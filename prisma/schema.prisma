@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/__generated__/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model android_metadata {
+  locale String?
+
+  @@ignore
+}
+
+model countries {
+  countryId                String  @id
+  name                     String
+  continentName            String
+  languageHavingMediaCount Int
+  population               Int
+  longitude                Float
+  latitude                 Float
+  flagLossyWeb             String?
+  flagPng8                 String?
+}
+
+model country_translations {
+  countryId   String
+  name        String
+  languageTag String
+
+  @@id([countryId, languageTag])
+}
+
+model media_data {
+  id                                     String           @id
+  componentType                          Int?
+  primaryMediaLanguageId                 String
+  primaryMediaLanguageName               String?
+  subType                                String?
+  contentType                            Int?
+  lengthInMilliseconds                   Int
+  isDownloadable                         Int
+  languageCount                          Int
+  containsCount                          Int
+  approximateDownloadLowFileSizeInBytes  Int
+  approximateDownloadHighFileSizeInBytes Int
+  bibleCitations                         String
+  mediaComponentLinks                    String?
+  imageUrls                              String?
+  media_metadata                         media_metadata[]
+}
+
+model media_language_links {
+  mediaComponentId String
+  languageId       String
+
+  @@id([mediaComponentId, languageId])
+}
+
+model media_language_translations {
+  languageId          String
+  name                String
+  metadataLanguageTag String
+
+  @@id([languageId, metadataLanguageTag])
+}
+
+model media_languages {
+  mediaLanguageId  String  @id
+  name             String
+  nameNative       String
+  iso3             String
+  bcp47            String
+  speakerCount     Int
+  audioPreviewUrl  String?
+  primaryCountryId String
+}
+
+model media_metadata {
+  mediaId             String
+  title               String
+  shortDescription    String
+  longDescription     String
+  studyQuestions      String?
+  metadataLanguageTag String
+  media_data          media_data @relation(fields: [mediaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([mediaId, metadataLanguageTag])
+  @@index([mediaId], map: "index_media_metadata_mediaId")
+}
+
+model reading_languages {
+  id         String  @id
+  name       String
+  nativeName String?
+}
+
+model room_master_table {
+  id            Int     @id @default(autoincrement())
+  identity_hash String?
+}
+
+model spoken_languages {
+  countryId    String
+  languageId   String
+  speakerCount Int
+
+  @@id([countryId, languageId])
+}
+
+model suggested_languages {
+  countryId    String
+  languageId   String
+  languageRank Int
+
+  @@id([countryId, languageId])
+}
+
+model term_translations {
+  languageTag String
+  label       String
+  term        String
+
+  @@id([languageTag, label])
+}

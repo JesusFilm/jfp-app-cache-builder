@@ -1,0 +1,61 @@
+{
+  "name": "jfp-app-cache-builder",
+  "version": "1.0.0",
+  "description": "Command line tool to build and populate databases from Jesus Film Project API for iOS and Android applications",
+  "type": "module",
+  "main": "dist/main.js",
+  "bin": {
+    "jfp-app-cache-builder": "./bin/jfp-app-cache-builder"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "build": "tsc && cp -r src/__generated__ dist/",
+    "start": "node dist/main.js",
+    "dev": "tsx src/main.ts",
+    "cli": "pnpm run build && ./bin/jfp-app-cache-builder",
+    "lint": "eslint src/**/*.ts --no-warn-ignored",
+    "lint:fix": "eslint src/**/*.ts --fix --no-warn-ignored",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee",
+  "dependencies": {
+    "@apollo/client": "^3.13.9",
+    "@prisma/client": "^5.22.0",
+    "commander": "^14.0.0",
+    "graphql": "^16.11.0",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.1.1",
+    "plist": "^3.1.0",
+    "realm": "^12.14.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/node": "^24.2.0",
+    "@types/plist": "^3.0.5",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.3",
+    "gql.tada": "^1.8.12",
+    "prettier": "^3.6.2",
+    "prisma": "^5.22.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "vitest-mock-extended": "^3.1.0"
+  },
+  "graphql": {
+    "schema": "https://api-gateway.central.jesusfilm.org",
+    "documents": "src/**/*.{graphql,js,ts,jsx,tsx}"
+  }
+}

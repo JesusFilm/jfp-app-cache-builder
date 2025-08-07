@@ -1,0 +1,16 @@
+node_modules
+dist
+graphql
+!.vscode
+*.realm
+*.realm.*
+.env
+assets/*
+!assets/.gitkeep
+!assets/ios/
+!assets/android/
+assets/ios/*
+!assets/ios/arclight.clean.realm
+assets/android/*
+!assets/android/arclight.clean.db
+src/__generated__/prisma
