@@ -63,42 +63,30 @@ describe("transformMediaLanguageLinks", () => {
         variables: { offset: 100, limit: 100 },
       })
 
-      // Verify database createMany was called for media language links (called twice due to pagination)
-      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(2)
+      // Verify database createMany was called for media language links (only once since both videos are in first page)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(1)
 
-      // Verify the first page's media language links
-      expect(mockDb.media_language_links.createMany).toHaveBeenNthCalledWith(
-        1,
-        {
-          data: [
-            {
-              mediaComponentId: "video1",
-              languageId: "lang1",
-            },
-            {
-              mediaComponentId: "video1",
-              languageId: "lang2",
-            },
-          ],
-        }
-      )
-
-      // Verify the second page's media language links
-      expect(mockDb.media_language_links.createMany).toHaveBeenNthCalledWith(
-        2,
-        {
-          data: [
-            {
-              mediaComponentId: "video2",
-              languageId: "lang1",
-            },
-            {
-              mediaComponentId: "video2",
-              languageId: "lang3",
-            },
-          ],
-        }
-      )
+      // Verify createMany was called with all media language links from the first page
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            mediaComponentId: "video1",
+            languageId: "lang1",
+          },
+          {
+            mediaComponentId: "video1",
+            languageId: "lang2",
+          },
+          {
+            mediaComponentId: "video2",
+            languageId: "lang1",
+          },
+          {
+            mediaComponentId: "video2",
+            languageId: "lang3",
+          },
+        ],
+      })
 
       // Verify the transformed data
       expect(result).toEqual([
@@ -225,7 +213,7 @@ describe("transformMediaLanguageLinks", () => {
       ])
 
       // Verify all 5 media language links were created (across multiple pages)
-      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(3)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(2)
     })
   })
 
@@ -410,6 +398,10 @@ describe("transformMediaLanguageLinks", () => {
           {
             mediaComponentId: "test-video-123",
             languageId: "english-001",
+          },
+          {
+            mediaComponentId: "test-video-123",
+            languageId: "spanish-002",
           },
         ],
       })

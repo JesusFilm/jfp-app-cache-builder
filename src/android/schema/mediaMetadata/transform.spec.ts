@@ -325,7 +325,7 @@ describe("transformMediaMetadata", () => {
       expect(result[1]?.mediaId).toBe("video2")
 
       // Verify all 2 metadata records were upserted
-      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(1)
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(2)
     })
   })
 

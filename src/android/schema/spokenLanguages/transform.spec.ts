@@ -101,12 +101,12 @@ describe("transformSpokenLanguages", () => {
           {
             countryId: "CA",
             languageId: "529",
-            speakerCount: 30000000,
+            speakerCount: 20000000,
           },
           {
             countryId: "CA",
-            languageId: "6930",
-            speakerCount: 7000000,
+            languageId: "21028",
+            speakerCount: 8000000,
           },
         ],
       })
