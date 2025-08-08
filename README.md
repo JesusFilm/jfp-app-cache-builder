@@ -101,6 +101,38 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 - `pnpm lint:fix` - Fix linting issues automatically
 - `pnpm format` - Format code with Prettier
 - `pnpm format:check` - Check if code is properly formatted
+- `pnpm test` - Run the test suite
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:ui` - Run tests with UI interface
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### CI Workflow (`ci.yml`)
+
+Runs on every push to `main` and pull request:
+
+- **Code Formatting**: Checks if code follows Prettier formatting standards
+- **Linting**: Runs ESLint to check for code quality issues
+- **Build**: Compiles TypeScript and generates build artifacts
+- **Testing**: Runs the complete test suite (222 tests)
+- **Artifact Verification**: Ensures build artifacts are created correctly
+
+### Build Workflow (`build.yml`)
+
+Runs on pushes to `main` and manual triggers:
+
+- **iOS Cache Build**: Generates iOS Realm database with all content
+- **Android Cache Build**: Generates Android SQLite database with all content
+- **Artifact Upload**: Uploads cache files as GitHub artifacts
+
+### Workflow Status
+
+- ✅ **CI**: All checks must pass before cache builds
+- ✅ **Build**: Cache builds only run if CI passes
+- ✅ **Parallel**: iOS and Android builds run in parallel
+- ✅ **Caching**: Uses pnpm and Node.js caching for faster builds
 
 ## Output
 
