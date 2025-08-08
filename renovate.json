@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 4am on Monday"],
+  "timezone": "UTC",
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "schedule": ["before 4am on Monday"],
+      "automerge": true
+    },
+    {
+      "matchPackageNames": ["@types/node"],
+      "schedule": ["before 4am on Monday"],
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["^@prisma/"],
+      "groupName": "Prisma packages",
+      "schedule": ["before 4am on Monday"],
+      "automerge": false
+    },
+    {
+      "matchPackagePatterns": ["^eslint", "^@typescript-eslint/"],
+      "groupName": "ESLint packages",
+      "schedule": ["before 4am on Monday"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["minor"],
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 4am on Monday"]
+  },
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "semanticCommits": "enabled",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageAction": "update",
+  "commitMessageExtra": "to {{newVersion}}",
+  "automerge": true,
+  "platformAutomerge": true,
+  "reviewers": ["tataihono"]
+}
