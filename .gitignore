@@ -4,7 +4,8 @@ graphql
 !.vscode
 *.realm
 *.realm.*
-.env
+.env.local
+.env.*.local
 assets/*
 !assets/.gitkeep
 !assets/ios/
