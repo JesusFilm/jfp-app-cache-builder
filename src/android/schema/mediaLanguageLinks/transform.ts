@@ -1,6 +1,6 @@
 import { media_language_links as MediaLanguageLink } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_MediaLanguageLinksQuery as query } from "./query.js"
 
@@ -58,6 +58,8 @@ export async function transformMediaLanguageLinks({
 
     if (!readOnly) {
       logger?.info("Writing media language links page to database")
+
+      const db = await getDb()
 
       await Promise.all(
         mediaLanguageLinks.map(async (link) => {

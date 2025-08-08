@@ -10,7 +10,9 @@ import { transformMediaData } from "./transform.js"
 import type { PrismaMock } from "../../../__mocks__/prisma.js"
 
 vi.mock("../../../lib/client.js")
-vi.mock("../../lib/db.js", () => ({ db: prisma }))
+vi.mock("../../lib/db.js", () => ({
+  getDb: vi.fn(() => Promise.resolve(prisma)),
+}))
 
 const mockClient = vi.mocked(client)
 

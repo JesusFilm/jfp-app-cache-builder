@@ -1,6 +1,6 @@
 import { suggested_languages as SuggestedLanguage } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_SuggestedLanguagesQuery as query } from "./query.js"
 
@@ -35,6 +35,8 @@ export async function transformSuggestedLanguages({
 
   if (!readOnly) {
     logger?.info("Writing suggested languages to database")
+
+    const db = await getDb()
 
     await Promise.all(
       suggestedLanguages.map(async (suggestedLanguage) => {

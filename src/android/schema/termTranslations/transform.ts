@@ -1,6 +1,6 @@
 import { term_translations as TermTranslation } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_TermTranslationsQuery as query } from "./query.js"
 
@@ -34,6 +34,8 @@ export async function transformTermTranslations({
 
   if (!readOnly) {
     logger?.info("Writing term translations to database")
+
+    const db = await getDb()
 
     await Promise.all(
       termTranslations.map(async (termTranslation) => {

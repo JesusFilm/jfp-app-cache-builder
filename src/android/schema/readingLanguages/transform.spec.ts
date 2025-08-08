@@ -5,7 +5,9 @@ import { prisma } from "../../../__mocks__/prisma.js"
 
 import { transformReadingLanguages } from "./transform.js"
 
-vi.mock("../../lib/db.js", () => ({ db: prisma }))
+vi.mock("../../lib/db.js", () => ({
+  getDb: vi.fn(() => Promise.resolve(prisma)),
+}))
 vi.mock("../../../lib/languages.js", () => ({
   languages: [
     {

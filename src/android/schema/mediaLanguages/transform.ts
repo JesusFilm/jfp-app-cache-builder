@@ -1,6 +1,6 @@
 import { media_languages as MediaLanguage } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_MediaLanguagesQuery as query } from "./query.js"
 
@@ -48,6 +48,8 @@ export async function transformMediaLanguages({
 
   if (!readOnly) {
     logger?.info("Writing media languages to database")
+
+    const db = await getDb()
 
     await Promise.all(
       mediaLanguages.map(async (mediaLanguage) => {

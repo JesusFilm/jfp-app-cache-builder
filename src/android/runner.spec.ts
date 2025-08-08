@@ -15,12 +15,12 @@ vi.mock("./schema/spokenLanguages/transform.js")
 vi.mock("./schema/suggestedLanguages/transform.js")
 vi.mock("./schema/termTranslations/transform.js")
 
-// Mock the cleanup function
+// Mock the rebuild function
 vi.mock("./lib/db.js", () => ({
-  cleanup: vi.fn(),
+  rebuild: vi.fn(),
 }))
 
-const { cleanup } = await import("./lib/db.js")
+const { rebuild } = await import("./lib/db.js")
 
 describe("runner", () => {
   beforeEach(() => {
@@ -215,13 +215,13 @@ describe("runner", () => {
     })
   })
 
-  describe("database cleanup", () => {
-    it("should call cleanup when not in read-only mode", async () => {
+  describe("database rebuild", () => {
+    it("should call rebuild when not in read-only mode", async () => {
       const { transformCountries } = await import(
         "./schema/countries/transform.js"
       )
 
-      vi.mocked(cleanup).mockResolvedValue(undefined)
+      vi.mocked(rebuild).mockResolvedValue(undefined)
       vi.mocked(transformCountries).mockResolvedValue([])
 
       const mockLogger = {
@@ -237,19 +237,18 @@ describe("runner", () => {
         logger: mockLogger,
       })
 
-      expect(cleanup).toHaveBeenCalledWith({ logger: mockLogger })
+      expect(rebuild).toHaveBeenCalledWith({ logger: mockLogger })
       expect(mockLogger.info).toHaveBeenCalledWith(
-        "Cleaning all Android tables"
+        "Starting Android data transformation process"
       )
-      expect(mockLogger.info).toHaveBeenCalledWith("Completed table cleanup")
     })
 
-    it("should not call cleanup when in read-only mode", async () => {
+    it("should not call rebuild when in read-only mode", async () => {
       const { transformCountries } = await import(
         "./schema/countries/transform.js"
       )
 
-      vi.mocked(cleanup).mockResolvedValue(undefined)
+      vi.mocked(rebuild).mockResolvedValue(undefined)
       vi.mocked(transformCountries).mockResolvedValue([])
 
       const mockLogger = {
@@ -266,7 +265,7 @@ describe("runner", () => {
         readOnly: true,
       })
 
-      expect(cleanup).not.toHaveBeenCalled()
+      expect(rebuild).not.toHaveBeenCalled()
       expect(mockLogger.info).toHaveBeenCalledWith("Running in read-only mode")
     })
   })
@@ -311,16 +310,16 @@ describe("runner", () => {
       expect(transformCountries).toHaveBeenCalled()
     })
 
-    it("should handle cleanup errors", async () => {
-      const error = new Error("Cleanup failed")
-      vi.mocked(cleanup).mockRejectedValue(error)
+    it("should handle rebuild errors", async () => {
+      const error = new Error("Rebuild failed")
+      vi.mocked(rebuild).mockRejectedValue(error)
 
       await expect(
         runner({
           languageId: "529",
           languageTag: "en",
         })
-      ).rejects.toThrow("Cleanup failed")
+      ).rejects.toThrow("Rebuild failed")
     })
   })
 
@@ -457,10 +456,6 @@ describe("runner", () => {
       expect(mockLogger.info).toHaveBeenCalledWith(
         "Starting Android data transformation process"
       )
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        "Cleaning all Android tables"
-      )
-      expect(mockLogger.info).toHaveBeenCalledWith("Completed table cleanup")
       expect(mockLogger.info).toHaveBeenCalledWith("Transforming countries")
       expect(mockLogger.info).toHaveBeenCalledWith("Transformed countries")
       expect(mockLogger.info).toHaveBeenCalledWith(

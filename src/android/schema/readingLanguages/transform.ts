@@ -1,6 +1,6 @@
 import { reading_languages as ReadingLanguage } from "../../../__generated__/prisma/index.js"
 import { languages } from "../../../lib/languages.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import type { TransformOptions } from "../../../types/transform.js"
 
@@ -23,6 +23,8 @@ export async function transformReadingLanguages({
 
   if (!readOnly) {
     logger?.info("Writing reading languages to database")
+
+    const db = await getDb()
 
     await Promise.all(
       readingLanguages.map(async (readingLanguage) => {

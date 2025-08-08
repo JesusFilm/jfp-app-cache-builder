@@ -1,6 +1,6 @@
 import { countries as Country } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_CountriesQuery as query } from "./query.js"
 
@@ -36,6 +36,8 @@ export async function transformCountries({
 
   if (!readOnly) {
     logger?.info("Writing countries to database")
+
+    const db = await getDb()
 
     await Promise.all(
       countries.map(async (country) => {

@@ -6,7 +6,30 @@ import { Logger } from "pino"
 
 import { PrismaClient } from "../../__generated__/prisma/index.js"
 
-export const db = new PrismaClient()
+let _db: PrismaClient | null = null
+
+export async function getDb(
+  dbPath = path.join(process.cwd(), "assets", "android", "cache.db"),
+  ignoreCache = false
+): Promise<PrismaClient> {
+  let db = _db
+  if (!db || ignoreCache) {
+    db = new PrismaClient({
+      datasources: {
+        db: {
+          url: `file:${dbPath}`,
+        },
+      },
+    })
+  }
+
+  if (ignoreCache) {
+    return db
+  } else {
+    _db = db
+    return _db
+  }
+}
 
 interface CleanupOptions {
   logger?: Logger | undefined
@@ -26,14 +49,8 @@ export async function cleanup({ logger, cleanDbPath }: CleanupOptions) {
     throw new Error(`Clean database file not found at: ${cleanDbPath}`)
   }
 
-  // Create a new Prisma client instance pointing to the clean database
-  const db = new PrismaClient({
-    datasources: {
-      db: {
-        url: `file:${cleanDbPath}`,
-      },
-    },
-  })
+  // Open the clean database file directly
+  const db = await getDb(cleanDbPath, true)
 
   // Check if there's any data to clean, and only perform deletes if needed
   const [

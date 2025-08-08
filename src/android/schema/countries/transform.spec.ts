@@ -11,7 +11,7 @@ import { transformCountries } from "./transform.js"
 // Mock the dependencies
 vi.mock("../../../lib/client.js")
 vi.mock("../../lib/db.js", () => ({
-  db: prisma,
+  getDb: vi.fn(() => Promise.resolve(prisma)),
 }))
 
 const mockClient = vi.mocked(client)

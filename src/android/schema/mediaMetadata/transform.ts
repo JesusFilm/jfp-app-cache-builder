@@ -1,6 +1,6 @@
 import { media_metadata as MediaMetadata } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_MediaMetadataQuery as query } from "./query.js"
 
@@ -128,6 +128,8 @@ export async function transformMediaMetadata({
 
     if (!readOnly) {
       logger?.info("Writing media metadata page to database")
+
+      const db = await getDb()
 
       await Promise.all(
         mediaMetadata.map(async (item) => {

@@ -1,6 +1,6 @@
 import { media_data as MediaData } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_MediaDataQuery as query } from "./query.js"
 
@@ -128,6 +128,8 @@ export async function transformMediaData({
 
     if (!readOnly) {
       logger?.info("Writing media data page to database")
+
+      const db = await getDb()
 
       await Promise.all(
         mediaData.map(async (mediaItem) => {

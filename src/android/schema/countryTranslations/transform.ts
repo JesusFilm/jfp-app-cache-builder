@@ -1,6 +1,6 @@
 import { country_translations as CountryTranslation } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_CountryTranslationsQuery as query } from "./query.js"
 
@@ -39,6 +39,8 @@ export async function transformCountryTranslations({
 
   if (!readOnly) {
     logger?.info("Writing country translations to database")
+
+    const db = await getDb()
 
     await Promise.all(
       countryTranslations.map(async (countryTranslation) => {

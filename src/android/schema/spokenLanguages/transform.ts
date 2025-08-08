@@ -1,6 +1,6 @@
 import { spoken_languages as SpokenLanguage } from "../../../__generated__/prisma/index.js"
 import { client } from "../../../lib/client.js"
-import { db } from "../../lib/db.js"
+import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_Android_SpokenLanguagesQuery as query } from "./query.js"
 
@@ -49,6 +49,8 @@ export async function transformSpokenLanguages({
 
   if (!readOnly) {
     logger?.info("Writing spoken languages to database")
+
+    const db = await getDb()
 
     await Promise.all(
       spokenLanguages.map(async (spokenLanguage) => {
