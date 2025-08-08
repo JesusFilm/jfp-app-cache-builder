@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JFP App Cache Downloads</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        background: #efede3;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .logo {
+        margin-bottom: 30px;
+      }
+
+      .logo img {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+
+      .logo h1 {
+        color: #333;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .logo p {
+        color: #666;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .download-section {
+        margin: 40px 0;
+      }
+
+      .download-buttons {
+        display: grid;
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .download-btn:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .download-btn:hover:before {
+        left: 100%;
+      }
+
+      .ios-btn {
+        background: linear-gradient(135deg, #007aff, #0051d5);
+        color: white;
+        box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+      }
+
+      .ios-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(0, 122, 255, 0.4);
+      }
+
+      .android-btn {
+        background: linear-gradient(135deg, #3ddc84, #00c853);
+        color: white;
+        box-shadow: 0 8px 25px rgba(61, 220, 132, 0.3);
+      }
+
+      .android-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(61, 220, 132, 0.4);
+      }
+
+      .btn-icon {
+        margin-right: 12px;
+        font-size: 1.3rem;
+      }
+
+      .info-section {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+      }
+
+      .info-text {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .build-info {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .build-info h3 {
+        color: #333;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+      }
+
+      .build-details {
+        display: grid;
+        gap: 10px;
+        text-align: left;
+      }
+
+      .build-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .build-detail:last-child {
+        border-bottom: none;
+      }
+
+      .build-label {
+        font-weight: 600;
+        color: #495057;
+      }
+
+      .build-value {
+        color: #6c757d;
+        font-family: "SFMono-Regular", "Monaco", "Consolas", monospace;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+        }
+
+        .logo h1 {
+          font-size: 2rem;
+        }
+
+        .download-btn {
+          padding: 16px 24px;
+          font-size: 1rem;
+        }
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-success {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-loading {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        max-width: 600px;
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .footer a {
+        color: #ef343f;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img src="./assets/logo.png" alt="JFP Logo" />
+        <h1>JFP App Cache</h1>
+        <p>
+          Download the latest iOS and Android cache databases for offline access
+          to Jesus Film content
+        </p>
+      </div>
+
+      <div class="download-section">
+        <div class="download-buttons">
+          <a
+            href="./ios-cache.zip"
+            id="ios-download"
+            class="download-btn ios-btn"
+            download="jfp-ios-cache.zip"
+          >
+            <span class="btn-icon">📱</span>
+            Download iOS Cache
+          </a>
+          <a
+            href="./android-cache.zip"
+            id="android-download"
+            class="download-btn android-btn"
+            download="jfp-android-cache.zip"
+          >
+            <span class="btn-icon">🤖</span>
+            Download Android Cache
+          </a>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <p class="info-text">
+          These cache files contain offline data for the Jesus Film Project
+          applications. The iOS cache uses Realm database format, while the
+          Android cache uses SQLite.
+        </p>
+
+        <div class="build-info">
+          <h3>📊 Latest Build Information</h3>
+          <div class="build-details">
+            <div class="build-detail">
+              <span class="build-label">Build Date:</span>
+              <span class="build-value" id="build-date">Loading...</span>
+            </div>
+            <div class="build-detail">
+              <span class="build-label">Build Number:</span>
+              <span class="build-value" id="build-number">Loading...</span>
+            </div>
+            <div class="build-detail">
+              <span class="build-label">Commit:</span>
+              <span class="build-value" id="commit-sha">Loading...</span>
+            </div>
+            <div class="build-detail">
+              <span class="build-label">Status:</span>
+              <span class="status-badge status-loading" id="build-status"
+                >Building</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        <a
+          href="https://jesusfilm.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Jesus Film Project</a
+        >
+        believes everyone, everywhere should have access to the life‑changing
+        story of Jesus in their own heart language and heart medium, equipping
+        believers around the globe to share the gospel to people of every tribe,
+        tongue and nation.
+      </p>
+    </div>
+
+    <script>
+      // This will be populated by the GitHub Actions workflow
+      const buildInfo = {
+        buildDate: "{{BUILD_DATE}}",
+        buildNumber: "{{BUILD_NUMBER}}",
+        commitSha: "{{COMMIT_SHA}}",
+      }
+
+      // Update the page with build information
+      function updateBuildInfo() {
+        const buildDate = document.getElementById("build-date")
+        const buildNumber = document.getElementById("build-number")
+        const commitSha = document.getElementById("commit-sha")
+        const buildStatus = document.getElementById("build-status")
+        const iosDownload = document.getElementById("ios-download")
+        const androidDownload = document.getElementById("android-download")
+
+        // Check if this is a template (placeholders not replaced)
+        const isTemplate = buildInfo.buildDate.includes("{{")
+
+        if (isTemplate) {
+          // Show placeholder information for development
+          buildDate.textContent = new Date().toLocaleString()
+          buildNumber.textContent = "Development Build"
+          commitSha.textContent = "dev-commit"
+          buildStatus.textContent = "Development"
+          buildStatus.className = "status-badge status-loading"
+
+          // Disable download buttons in development
+          iosDownload.style.opacity = "0.6"
+          androidDownload.style.opacity = "0.6"
+          iosDownload.style.cursor = "not-allowed"
+          androidDownload.style.cursor = "not-allowed"
+          iosDownload.onclick = (e) => {
+            e.preventDefault()
+            alert("Download links will be available after GitHub Actions build")
+          }
+          androidDownload.onclick = (e) => {
+            e.preventDefault()
+            alert("Download links will be available after GitHub Actions build")
+          }
+        } else {
+          // Use actual build information
+          buildDate.textContent = buildInfo.buildDate
+          buildNumber.textContent = `#${buildInfo.buildNumber}`
+          commitSha.textContent = buildInfo.commitSha.substring(0, 8)
+          buildStatus.textContent = "Success"
+          buildStatus.className = "status-badge status-success"
+        }
+      }
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", updateBuildInfo)
+
+      // Add click tracking and download functionality
+      document
+        .getElementById("ios-download")
+        .addEventListener("click", function (e) {
+          console.log("iOS cache download clicked")
+          // The download will happen automatically due to the download attribute
+        })
+
+      document
+        .getElementById("android-download")
+        .addEventListener("click", function (e) {
+          console.log("Android cache download clicked")
+          // The download will happen automatically due to the download attribute
+        })
+    </script>
+  </body>
+</html>

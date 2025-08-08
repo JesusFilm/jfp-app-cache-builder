@@ -17,3 +17,6 @@ assets/ios/*
 assets/android/*
 !assets/android/cache.clean.db
 src/__generated__/prisma
+
+# GitHub Pages build directory
+_site
