@@ -15,7 +15,7 @@ interface CleanupOptions {
 
 export async function cleanup({ logger, cleanDbPath }: CleanupOptions) {
   if (!cleanDbPath) {
-    cleanDbPath = path.join(process.cwd(), "assets", "android", "arclight.db")
+    cleanDbPath = path.join(process.cwd(), "assets", "android", "cache.db")
   }
 
   logger?.info?.({ cleanDbPath }, "Starting cleanup of Android database")
@@ -171,8 +171,8 @@ export async function rebuild({ logger }: RebuildOptions) {
 
   // Define the assets directory and clean file paths
   const assetsDir = path.join(process.cwd(), "assets", "android")
-  const cleanDbPath = path.join(assetsDir, "arclight.clean.db")
-  const targetDbPath = path.join(assetsDir, "arclight.db")
+  const cleanDbPath = path.join(assetsDir, "cache.clean.db")
+  const targetDbPath = path.join(assetsDir, "cache.db")
 
   // Run cleanup to ensure database connections are properly closed
   logger?.info?.("Running cleanup before file operations")
@@ -184,8 +184,8 @@ export async function rebuild({ logger }: RebuildOptions) {
   for (const file of files) {
     const filePath = path.join(assetsDir, file)
 
-    // Skip .gitkeep and arclight.clean.db files
-    if (file === ".gitkeep" || file === "arclight.clean.db") {
+    // Skip .gitkeep and cache.clean.db files
+    if (file === ".gitkeep" || file === "cache.clean.db") {
       logger?.info?.(`Skipping protected file: ${file}`)
       continue
     }
@@ -212,7 +212,7 @@ export async function rebuild({ logger }: RebuildOptions) {
 
   // Copy clean file to target location
   await fs.copyFile(cleanDbPath, targetDbPath)
-  logger?.info?.("Copied arclight.clean.db to arclight.db")
+  logger?.info?.("Copied cache.clean.db to cache.db")
 
   logger?.info?.("Successfully rebuilt Android database from clean files")
 }

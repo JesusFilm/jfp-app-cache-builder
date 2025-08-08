@@ -1,0 +1,86 @@
+name: Build iOS and Android Caches
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build TypeScript
+        run: pnpm build
+
+      - name: Build iOS cache
+        run: ./bin/jfp-app-cache-builder --target ios --verbose
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Zip iOS database
+        run: |
+          zip ios-cache.zip assets/ios/cache.realm
+
+      - name: Upload iOS cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-cache
+          path: ios-cache.zip
+          retention-days: 90
+
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build TypeScript
+        run: pnpm build
+
+      - name: Build Android cache
+        run: ./bin/jfp-app-cache-builder --target android --verbose
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Zip Android database
+        run: |
+          zip android-cache.zip assets/android/cache.db
+
+      - name: Upload Android cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-cache
+          path: android-cache.zip
+          retention-days: 90

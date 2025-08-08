@@ -10,8 +10,8 @@ JFP App Cache Builder is a Node.js application that:
 - Fetches various types of content data (languages, media items, countries, etc.)
 - Transforms the data into a structured format
 - Stores it in a local database file:
-  - iOS: Realm database (`assets/ios/arclight.realm`)
-  - Android: SQLite database (`assets/android/arclight.db`)
+  - iOS: Realm database (`assets/ios/cache.realm`)
+  - Android: SQLite database (`assets/android/cache.db`)
 
 This database can then be used by iOS and Android applications to provide offline access to Jesus Film content.
 
@@ -104,7 +104,7 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 
 ## Output
 
-The tool generates a Realm database file at `assets/arclight.realm` containing:
+The tool generates a Realm database file at `assets/cache.realm` containing:
 
 - **Bible Codes** - Bible book information and metadata
 - **Languages** - Language data with audio previews and speaker counts
@@ -120,7 +120,7 @@ The tool uses the following default configuration:
 
 - **Language ID**: `529` (English)
 - **API Endpoint**: `https://api-gateway.central.jesusfilm.org`
-- **Database Path**: `assets/arclight.realm`
+- **Database Path**: `assets/cache.realm`
 
 ## Troubleshooting
 

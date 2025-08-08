@@ -20,7 +20,7 @@ import type { Logger } from "pino"
 let _db: Realm | null = null
 
 export async function getDb(
-  dbPath = path.join(process.cwd(), "assets", "ios", "arclight.realm"),
+  dbPath = path.join(process.cwd(), "assets", "ios", "cache.realm"),
   ignoreCache = false
 ): Promise<Realm> {
   let db = _db
@@ -57,7 +57,7 @@ interface CleanupOptions {
 
 export async function cleanup({ logger, cleanRealmPath }: CleanupOptions) {
   if (!cleanRealmPath) {
-    cleanRealmPath = path.join(process.cwd(), "assets", "ios", "arclight.realm")
+    cleanRealmPath = path.join(process.cwd(), "assets", "ios", "cache.realm")
   }
 
   logger?.info?.({ cleanRealmPath }, "Starting cleanup of iOS database")
@@ -187,8 +187,8 @@ export async function rebuild({ logger }: RebuildOptions) {
 
   // Define the assets directory and clean file paths
   const assetsDir = path.join(process.cwd(), "assets", "ios")
-  const cleanRealmPath = path.join(assetsDir, "arclight.clean.realm")
-  const targetRealmPath = path.join(assetsDir, "arclight.realm")
+  const cleanRealmPath = path.join(assetsDir, "cache.clean.realm")
+  const targetRealmPath = path.join(assetsDir, "cache.realm")
 
   // Run cleanup to ensure database connections are properly closed
   logger?.info?.("Running cleanup before file operations")
@@ -200,8 +200,8 @@ export async function rebuild({ logger }: RebuildOptions) {
   for (const file of files) {
     const filePath = path.join(assetsDir, file)
 
-    // Skip .gitkeep and arclight.clean.realm files
-    if (file === ".gitkeep" || file === "arclight.clean.realm") {
+    // Skip .gitkeep and cache.clean.realm files
+    if (file === ".gitkeep" || file === "cache.clean.realm") {
       logger?.info?.(`Skipping protected file: ${file}`)
       continue
     }
@@ -228,7 +228,7 @@ export async function rebuild({ logger }: RebuildOptions) {
 
   // Copy clean file to target location
   await fs.copyFile(cleanRealmPath, targetRealmPath)
-  logger?.info?.("Copied arclight.clean.realm to arclight.realm")
+  logger?.info?.("Copied cache.clean.realm to cache.realm")
 
   logger?.info?.("Successfully rebuilt iOS database from clean files")
 }

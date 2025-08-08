@@ -219,8 +219,8 @@ const logger = pino({
 3. **Prepare clean template files in this repository:**
    - Extract the migrated database files from the target applications
    - Replace the clean template files in this repository:
-     - `assets/ios/arclight.clean.realm` (from iOS app)
-     - `assets/android/arclight.clean.db` (from Android app)
+     - `assets/ios/cache.clean.realm` (from iOS app)
+     - `assets/android/cache.clean.db` (from Android app)
 
 4. **Rebuild from clean templates:**
    ```bash
@@ -353,19 +353,19 @@ pnpm cli --target android --rebuild
 ### Database Files
 
 #### iOS (Realm)
-- Main database: `assets/ios/arclight.realm`
-- Clean template: `assets/ios/arclight.clean.realm`
+- Main database: `assets/ios/cache.realm`
+- Clean template: `assets/ios/cache.clean.realm`
 - Auxiliary files (removed during rebuild):
-  - `arclight.realm.lock`
-  - `arclight.realm.note`
-  - `arclight.realm.management/`
+  - `cache.realm.lock`
+  - `cache.realm.note`
+  - `cache.realm.management/`
 
 #### Android (SQLite)
-- Main database: `assets/android/arclight.db`
-- Clean template: `assets/android/arclight.clean.db`
+- Main database: `assets/android/cache.db`
+- Clean template: `assets/android/cache.clean.db`
 - Auxiliary files (removed during rebuild):
-  - `arclight.db-shm` (shared memory file)
-  - `arclight.db-wal` (write-ahead log)
+  - `cache.db-shm` (shared memory file)
+  - `cache.db-wal` (write-ahead log)
 
 ## Testing
 

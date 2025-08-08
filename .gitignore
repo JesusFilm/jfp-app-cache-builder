@@ -10,7 +10,7 @@ assets/*
 !assets/ios/
 !assets/android/
 assets/ios/*
-!assets/ios/arclight.clean.realm
+!assets/ios/cache.clean.realm
 assets/android/*
-!assets/android/arclight.clean.db
+!assets/android/cache.clean.db
 src/__generated__/prisma
