@@ -49,7 +49,7 @@ jobs:
 
       - name: Zip iOS database
         run: |
-          zip ios-cache.zip assets/ios/cache.realm
+          cd assets/ios && zip ../../ios-cache.zip cache.realm
 
       - name: Upload iOS cache
         uses: actions/upload-artifact@v4
@@ -91,7 +91,7 @@ jobs:
 
       - name: Zip Android database
         run: |
-          zip android-cache.zip assets/android/cache.db
+          cd assets/android && zip ../../android-cache.zip cache.db
 
       - name: Upload Android cache
         uses: actions/upload-artifact@v4
