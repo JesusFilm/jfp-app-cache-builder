@@ -131,13 +131,13 @@ export async function transformMediaData({
 
       const db = await getDb()
 
-      await Promise.all(
-        mediaData.map(async (mediaItem) => {
-          await db.media_data.create({
-            data: mediaItem,
-          })
+      // Use createMany for better performance with large batches
+      if (mediaData.length > 0) {
+        await db.media_data.createMany({
+          data: mediaData,
         })
-      )
+      }
+
       logger?.info(
         { count: mediaData.length, offset },
         "Successfully wrote media data page to database"

@@ -38,13 +38,13 @@ export async function transformSuggestedLanguages({
 
     const db = await getDb()
 
-    await Promise.all(
-      suggestedLanguages.map(async (suggestedLanguage) => {
-        await db.suggested_languages.create({
-          data: suggestedLanguage,
-        })
+    // Use createMany for better performance with large batches
+    if (suggestedLanguages.length > 0) {
+      await db.suggested_languages.createMany({
+        data: suggestedLanguages,
       })
-    )
+    }
+
     logger?.info(
       { count: suggestedLanguages.length },
       "Successfully wrote suggested languages to database"

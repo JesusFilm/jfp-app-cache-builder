@@ -105,8 +105,8 @@ describe("transformMediaData", () => {
       }),
     })
 
-    expect(mockDb.media_data.create).toHaveBeenCalledWith({
-      data: result[0],
+    expect(mockDb.media_data.createMany).toHaveBeenCalledWith({
+      data: [result[0]],
     })
   })
 
@@ -876,7 +876,7 @@ describe("transformMediaData", () => {
     })
 
     expect(result).toHaveLength(1)
-    expect(mockDb.media_data.create).not.toHaveBeenCalled()
+    expect(mockDb.media_data.createMany).not.toHaveBeenCalled()
   })
 
   it("should handle errors gracefully", async () => {

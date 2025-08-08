@@ -26,13 +26,12 @@ export async function transformReadingLanguages({
 
     const db = await getDb()
 
-    await Promise.all(
-      readingLanguages.map(async (readingLanguage) => {
-        await db.reading_languages.create({
-          data: readingLanguage,
-        })
+    // Use createMany for better performance with large batches
+    if (readingLanguages.length > 0) {
+      await db.reading_languages.createMany({
+        data: readingLanguages,
       })
-    )
+    }
     logger?.info(
       { count: readingLanguages.length },
       "Successfully wrote reading languages to database"

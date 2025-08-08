@@ -72,33 +72,27 @@ describe("transformTermTranslations", () => {
         query,
       })
 
-      expect(mockDb.term_translations.create).toHaveBeenCalledTimes(3)
+      expect(mockDb.term_translations.createMany).toHaveBeenCalledTimes(1)
 
-      // Check first term translation (genre - English)
-      expect(mockDb.term_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageTag: "en",
-          label: "genre",
-          term: "Action",
-        },
-      })
-
-      // Check second term translation (genre - Spanish)
-      expect(mockDb.term_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageTag: "es",
-          label: "genre",
-          term: "Acción",
-        },
-      })
-
-      // Check third term translation (category - English)
-      expect(mockDb.term_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageTag: "en",
-          label: "category",
-          term: "Movie",
-        },
+      // Check that createMany was called with all term translations
+      expect(mockDb.term_translations.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            languageTag: "en",
+            label: "genre",
+            term: "Action",
+          },
+          {
+            languageTag: "es",
+            label: "genre",
+            term: "Acción",
+          },
+          {
+            languageTag: "en",
+            label: "category",
+            term: "Movie",
+          },
+        ],
       })
 
       expect(result).toEqual([
@@ -151,7 +145,7 @@ describe("transformTermTranslations", () => {
         query,
       })
 
-      expect(mockDb.term_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.term_translations.createMany).not.toHaveBeenCalled()
 
       expect(result).toEqual([
         {
@@ -177,7 +171,7 @@ describe("transformTermTranslations", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.term_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.term_translations.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle taxonomies with no term translations", async () => {
@@ -198,7 +192,7 @@ describe("transformTermTranslations", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.term_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.term_translations.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle term translations with missing languageTag", async () => {
@@ -239,7 +233,7 @@ describe("transformTermTranslations", () => {
         },
       ])
 
-      expect(mockDb.term_translations.create).toHaveBeenCalledTimes(1)
+      expect(mockDb.term_translations.createMany).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -255,7 +249,7 @@ describe("transformTermTranslations", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.term_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.term_translations.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -277,7 +271,7 @@ describe("transformTermTranslations", () => {
 
       mockClient.query.mockResolvedValue(mockApiResponse)
 
-      mockDb.term_translations.create.mockImplementation(() => {
+      mockDb.term_translations.createMany.mockImplementation(() => {
         throw new Error("Database write failed")
       })
 
@@ -383,7 +377,7 @@ describe("transformTermTranslations", () => {
         },
       ])
 
-      expect(mockDb.term_translations.create).toHaveBeenCalledTimes(2)
+      expect(mockDb.term_translations.createMany).toHaveBeenCalledTimes(1)
     })
   })
 })

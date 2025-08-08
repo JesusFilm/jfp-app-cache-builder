@@ -52,21 +52,20 @@ export async function transformSpokenLanguages({
 
     const db = await getDb()
 
-    await Promise.all(
-      spokenLanguages.map(async (spokenLanguage) => {
-        try {
-          await db.spoken_languages.create({
-            data: spokenLanguage,
-          })
-        } catch (error) {
-          logger?.error(
-            { error, spokenLanguage },
-            "Error writing spoken language to database"
-          )
-          throw error
-        }
-      })
-    )
+    // Use createMany for better performance with large batches
+    if (spokenLanguages.length > 0) {
+      try {
+        await db.spoken_languages.createMany({
+          data: spokenLanguages,
+        })
+      } catch (error) {
+        logger?.error(
+          { error, count: spokenLanguages.length },
+          "Error writing spoken languages to database"
+        )
+        throw error
+      }
+    }
     logger?.info(
       { count: spokenLanguages.length },
       "Successfully wrote spoken languages to database"

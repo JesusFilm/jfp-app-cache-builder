@@ -61,13 +61,12 @@ export async function transformMediaLanguageLinks({
 
       const db = await getDb()
 
-      await Promise.all(
-        mediaLanguageLinks.map(async (link) => {
-          await db.media_language_links.create({
-            data: link,
-          })
+      // Use createMany for better performance with large batches
+      if (mediaLanguageLinks.length > 0) {
+        await db.media_language_links.createMany({
+          data: mediaLanguageLinks,
         })
-      )
+      }
       logger?.info(
         { count: mediaLanguageLinks.length, offset },
         "Successfully wrote media language links page to database"

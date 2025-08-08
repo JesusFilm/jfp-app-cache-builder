@@ -66,34 +66,28 @@ describe("transformReadingLanguages", () => {
         nativeName: "le français",
       })
 
-      // Verify database create was called for each language
-      expect(mockDb.reading_languages.create).toHaveBeenCalledTimes(3)
+      // Verify database createMany was called
+      expect(mockDb.reading_languages.createMany).toHaveBeenCalledTimes(1)
 
-      // Verify first language database call
-      expect(mockDb.reading_languages.create).toHaveBeenCalledWith({
-        data: {
-          id: "en",
-          name: "English",
-          nativeName: "English",
-        },
-      })
-
-      // Verify second language database call
-      expect(mockDb.reading_languages.create).toHaveBeenCalledWith({
-        data: {
-          id: "es",
-          name: "Spanish",
-          nativeName: "Español",
-        },
-      })
-
-      // Verify third language database call
-      expect(mockDb.reading_languages.create).toHaveBeenCalledWith({
-        data: {
-          id: "fr",
-          name: "French",
-          nativeName: "le français",
-        },
+      // Verify createMany was called with all languages
+      expect(mockDb.reading_languages.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            id: "en",
+            name: "English",
+            nativeName: "English",
+          },
+          {
+            id: "es",
+            name: "Spanish",
+            nativeName: "Español",
+          },
+          {
+            id: "fr",
+            name: "French",
+            nativeName: "le français",
+          },
+        ],
       })
     })
 
@@ -112,7 +106,7 @@ describe("transformReadingLanguages", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.reading_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.reading_languages.createMany).not.toHaveBeenCalled()
     })
   })
 
@@ -145,7 +139,7 @@ describe("transformReadingLanguages", () => {
 
   describe("error handling", () => {
     it("should handle database write errors", async () => {
-      ;(mockDb.reading_languages.create as any).mockRejectedValue(
+      ;(mockDb.reading_languages.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 

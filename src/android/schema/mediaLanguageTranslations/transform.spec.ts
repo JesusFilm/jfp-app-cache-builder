@@ -82,39 +82,37 @@ describe("transformMediaLanguageTranslations", () => {
         variables: {},
       })
 
-      // Verify database create was called for each translation
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledTimes(4)
+      // Verify database createMany was called for all translations
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledTimes(1)
 
-      // Verify the first language's translations
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageId: "lang1",
-          name: "English",
-          metadataLanguageTag: "en",
-        },
-      })
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageId: "lang1",
-          name: "Inglés",
-          metadataLanguageTag: "es",
-        },
-      })
-
-      // Verify the second language's translations
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageId: "lang2",
-          name: "Spanish",
-          metadataLanguageTag: "en",
-        },
-      })
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageId: "lang2",
-          name: "Español",
-          metadataLanguageTag: "es",
-        },
+      // Verify createMany was called with all language translations
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledWith({
+        data: [
+          {
+            languageId: "lang1",
+            name: "English",
+            metadataLanguageTag: "en",
+          },
+          {
+            languageId: "lang1",
+            name: "Inglés",
+            metadataLanguageTag: "es",
+          },
+          {
+            languageId: "lang2",
+            name: "Spanish",
+            metadataLanguageTag: "en",
+          },
+          {
+            languageId: "lang2",
+            name: "Español",
+            metadataLanguageTag: "es",
+          },
+        ],
       })
 
       // Verify the transformed data
@@ -168,7 +166,9 @@ describe("transformMediaLanguageTranslations", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.media_language_translations.create).not.toHaveBeenCalled()
+      expect(
+        mockDb.media_language_translations.createMany
+      ).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -194,7 +194,9 @@ describe("transformMediaLanguageTranslations", () => {
         languageTag: "en",
       })
 
-      expect(mockDb.media_language_translations.create).not.toHaveBeenCalled()
+      expect(
+        mockDb.media_language_translations.createMany
+      ).not.toHaveBeenCalled()
 
       expect(result).toEqual([])
     })
@@ -236,7 +238,9 @@ describe("transformMediaLanguageTranslations", () => {
       ])
 
       // Only the language with translations should be created
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledTimes(1)
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledTimes(1)
     })
 
     it("should handle languages with missing metadataLanguageTag", async () => {
@@ -278,7 +282,9 @@ describe("transformMediaLanguageTranslations", () => {
       ])
 
       // Only the translation with metadataLanguageTag should be created
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledTimes(1)
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledTimes(1)
     })
 
     it("should handle single language with multiple translations", async () => {
@@ -335,7 +341,9 @@ describe("transformMediaLanguageTranslations", () => {
         },
       ])
 
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledTimes(3)
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -351,7 +359,9 @@ describe("transformMediaLanguageTranslations", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.media_language_translations.create).not.toHaveBeenCalled()
+      expect(
+        mockDb.media_language_translations.createMany
+      ).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -372,7 +382,7 @@ describe("transformMediaLanguageTranslations", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.media_language_translations.create as any).mockRejectedValue(
+      ;(mockDb.media_language_translations.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 
@@ -419,12 +429,16 @@ describe("transformMediaLanguageTranslations", () => {
       ])
 
       // Verify database objects are created with correct structure
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledWith({
-        data: {
-          languageId: "lang1",
-          name: "English",
-          metadataLanguageTag: "en",
-        },
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledWith({
+        data: [
+          {
+            languageId: "lang1",
+            name: "English",
+            metadataLanguageTag: "en",
+          },
+        ],
       })
     })
 
@@ -499,7 +513,9 @@ describe("transformMediaLanguageTranslations", () => {
       ])
 
       // Verify all 4 translations were created
-      expect(mockDb.media_language_translations.create).toHaveBeenCalledTimes(4)
+      expect(
+        mockDb.media_language_translations.createMany
+      ).toHaveBeenCalledTimes(1)
     })
   })
 })

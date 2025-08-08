@@ -96,35 +96,33 @@ describe("transformMediaLanguages", () => {
         primaryCountryId: "ES",
       })
 
-      // Verify database create was called for each language
-      expect(mockDb.media_languages.create).toHaveBeenCalledTimes(2)
+      // Verify database createMany was called
+      expect(mockDb.media_languages.createMany).toHaveBeenCalledTimes(1)
 
-      // Verify first language database call
-      expect(mockDb.media_languages.create).toHaveBeenCalledWith({
-        data: {
-          mediaLanguageId: "lang1",
-          name: "English",
-          nameNative: "English",
-          iso3: "eng",
-          bcp47: "en",
-          speakerCount: 270000000,
-          audioPreviewUrl: "https://example.com/audio.mp3",
-          primaryCountryId: "US",
-        },
-      })
-
-      // Verify second language database call
-      expect(mockDb.media_languages.create).toHaveBeenCalledWith({
-        data: {
-          mediaLanguageId: "lang2",
-          name: "Spanish",
-          nameNative: "Español",
-          iso3: "spa",
-          bcp47: "es",
-          speakerCount: 45000000,
-          audioPreviewUrl: "https://example.com/audio2.mp3",
-          primaryCountryId: "ES",
-        },
+      // Verify createMany was called with all languages
+      expect(mockDb.media_languages.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            mediaLanguageId: "lang1",
+            name: "English",
+            nameNative: "English",
+            iso3: "eng",
+            bcp47: "en",
+            speakerCount: 270000000,
+            audioPreviewUrl: "https://example.com/audio.mp3",
+            primaryCountryId: "US",
+          },
+          {
+            mediaLanguageId: "lang2",
+            name: "Spanish",
+            nameNative: "Español",
+            iso3: "spa",
+            bcp47: "es",
+            speakerCount: 45000000,
+            audioPreviewUrl: "https://example.com/audio2.mp3",
+            primaryCountryId: "ES",
+          },
+        ],
       })
     })
 
@@ -170,7 +168,7 @@ describe("transformMediaLanguages", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.media_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.media_languages.createMany).not.toHaveBeenCalled()
     })
   })
 
@@ -188,7 +186,7 @@ describe("transformMediaLanguages", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.media_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.media_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle languages with no country languages", async () => {
@@ -362,7 +360,7 @@ describe("transformMediaLanguages", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.media_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.media_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -387,7 +385,7 @@ describe("transformMediaLanguages", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.media_languages.create as any).mockRejectedValue(
+      ;(mockDb.media_languages.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 

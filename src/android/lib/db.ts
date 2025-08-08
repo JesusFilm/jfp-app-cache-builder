@@ -2,6 +2,7 @@ import { promises as fs } from "fs"
 import path from "path"
 import process from "process"
 
+import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3"
 import { Logger } from "pino"
 
 import { PrismaClient } from "../../__generated__/prisma/index.js"
@@ -14,12 +15,13 @@ export async function getDb(
 ): Promise<PrismaClient> {
   let db = _db
   if (!db || ignoreCache) {
+    // Use better-sqlite3 for improved performance
+    const adapter = new PrismaBetterSQLite3({
+      url: `file:${dbPath}`,
+    })
+
     db = new PrismaClient({
-      datasources: {
-        db: {
-          url: `file:${dbPath}`,
-        },
-      },
+      adapter,
     })
   }
 

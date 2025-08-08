@@ -77,34 +77,38 @@ describe("transformSpokenLanguages", () => {
         query,
       })
 
-      // Verify database create was called for all spoken languages
-      expect(mockDb.spoken_languages.create).toHaveBeenCalledTimes(5)
+      // Verify database createMany was called for all spoken languages
+      expect(mockDb.spoken_languages.createMany).toHaveBeenCalledTimes(1)
 
-      // Check first create call
-      expect(mockDb.spoken_languages.create).toHaveBeenNthCalledWith(1, {
-        data: {
-          countryId: "US",
-          languageId: "529",
-          speakerCount: 250000000,
-        },
-      })
-
-      // Check second create call
-      expect(mockDb.spoken_languages.create).toHaveBeenNthCalledWith(2, {
-        data: {
-          countryId: "US",
-          languageId: "21028",
-          speakerCount: 45000000,
-        },
-      })
-
-      // Check third create call
-      expect(mockDb.spoken_languages.create).toHaveBeenNthCalledWith(3, {
-        data: {
-          countryId: "US",
-          languageId: "6930",
-          speakerCount: 1000000,
-        },
+      // Check createMany was called with all spoken languages
+      expect(mockDb.spoken_languages.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "US",
+            languageId: "529",
+            speakerCount: 250000000,
+          },
+          {
+            countryId: "US",
+            languageId: "21028",
+            speakerCount: 45000000,
+          },
+          {
+            countryId: "US",
+            languageId: "6930",
+            speakerCount: 1000000,
+          },
+          {
+            countryId: "CA",
+            languageId: "529",
+            speakerCount: 30000000,
+          },
+          {
+            countryId: "CA",
+            languageId: "6930",
+            speakerCount: 7000000,
+          },
+        ],
       })
 
       // Verify the transformed data
@@ -161,7 +165,7 @@ describe("transformSpokenLanguages", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.spoken_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.spoken_languages.createMany).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -188,7 +192,7 @@ describe("transformSpokenLanguages", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.spoken_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.spoken_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle countries with no spoken languages", async () => {
@@ -209,7 +213,7 @@ describe("transformSpokenLanguages", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.spoken_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.spoken_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle missing speakers count", async () => {
@@ -333,8 +337,8 @@ describe("transformSpokenLanguages", () => {
         speakerCount: 1000000,
       })
 
-      // Verify database create was called only for the deduplicated records
-      expect(mockDb.spoken_languages.create).toHaveBeenCalledTimes(4)
+      // Verify database createMany was called only for the deduplicated records
+      expect(mockDb.spoken_languages.createMany).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -350,7 +354,7 @@ describe("transformSpokenLanguages", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.spoken_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.spoken_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -369,7 +373,7 @@ describe("transformSpokenLanguages", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.spoken_languages.create as any).mockRejectedValue(
+      ;(mockDb.spoken_languages.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 

@@ -37,13 +37,13 @@ export async function transformTermTranslations({
 
     const db = await getDb()
 
-    await Promise.all(
-      termTranslations.map(async (termTranslation) => {
-        await db.term_translations.create({
-          data: termTranslation,
-        })
+    // Use createMany for better performance with large batches
+    if (termTranslations.length > 0) {
+      await db.term_translations.createMany({
+        data: termTranslations,
       })
-    )
+    }
+
     logger?.info(
       { count: termTranslations.length },
       "Successfully wrote term translations to database"

@@ -131,13 +131,12 @@ export async function transformMediaMetadata({
 
       const db = await getDb()
 
-      await Promise.all(
-        mediaMetadata.map(async (item) => {
-          await db.media_metadata.create({
-            data: item,
-          })
+      // Use createMany for better performance with large batches
+      if (mediaMetadata.length > 0) {
+        await db.media_metadata.createMany({
+          data: mediaMetadata,
         })
-      )
+      }
       logger?.info(
         { count: mediaMetadata.length, offset },
         "Successfully wrote media metadata page to database"

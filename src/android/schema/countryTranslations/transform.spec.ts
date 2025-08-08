@@ -75,33 +75,27 @@ describe("transformCountryTranslations", () => {
         query,
       })
 
-      expect(mockDb.country_translations.create).toHaveBeenCalledTimes(3)
+      expect(mockDb.country_translations.createMany).toHaveBeenCalledTimes(1)
 
-      // Check first country translation (US - English)
-      expect(mockDb.country_translations.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "US",
-          name: "United States",
-          languageTag: "en",
-        },
-      })
-
-      // Check second country translation (US - Spanish)
-      expect(mockDb.country_translations.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "US",
-          name: "Estados Unidos",
-          languageTag: "es",
-        },
-      })
-
-      // Check third country translation (CA - English)
-      expect(mockDb.country_translations.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "CA",
-          name: "Canada",
-          languageTag: "en",
-        },
+      // Check createMany was called with all country translations
+      expect(mockDb.country_translations.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "US",
+            name: "United States",
+            languageTag: "en",
+          },
+          {
+            countryId: "US",
+            name: "Estados Unidos",
+            languageTag: "es",
+          },
+          {
+            countryId: "CA",
+            name: "Canada",
+            languageTag: "en",
+          },
+        ],
       })
 
       expect(result).toHaveLength(3)
@@ -154,7 +148,7 @@ describe("transformCountryTranslations", () => {
         query,
       })
 
-      expect(mockDb.country_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.country_translations.createMany).not.toHaveBeenCalled()
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
@@ -180,7 +174,7 @@ describe("transformCountryTranslations", () => {
 
       const result = await transformCountryTranslations(options)
 
-      expect(mockDb.country_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.country_translations.createMany).not.toHaveBeenCalled()
       expect(result).toHaveLength(0)
     })
 
@@ -203,7 +197,7 @@ describe("transformCountryTranslations", () => {
 
       const result = await transformCountryTranslations(options)
 
-      expect(mockDb.country_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.country_translations.createMany).not.toHaveBeenCalled()
       expect(result).toHaveLength(0)
     })
 
@@ -241,13 +235,15 @@ describe("transformCountryTranslations", () => {
 
       const result = await transformCountryTranslations(options)
 
-      expect(mockDb.country_translations.create).toHaveBeenCalledTimes(1)
-      expect(mockDb.country_translations.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "US",
-          name: "United States",
-          languageTag: "en",
-        },
+      expect(mockDb.country_translations.createMany).toHaveBeenCalledTimes(1)
+      expect(mockDb.country_translations.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "US",
+            name: "United States",
+            languageTag: "en",
+          },
+        ],
       })
 
       expect(result).toHaveLength(1)
@@ -272,7 +268,7 @@ describe("transformCountryTranslations", () => {
         "GraphQL error"
       )
 
-      expect(mockDb.country_translations.create).not.toHaveBeenCalled()
+      expect(mockDb.country_translations.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -294,7 +290,7 @@ describe("transformCountryTranslations", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.country_translations.create as any).mockRejectedValue(
+      ;(mockDb.country_translations.createMany as any).mockRejectedValue(
         new Error("Database error")
       )
 
@@ -411,7 +407,7 @@ describe("transformCountryTranslations", () => {
       const result = await transformCountryTranslations(options)
 
       expect(result).toHaveLength(4)
-      expect(mockDb.country_translations.create).toHaveBeenCalledTimes(4)
+      expect(mockDb.country_translations.createMany).toHaveBeenCalledTimes(1)
     })
   })
 })

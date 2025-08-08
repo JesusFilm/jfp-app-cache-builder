@@ -62,19 +62,21 @@ describe("transformCountries", () => {
       })
 
       // Verify database create was called
-      expect(mockDb.countries.create).toHaveBeenCalledTimes(1)
-      expect(mockDb.countries.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "US",
-          name: "United States",
-          continentName: "North America",
-          languageHavingMediaCount: 1,
-          population: 331002651,
-          longitude: -97,
-          latitude: 38,
-          flagLossyWeb: "https://flagcdn.com/w320/us.webp",
-          flagPng8: "https://flagcdn.com/w320/us.png",
-        },
+      expect(mockDb.countries.createMany).toHaveBeenCalledTimes(1)
+      expect(mockDb.countries.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "US",
+            name: "United States",
+            continentName: "North America",
+            languageHavingMediaCount: 1,
+            population: 331002651,
+            longitude: -97,
+            latitude: 38,
+            flagLossyWeb: "https://flagcdn.com/w320/us.webp",
+            flagPng8: "https://flagcdn.com/w320/us.png",
+          },
+        ],
       })
 
       // Verify the transformed data
@@ -121,7 +123,7 @@ describe("transformCountries", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.countries.create).not.toHaveBeenCalled()
+      expect(mockDb.countries.createMany).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -154,7 +156,7 @@ describe("transformCountries", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.countries.create).not.toHaveBeenCalled()
+      expect(mockDb.countries.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle missing optional fields", async () => {
@@ -252,7 +254,7 @@ describe("transformCountries", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.countries.create).not.toHaveBeenCalled()
+      expect(mockDb.countries.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -275,7 +277,7 @@ describe("transformCountries", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.countries.create as any).mockRejectedValue(
+      ;(mockDb.countries.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 
@@ -373,18 +375,20 @@ describe("transformCountries", () => {
       ])
 
       // Verify database objects are created with correct structure
-      expect(mockDb.countries.create).toHaveBeenCalledWith({
-        data: {
-          countryId: "MX",
-          name: "México",
-          continentName: "América del Norte",
-          languageHavingMediaCount: 2,
-          population: 128932753,
-          longitude: -102.0,
-          latitude: 23.0,
-          flagLossyWeb: "https://flagcdn.com/w320/mx.webp",
-          flagPng8: "https://flagcdn.com/w320/mx.png",
-        },
+      expect(mockDb.countries.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "MX",
+            name: "México",
+            continentName: "América del Norte",
+            languageHavingMediaCount: 2,
+            population: 128932753,
+            longitude: -102.0,
+            latitude: 23.0,
+            flagLossyWeb: "https://flagcdn.com/w320/mx.webp",
+            flagPng8: "https://flagcdn.com/w320/mx.png",
+          },
+        ],
       })
     })
 
@@ -453,7 +457,7 @@ describe("transformCountries", () => {
       ])
 
       // Verify both countries were upserted
-      expect(mockDb.countries.create).toHaveBeenCalledTimes(2)
+      expect(mockDb.countries.createMany).toHaveBeenCalledTimes(1)
     })
   })
 })

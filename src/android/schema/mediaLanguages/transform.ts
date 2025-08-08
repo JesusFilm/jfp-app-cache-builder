@@ -51,13 +51,12 @@ export async function transformMediaLanguages({
 
     const db = await getDb()
 
-    await Promise.all(
-      mediaLanguages.map(async (mediaLanguage) => {
-        await db.media_languages.create({
-          data: mediaLanguage,
-        })
+    // Use createMany for better performance with large batches
+    if (mediaLanguages.length > 0) {
+      await db.media_languages.createMany({
+        data: mediaLanguages,
       })
-    )
+    }
     logger?.info(
       { count: mediaLanguages.length },
       "Successfully wrote media languages to database"

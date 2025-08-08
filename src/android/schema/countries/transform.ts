@@ -39,13 +39,12 @@ export async function transformCountries({
 
     const db = await getDb()
 
-    await Promise.all(
-      countries.map(async (country) => {
-        await db.countries.create({
-          data: country,
-        })
+    // Use createMany for better performance with large batches
+    if (countries.length > 0) {
+      await db.countries.createMany({
+        data: countries,
       })
-    )
+    }
     logger?.info(
       { count: countries.length },
       "Successfully wrote countries to database"

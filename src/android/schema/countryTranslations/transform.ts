@@ -42,13 +42,12 @@ export async function transformCountryTranslations({
 
     const db = await getDb()
 
-    await Promise.all(
-      countryTranslations.map(async (countryTranslation) => {
-        await db.country_translations.create({
-          data: countryTranslation,
-        })
+    // Use createMany for better performance with large batches
+    if (countryTranslations.length > 0) {
+      await db.country_translations.createMany({
+        data: countryTranslations,
       })
-    )
+    }
     logger?.info(
       { count: countryTranslations.length },
       "Successfully wrote country translations to database"

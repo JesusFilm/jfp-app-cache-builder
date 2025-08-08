@@ -63,36 +63,42 @@ describe("transformMediaLanguageLinks", () => {
         variables: { offset: 100, limit: 100 },
       })
 
-      // Verify database create was called for each media language link
-      expect(mockDb.media_language_links.create).toHaveBeenCalledTimes(4)
+      // Verify database createMany was called for media language links (called twice due to pagination)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(2)
 
-      // Verify the first video's language links
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "video1",
-          languageId: "lang1",
-        },
-      })
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "video1",
-          languageId: "lang2",
-        },
-      })
+      // Verify the first page's media language links
+      expect(mockDb.media_language_links.createMany).toHaveBeenNthCalledWith(
+        1,
+        {
+          data: [
+            {
+              mediaComponentId: "video1",
+              languageId: "lang1",
+            },
+            {
+              mediaComponentId: "video1",
+              languageId: "lang2",
+            },
+          ],
+        }
+      )
 
-      // Verify the second video's language links
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "video2",
-          languageId: "lang1",
-        },
-      })
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "video2",
-          languageId: "lang3",
-        },
-      })
+      // Verify the second page's media language links
+      expect(mockDb.media_language_links.createMany).toHaveBeenNthCalledWith(
+        2,
+        {
+          data: [
+            {
+              mediaComponentId: "video2",
+              languageId: "lang1",
+            },
+            {
+              mediaComponentId: "video2",
+              languageId: "lang3",
+            },
+          ],
+        }
+      )
 
       // Verify the transformed data
       expect(result).toEqual([
@@ -136,7 +142,7 @@ describe("transformMediaLanguageLinks", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.media_language_links.create).not.toHaveBeenCalled()
+      expect(mockDb.media_language_links.createMany).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -218,8 +224,8 @@ describe("transformMediaLanguageLinks", () => {
         },
       ])
 
-      // Verify all 5 media language links were created
-      expect(mockDb.media_language_links.create).toHaveBeenCalledTimes(5)
+      // Verify all 5 media language links were created (across multiple pages)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(3)
     })
   })
 
@@ -237,7 +243,7 @@ describe("transformMediaLanguageLinks", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.media_language_links.create).not.toHaveBeenCalled()
+      expect(mockDb.media_language_links.createMany).not.toHaveBeenCalled()
       expect(mockClient.query).toHaveBeenCalledTimes(1)
       expect(mockClient.query).toHaveBeenCalledWith({
         query,
@@ -276,12 +282,14 @@ describe("transformMediaLanguageLinks", () => {
       ])
 
       // Only the video with language IDs should be created
-      expect(mockDb.media_language_links.create).toHaveBeenCalledTimes(1)
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "video2",
-          languageId: "lang1",
-        },
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(1)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            mediaComponentId: "video2",
+            languageId: "lang1",
+          },
+        ],
       })
     })
 
@@ -319,7 +327,7 @@ describe("transformMediaLanguageLinks", () => {
         },
       ])
 
-      expect(mockDb.media_language_links.create).toHaveBeenCalledTimes(3)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -335,7 +343,7 @@ describe("transformMediaLanguageLinks", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.media_language_links.create).not.toHaveBeenCalled()
+      expect(mockDb.media_language_links.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -351,7 +359,7 @@ describe("transformMediaLanguageLinks", () => {
       mockClient.query
         .mockResolvedValueOnce(mockApiResponse)
         .mockResolvedValueOnce(createMockResponse({ videos: [] })) // Stop pagination
-      ;(mockDb.media_language_links.create as any).mockRejectedValue(
+      ;(mockDb.media_language_links.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 
@@ -397,11 +405,13 @@ describe("transformMediaLanguageLinks", () => {
       ])
 
       // Verify database objects are created with correct structure
-      expect(mockDb.media_language_links.create).toHaveBeenCalledWith({
-        data: {
-          mediaComponentId: "test-video-123",
-          languageId: "english-001",
-        },
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            mediaComponentId: "test-video-123",
+            languageId: "english-001",
+          },
+        ],
       })
     })
 
@@ -466,7 +476,7 @@ describe("transformMediaLanguageLinks", () => {
       ])
 
       // Verify all 6 media language links were created
-      expect(mockDb.media_language_links.create).toHaveBeenCalledTimes(6)
+      expect(mockDb.media_language_links.createMany).toHaveBeenCalledTimes(1)
     })
   })
 })

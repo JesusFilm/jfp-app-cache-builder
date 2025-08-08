@@ -123,31 +123,29 @@ describe("transformMediaMetadata", () => {
         variables: { offset: 100, limit: 100 },
       })
 
-      // Verify database create was called for each metadata record
-      expect(mockDb.media_metadata.create).toHaveBeenCalledTimes(2)
+      // Verify database createMany was called for metadata records
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(1)
 
-      // Verify English metadata record
-      expect(mockDb.media_metadata.create).toHaveBeenCalledWith({
-        data: {
-          mediaId: "video1",
-          title: "English Title",
-          shortDescription: "English Snippet",
-          longDescription: "English Description",
-          studyQuestions: JSON.stringify(["Question 2", "Question 1"]),
-          metadataLanguageTag: "en",
-        },
-      })
-
-      // Verify Spanish metadata record
-      expect(mockDb.media_metadata.create).toHaveBeenCalledWith({
-        data: {
-          mediaId: "video1",
-          title: "Spanish Title",
-          shortDescription: "Spanish Snippet",
-          longDescription: "Spanish Description",
-          studyQuestions: JSON.stringify(["Pregunta 1"]),
-          metadataLanguageTag: "es",
-        },
+      // Verify createMany was called with all metadata records
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            mediaId: "video1",
+            title: "English Title",
+            shortDescription: "English Snippet",
+            longDescription: "English Description",
+            studyQuestions: JSON.stringify(["Question 2", "Question 1"]),
+            metadataLanguageTag: "en",
+          },
+          {
+            mediaId: "video1",
+            title: "Spanish Title",
+            shortDescription: "Spanish Snippet",
+            longDescription: "Spanish Description",
+            studyQuestions: JSON.stringify(["Pregunta 1"]),
+            metadataLanguageTag: "es",
+          },
+        ],
       })
 
       // Verify the transformed data
@@ -216,7 +214,7 @@ describe("transformMediaMetadata", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.media_metadata.create).not.toHaveBeenCalled()
+      expect(mockDb.media_metadata.createMany).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -327,7 +325,7 @@ describe("transformMediaMetadata", () => {
       expect(result[1]?.mediaId).toBe("video2")
 
       // Verify all 2 metadata records were upserted
-      expect(mockDb.media_metadata.create).toHaveBeenCalledTimes(2)
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -345,7 +343,7 @@ describe("transformMediaMetadata", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.media_metadata.create).not.toHaveBeenCalled()
+      expect(mockDb.media_metadata.createMany).not.toHaveBeenCalled()
       expect(mockClient.query).toHaveBeenCalledTimes(1)
       expect(mockClient.query).toHaveBeenCalledWith({
         query,
@@ -376,7 +374,7 @@ describe("transformMediaMetadata", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.media_metadata.create).not.toHaveBeenCalled()
+      expect(mockDb.media_metadata.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle videos with missing language tags", async () => {
@@ -528,7 +526,7 @@ describe("transformMediaMetadata", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.media_metadata.create).not.toHaveBeenCalled()
+      expect(mockDb.media_metadata.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -568,7 +566,7 @@ describe("transformMediaMetadata", () => {
       mockClient.query
         .mockResolvedValueOnce(mockApiResponse)
         .mockResolvedValueOnce(createMockResponse({ videos: [] })) // Stop pagination
-      ;(mockDb.media_metadata.create as any).mockRejectedValue(
+      ;(mockDb.media_metadata.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 
@@ -695,7 +693,7 @@ describe("transformMediaMetadata", () => {
       })
 
       // Verify all 3 metadata records were upserted
-      expect(mockDb.media_metadata.create).toHaveBeenCalledTimes(3)
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(1)
     })
 
     it("should handle multiple videos with overlapping language tags", async () => {
@@ -789,7 +787,7 @@ describe("transformMediaMetadata", () => {
       ])
 
       // Verify both metadata records were upserted
-      expect(mockDb.media_metadata.create).toHaveBeenCalledTimes(2)
+      expect(mockDb.media_metadata.createMany).toHaveBeenCalledTimes(1)
     })
   })
 })

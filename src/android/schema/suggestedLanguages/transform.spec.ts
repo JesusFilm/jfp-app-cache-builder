@@ -77,34 +77,28 @@ describe("transformSuggestedLanguages", () => {
         query,
       })
 
-      // Verify database create was called for suggested languages only
-      expect(mockDb.suggested_languages.create).toHaveBeenCalledTimes(3)
+      // Verify database createMany was called for suggested languages only
+      expect(mockDb.suggested_languages.createMany).toHaveBeenCalledTimes(1)
 
-      // Check first create call
-      expect(mockDb.suggested_languages.create).toHaveBeenNthCalledWith(1, {
-        data: {
-          countryId: "US",
-          languageId: "529",
-          languageRank: 1,
-        },
-      })
-
-      // Check second create call
-      expect(mockDb.suggested_languages.create).toHaveBeenNthCalledWith(2, {
-        data: {
-          countryId: "US",
-          languageId: "6930",
-          languageRank: 3,
-        },
-      })
-
-      // Check third create call
-      expect(mockDb.suggested_languages.create).toHaveBeenNthCalledWith(3, {
-        data: {
-          countryId: "CA",
-          languageId: "529",
-          languageRank: 1,
-        },
+      // Check that createMany was called with all suggested languages
+      expect(mockDb.suggested_languages.createMany).toHaveBeenCalledWith({
+        data: [
+          {
+            countryId: "US",
+            languageId: "529",
+            languageRank: 1,
+          },
+          {
+            countryId: "US",
+            languageId: "6930",
+            languageRank: 3,
+          },
+          {
+            countryId: "CA",
+            languageId: "529",
+            languageRank: 1,
+          },
+        ],
       })
 
       // Verify the transformed data
@@ -152,7 +146,7 @@ describe("transformSuggestedLanguages", () => {
       })
 
       // Verify no database write in read-only mode
-      expect(mockDb.suggested_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.suggested_languages.createMany).not.toHaveBeenCalled()
 
       // Verify transformation still works
       expect(result).toEqual([
@@ -179,7 +173,7 @@ describe("transformSuggestedLanguages", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.suggested_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.suggested_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle countries with no suggested languages", async () => {
@@ -211,7 +205,7 @@ describe("transformSuggestedLanguages", () => {
       })
 
       expect(result).toEqual([])
-      expect(mockDb.suggested_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.suggested_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle missing languageRank", async () => {
@@ -259,7 +253,7 @@ describe("transformSuggestedLanguages", () => {
         })
       ).rejects.toThrow("GraphQL query failed")
 
-      expect(mockDb.suggested_languages.create).not.toHaveBeenCalled()
+      expect(mockDb.suggested_languages.createMany).not.toHaveBeenCalled()
     })
 
     it("should handle database write errors", async () => {
@@ -279,7 +273,7 @@ describe("transformSuggestedLanguages", () => {
       })
 
       mockClient.query.mockResolvedValue(mockApiResponse)
-      ;(mockDb.suggested_languages.create as any).mockRejectedValue(
+      ;(mockDb.suggested_languages.createMany as any).mockRejectedValue(
         new Error("Database write failed")
       )
 
