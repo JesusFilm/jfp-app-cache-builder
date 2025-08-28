@@ -18,9 +18,10 @@ vi.mock("./schema/termTranslations/transform.js")
 // Mock the rebuild function
 vi.mock("./lib/db.js", () => ({
   rebuild: vi.fn(),
+  getDb: vi.fn(),
 }))
 
-const { rebuild } = await import("./lib/db.js")
+const { rebuild, getDb } = await import("./lib/db.js")
 
 describe("runner", () => {
   beforeEach(() => {
@@ -66,6 +67,11 @@ describe("runner", () => {
       const { transformReadingLanguages } = await import(
         "./schema/readingLanguages/transform.js"
       )
+
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
 
       vi.mocked(transformCountries).mockResolvedValue([])
       vi.mocked(transformCountryTranslations).mockResolvedValue([])
@@ -157,6 +163,10 @@ describe("runner", () => {
       const { transformCountries } = await import(
         "./schema/countries/transform.js"
       )
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
       vi.mocked(transformCountries).mockResolvedValue([])
 
       await runner({
@@ -215,12 +225,107 @@ describe("runner", () => {
     })
   })
 
+  describe("database disconnect", () => {
+    it("should disconnect database when not in read-only mode", async () => {
+      const { transformCountries } = await import(
+        "./schema/countries/transform.js"
+      )
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
+      vi.mocked(rebuild).mockResolvedValue(undefined)
+      vi.mocked(transformCountries).mockResolvedValue([])
+
+      const mockLogger = {
+        info: vi.fn(),
+        child: vi.fn().mockReturnValue({
+          info: vi.fn(),
+        }),
+      } as any
+
+      await runner({
+        languageId: "529",
+        languageTag: "en",
+        logger: mockLogger,
+      })
+
+      expect(getDb).toHaveBeenCalled()
+      expect(mockDb.$disconnect).toHaveBeenCalled()
+    })
+
+    it("should not disconnect database when in read-only mode", async () => {
+      const { transformCountries } = await import(
+        "./schema/countries/transform.js"
+      )
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
+      vi.mocked(transformCountries).mockResolvedValue([])
+
+      const mockLogger = {
+        info: vi.fn(),
+        child: vi.fn().mockReturnValue({
+          info: vi.fn(),
+        }),
+      } as any
+
+      await runner({
+        languageId: "529",
+        languageTag: "en",
+        logger: mockLogger,
+        readOnly: true,
+      })
+
+      expect(getDb).not.toHaveBeenCalled()
+      expect(mockDb.$disconnect).not.toHaveBeenCalled()
+    })
+
+    it("should handle disconnect errors gracefully", async () => {
+      const { transformCountries } = await import(
+        "./schema/countries/transform.js"
+      )
+      const mockDb = {
+        $disconnect: vi.fn().mockRejectedValue(new Error("Disconnect failed")),
+      }
+
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
+      vi.mocked(rebuild).mockResolvedValue(undefined)
+      vi.mocked(transformCountries).mockResolvedValue([])
+
+      const mockLogger = {
+        info: vi.fn(),
+        child: vi.fn().mockReturnValue({
+          info: vi.fn(),
+        }),
+      } as any
+
+      await expect(
+        runner({
+          languageId: "529",
+          languageTag: "en",
+          logger: mockLogger,
+        })
+      ).rejects.toThrow("Disconnect failed")
+
+      expect(getDb).toHaveBeenCalled()
+      expect(mockDb.$disconnect).toHaveBeenCalled()
+    })
+  })
+
   describe("database rebuild", () => {
     it("should call rebuild when not in read-only mode", async () => {
       const { transformCountries } = await import(
         "./schema/countries/transform.js"
       )
 
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
       vi.mocked(rebuild).mockResolvedValue(undefined)
       vi.mocked(transformCountries).mockResolvedValue([])
 
@@ -343,6 +448,11 @@ describe("runner", () => {
         "./schema/mediaLanguageLinks/transform.js"
       )
 
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
+
       vi.mocked(transformCountries).mockImplementation(async () => {
         executionOrder.push("countries")
         return []
@@ -389,6 +499,10 @@ describe("runner", () => {
         "./schema/mediaData/transform.js"
       )
 
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
       vi.mocked(transformCountries).mockResolvedValue([])
       vi.mocked(transformMediaData).mockResolvedValue([])
 
@@ -438,6 +552,10 @@ describe("runner", () => {
       const { transformCountries } = await import(
         "./schema/countries/transform.js"
       )
+      const mockDb = {
+        $disconnect: vi.fn().mockResolvedValue(undefined),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
       vi.mocked(transformCountries).mockResolvedValue([])
 
       const mockLogger = {

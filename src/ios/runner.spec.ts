@@ -28,6 +28,7 @@ describe("runner", () => {
       create: vi.fn(),
       objects: vi.fn(),
       delete: vi.fn(),
+      close: vi.fn().mockResolvedValue(undefined),
     }
     vi.mocked(getDb).mockResolvedValue(mockDb as any)
     vi.mocked(cleanup).mockResolvedValue()
@@ -198,6 +199,61 @@ describe("runner", () => {
         languageTag: "en",
         readOnly: true,
       })
+    })
+  })
+
+  describe("database disconnect", () => {
+    it("should close database when not in read-only mode", async () => {
+      const { transformBibleCodes } = await import(
+        "./schema/bibleCode/transform.js"
+      )
+      vi.mocked(transformBibleCodes).mockResolvedValue([])
+
+      await runner({
+        languageId: "529",
+        languageTag: "en",
+      })
+
+      expect(getDb).toHaveBeenCalled()
+    })
+
+    it("should not close database when in read-only mode", async () => {
+      const { transformBibleCodes } = await import(
+        "./schema/bibleCode/transform.js"
+      )
+      vi.mocked(transformBibleCodes).mockResolvedValue([])
+
+      await runner({
+        languageId: "529",
+        languageTag: "en",
+        readOnly: true,
+      })
+
+      expect(getDb).not.toHaveBeenCalled()
+    })
+
+    it("should handle close errors gracefully", async () => {
+      const { transformBibleCodes } = await import(
+        "./schema/bibleCode/transform.js"
+      )
+      const mockDb = {
+        write: vi.fn(),
+        create: vi.fn(),
+        objects: vi.fn(),
+        delete: vi.fn(),
+        close: vi.fn().mockRejectedValue(new Error("Close failed")),
+      }
+      vi.mocked(getDb).mockResolvedValue(mockDb as any)
+      vi.mocked(transformBibleCodes).mockResolvedValue([])
+
+      await expect(
+        runner({
+          languageId: "529",
+          languageTag: "en",
+        })
+      ).rejects.toThrow("Close failed")
+
+      expect(getDb).toHaveBeenCalled()
     })
   })
 
