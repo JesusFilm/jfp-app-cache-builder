@@ -7,25 +7,25 @@ export const JFPAppCacheBuilder_Android_MediaMetadataQuery = graphql(`
   ) {
     videos(limit: $limit, offset: $offset) {
       id
-      title {
+      title(primary: false) {
         value
         language {
           metadataLanguageTag: bcp47
         }
       }
-      longDescription: description {
+      longDescription: description(primary: false) {
         value
         language {
           metadataLanguageTag: bcp47
         }
       }
-      shortDescription: snippet {
+      shortDescription: snippet(primary: false) {
         value
         language {
           metadataLanguageTag: bcp47
         }
       }
-      studyQuestions {
+      studyQuestions(primary: false) {
         value
         order
         language {
