@@ -1,6 +1,6 @@
 import { RunnerOptions, TransformOptions } from "../types/transform.js"
 
-import { rebuild } from "./lib/db.js"
+import { getDb, rebuild } from "./lib/db.js"
 import { transformBibleCodes } from "./schema/bibleCode/transform.js"
 import { transformContainedByMediaLinks } from "./schema/containedByMediaLink/transform.js"
 import { transformCountries } from "./schema/country/transform.js"
@@ -69,6 +69,11 @@ export async function runner({
 
     await transformer(transformOptions)
     logger?.info(`Transformed ${name}`)
+  }
+
+  if (!readOnly) {
+    const db = await getDb()
+    await db.close()
   }
 
   logger?.info("iOS data transformation completed successfully")

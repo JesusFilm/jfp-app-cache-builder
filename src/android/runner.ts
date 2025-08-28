@@ -1,4 +1,4 @@
-import { rebuild } from "./lib/db.js"
+import { getDb, rebuild } from "./lib/db.js"
 import { transformCountries } from "./schema/countries/transform.js"
 import { transformCountryTranslations } from "./schema/countryTranslations/transform.js"
 import { transformMediaData } from "./schema/mediaData/transform.js"
@@ -55,6 +55,11 @@ export async function runner({
       readOnly,
     })
     logger?.info(`Transformed ${name}`)
+  }
+
+  if (!readOnly) {
+    const db = await getDb()
+    await db.$disconnect()
   }
 
   logger?.info("Android data transformation completed successfully")
