@@ -15,6 +15,12 @@ export const languages: Language[] = [
     id: 22658,
   },
   {
+    tag: "bn",
+    name: "Bengali",
+    nameNative: "বাংলা",
+    id: 139081,
+  },
+  {
     tag: "zh-Hans",
     name: "Chinese (Simplified)",
     nameNative: "中国（简体）",
