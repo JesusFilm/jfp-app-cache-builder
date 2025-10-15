@@ -23,7 +23,7 @@ export const JFPAppCacheBuilder_iOS_MediaItemQuery = graphql(`
       languageIds: variantLanguages {
         id
       }
-      variant(languageId: $languageId) {
+      variants(input: { languageId: $languageId }) {
         mediaComponentId: id
         lengthInSeconds: duration
         isDownloadable: downloadable

@@ -22,8 +22,8 @@ program
   .option("--language-id <id>", "Language ID to process", "529")
   .option("--language-tag <tag>", "Language tag to process", "en")
   .option(
-    "--include-reading-language-data",
-    "Include reading language data in the build",
+    "--exclude-reading-language-data",
+    "Exclude reading language data in the build",
     false
   )
   .option("--silent", "Run in silent mode (no logging)", false)
@@ -41,7 +41,7 @@ interface CliOptions {
   target: string
   languageId: string
   languageTag: string
-  includeReadingLanguageData: boolean
+  excludeReadingLanguageData: boolean
   silent: boolean
   verbose: boolean
   dry: boolean
@@ -92,7 +92,7 @@ if (options.rebuild) {
 const runnerOptions: RunnerOptions = {
   languageId: options.languageId,
   languageTag: options.languageTag,
-  includeReadingLanguageData: options.includeReadingLanguageData,
+  includeReadingLanguageData: options.excludeReadingLanguageData != true,
   readOnly: options.dry,
   logger,
 }

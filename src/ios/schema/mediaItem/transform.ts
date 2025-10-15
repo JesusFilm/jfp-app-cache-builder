@@ -81,19 +81,19 @@ export async function transformMediaItems({
         contentType: ["collection", "series"].includes(video.subType)
           ? "none"
           : "video",
-        lengthInSeconds: video.variant?.lengthInSeconds ?? 0,
+        lengthInSeconds: video.variants[0]?.lengthInSeconds ?? 0,
         approxLargeDownloadSize:
-          video.variant?.downloads?.find((d) => d.quality === "high")
+          video.variants[0]?.downloads?.find((d) => d.quality === "high")
             ?.approxDownloadSize ?? undefined,
         approxSmallDownloadSize:
-          video.variant?.downloads?.find((d) => d.quality === "low")
+          video.variants[0]?.downloads?.find((d) => d.quality === "low")
             ?.approxDownloadSize ?? undefined,
         highResImageUrl: image?.highResImageUrl ?? "",
         lowResImageUrl: image?.lowResImageUrl ?? "",
         veryLowResImageUrl: image?.veryLowResImageUrl ?? "",
         thumbnailUrl: image?.thumbnailUrl ?? "",
         videoStillUrl: image?.videoStillUrl ?? "",
-        isDownloadable: video.variant?.isDownloadable ?? false,
+        isDownloadable: video.variants[0]?.isDownloadable ?? false,
         languageIds:
           video.languageIds?.map(({ id }) => `|${id}|`).join(",") ?? "",
         subType: video.subType ?? "",

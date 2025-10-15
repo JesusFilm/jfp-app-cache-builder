@@ -3,7 +3,7 @@ import { graphql } from "gql.tada"
 export const JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery = graphql(`
   query JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery($languageId: ID) {
     bibleCodeData: bibleBooks {
-      name: alternateName
+      name: osisId
       fullName: name(languageId: $languageId) {
         value
       }
