@@ -42,7 +42,27 @@ export async function transformMediaItems({
     )
 
     const mediaItems = data.videos.map((video) => {
-      const image = video.images?.[0]
+      const image = video.images?.reduce(
+        (acc, image) => {
+          if (acc.highResImageUrl == null && image.highResImageUrl) {
+            acc.highResImageUrl = image.highResImageUrl
+          }
+          if (acc.lowResImageUrl == null && image.lowResImageUrl) {
+            acc.lowResImageUrl = image.lowResImageUrl
+          }
+          if (acc.veryLowResImageUrl == null && image.veryLowResImageUrl) {
+            acc.veryLowResImageUrl = image.veryLowResImageUrl
+          }
+          if (acc.thumbnailUrl == null && image.thumbnailUrl) {
+            acc.thumbnailUrl = image.thumbnailUrl
+          }
+          if (acc.videoStillUrl == null && image.videoStillUrl) {
+            acc.videoStillUrl = image.videoStillUrl
+          }
+          return acc
+        },
+        {} as (typeof video.images)[number]
+      )
       const longDescription = video.longDescription?.[0]
       const shortDescription = video.shortDescription?.[0]
       const name = video.name?.[0]

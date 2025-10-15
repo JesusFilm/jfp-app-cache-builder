@@ -49,11 +49,18 @@ describe("transformMediaItems", () => {
             subType: "featureFilm",
             images: [
               {
+                highResImageUrl: null,
+                lowResImageUrl: null,
+                veryLowResImageUrl: null,
+                thumbnailUrl: "https://example.com/thumb.jpg",
+                videoStillUrl: "https://example.com/still.jpg",
+              },
+              {
                 highResImageUrl: "https://example.com/high.jpg",
                 lowResImageUrl: "https://example.com/low.jpg",
                 veryLowResImageUrl: "https://example.com/verylow.jpg",
-                thumbnailUrl: "https://example.com/thumb.jpg",
-                videoStillUrl: "https://example.com/still.jpg",
+                thumbnailUrl: "https://example.com/thumb2.jpg",
+                videoStillUrl: null,
               },
             ],
             languageIds: [{ id: "529" }, { id: "21028" }],
