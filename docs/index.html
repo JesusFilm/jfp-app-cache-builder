@@ -381,7 +381,7 @@
           // Use actual build information
           buildDate.textContent = buildInfo.buildDate
           buildNumber.textContent = `#${buildInfo.buildNumber}`
-          commitSha.textContent = buildInfo.commitSha.substring(0, 8)
+          commitSha.textContent = buildInfo.commitSha.substring(0, 7)
           buildStatus.textContent = "Success"
           buildStatus.className = "status-badge status-success"
         }
