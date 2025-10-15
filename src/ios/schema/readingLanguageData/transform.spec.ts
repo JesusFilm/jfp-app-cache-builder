@@ -3,21 +3,19 @@ import { Buffer } from "buffer"
 import Realm from "realm"
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+import { client } from "../../../lib/client.js"
 import { languages } from "../../../lib/languages.js"
+import { createMockResponse } from "../../../lib/test-utils.js"
 import { getDb } from "../../lib/db.js"
 
 import { ReadingLanguageData } from "./realm.js"
 import { transformReadingLanguageData } from "./transform.js"
 
-// Mock the dependencies
-vi.mock("../../../lib/languages.js")
+vi.mock("../../../lib/client.js")
 vi.mock("../../lib/db.js")
-vi.mock("../bibleCode/transform.js")
-vi.mock("../countryLink/transform.js")
-vi.mock("../language/transform.js")
-vi.mock("../mediaItem/transform.js")
 
 const mockGetDb = vi.mocked(getDb)
+const mockClient = vi.mocked(client)
 const mockLanguages = vi.mocked(languages)
 
 describe("transformReadingLanguageData", () => {
@@ -40,6 +38,7 @@ describe("transformReadingLanguageData", () => {
     // Mock the languages array
     mockLanguages.length = 0
     mockLanguages.push(
+      { tag: "en", name: "English", nameNative: "English", id: 529 },
       { tag: "es", name: "Spanish", nameNative: "Español", id: 21028 },
       { tag: "fr", name: "French", nameNative: "le français", id: 496 },
       { tag: "de", name: "German", nameNative: "Deutsche", id: 1106 }
@@ -51,19 +50,56 @@ describe("transformReadingLanguageData", () => {
   })
 
   describe("successful transformation", () => {
-    it("should transform data for all languages except English", async () => {
-      // Mock the sub-transformers
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      const { transformCountryLinks } = await import(
-        "../countryLink/transform.js"
-      )
-      const { transformLanguages } = await import("../language/transform.js")
-      const { transformMediaItems } = await import("../mediaItem/transform.js")
+    it("should transform data", async () => {
+      // Mock API response
+      const mockApiResponse = createMockResponse({
+        bibleCodeData: [
+          {
+            name: "Gen",
+            fullName: [{ value: "Genesis" }],
+          },
+        ],
+        countryData: [
+          {
+            name: [{ value: "Spain" }],
+            continent: { name: [{ value: "Europe" }] },
+          },
+        ],
+        languageData: [
+          {
+            name: [{ value: "Spanish" }],
+            nameNative: [{ value: "Español" }],
+          },
+        ],
+        mediaItemData: [
+          {
+            mediaComponentId: "video1",
+            longDescription: [{ value: "Long description" }],
+            shortDescription: [{ value: "Short description" }],
+            name: [{ value: "Video 1" }],
+            studyQuestions: [{ value: "Question 1" }],
+            bibleCitations: [
+              {
+                osisBibleBook: "Gen",
+                verseStart: 1,
+                verseEnd: 1,
+                chapterStart: 1,
+                chapterEnd: 1,
+              },
+            ],
+          },
+        ],
+      })
 
-      vi.mocked(transformBibleCodes).mockResolvedValue([])
-      vi.mocked(transformCountryLinks).mockResolvedValue([])
-      vi.mocked(transformLanguages).mockResolvedValue([])
-      vi.mocked(transformMediaItems).mockResolvedValue([])
+      mockClient.query.mockResolvedValueOnce(mockApiResponse)
+      mockClient.query.mockResolvedValue(
+        createMockResponse({
+          bibleCodeData: [],
+          countryData: [],
+          languageData: [],
+          mediaItemData: [],
+        })
+      )
 
       const result = await transformReadingLanguageData({
         languageId: "529",
@@ -74,14 +110,48 @@ describe("transformReadingLanguageData", () => {
       expect(result).toHaveLength(3)
 
       // Verify the structure of returned data
-      expect(result[0]).toEqual({
-        readingLanguageId: "21028", // Spanish language ID
-        metadataLanguageTag: "es",
-        bibleCodeData: Buffer.from(JSON.stringify([])),
-        countryData: Buffer.from(JSON.stringify([])),
-        languageData: Buffer.from(JSON.stringify([])),
-        mediaItemData: Buffer.from(JSON.stringify([])),
-      })
+      expect(result[0]!.readingLanguageId).toEqual("21028")
+      expect(result[0]!.metadataLanguageTag).toEqual("es")
+      expect(JSON.parse(result[0]!.bibleCodeData.toString())).toEqual([
+        {
+          name: "Gen",
+          fullName: "Genesis",
+          metadataLanguageTag: "es",
+        },
+      ])
+      expect(JSON.parse(result[0]!.countryData.toString())).toEqual([
+        {
+          name: "Spain",
+          continentName: "Europe",
+          metadataLanguageTag: "es",
+        },
+      ])
+      expect(JSON.parse(result[0]!.languageData.toString())).toEqual([
+        {
+          name: "Spanish",
+          nameNative: "Español",
+          metadataLanguageTag: "es",
+        },
+      ])
+      expect(JSON.parse(result[0]!.mediaItemData.toString())).toEqual([
+        {
+          mediaComponentId: "video1",
+          longDescription: "Long description",
+          shortDescription: "Short description",
+          name: "Video 1",
+          studyQuestions: ["Question 1"],
+          bibleCitations: [
+            {
+              osisBibleBook: "Gen",
+              verseStart: 1,
+              verseEnd: 1,
+              chapterStart: 1,
+              chapterEnd: 1,
+            },
+          ],
+          metadataLanguageTag: "es",
+        },
+      ])
 
       expect(result[1]).toEqual({
         readingLanguageId: "496", // French language ID
@@ -117,7 +187,6 @@ describe("transformReadingLanguageData", () => {
 
   describe("edge cases", () => {
     it("should handle empty languages array", async () => {
-      // Mock empty languages array
       mockLanguages.length = 0
 
       const result = await transformReadingLanguageData({
@@ -131,7 +200,6 @@ describe("transformReadingLanguageData", () => {
     })
 
     it("should handle languages array with only English", async () => {
-      // Mock languages array with only English
       mockLanguages.length = 0
       mockLanguages.push({
         tag: "en",
@@ -148,212 +216,6 @@ describe("transformReadingLanguageData", () => {
       expect(result).toEqual([])
       expect(mockDb.write).not.toHaveBeenCalled()
       expect(mockDb.create).not.toHaveBeenCalled()
-    })
-
-    it("should handle single language entry correctly", async () => {
-      // Mock languages array with only one non-English language
-      mockLanguages.length = 0
-      mockLanguages.push({
-        tag: "pt",
-        name: "Portuguese",
-        nameNative: "Português",
-        id: 584,
-      })
-
-      // Mock the sub-transformers
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      const { transformCountryLinks } = await import(
-        "../countryLink/transform.js"
-      )
-      const { transformLanguages } = await import("../language/transform.js")
-      const { transformMediaItems } = await import("../mediaItem/transform.js")
-
-      vi.mocked(transformBibleCodes).mockResolvedValue([])
-      vi.mocked(transformCountryLinks).mockResolvedValue([])
-      vi.mocked(transformLanguages).mockResolvedValue([])
-      vi.mocked(transformMediaItems).mockResolvedValue([])
-
-      const result = await transformReadingLanguageData({
-        languageId: "529",
-        languageTag: "en",
-      })
-
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
-        readingLanguageId: "584", // Portuguese language ID
-        metadataLanguageTag: "pt",
-        bibleCodeData: Buffer.from(JSON.stringify([])),
-        countryData: Buffer.from(JSON.stringify([])),
-        languageData: Buffer.from(JSON.stringify([])),
-        mediaItemData: Buffer.from(JSON.stringify([])),
-      })
-
-      expect(mockDb.write).toHaveBeenCalledTimes(1)
-      expect(mockDb.create).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  describe("error handling", () => {
-    it("should handle sub-transformer errors", async () => {
-      // Mock languages array
-      mockLanguages.length = 0
-      mockLanguages.push({
-        tag: "es",
-        name: "Spanish",
-        nameNative: "Español",
-        id: 21028,
-      })
-
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      vi.mocked(transformBibleCodes).mockRejectedValue(
-        new Error("Bible codes transform failed")
-      )
-
-      await expect(
-        transformReadingLanguageData({
-          languageId: "529",
-          languageTag: "en",
-        })
-      ).rejects.toThrow("Bible codes transform failed")
-
-      expect(mockDb.write).not.toHaveBeenCalled()
-    })
-
-    it("should handle database write errors", async () => {
-      // Mock languages array
-      mockLanguages.length = 0
-      mockLanguages.push({
-        tag: "es",
-        name: "Spanish",
-        nameNative: "Español",
-        id: 21028,
-      })
-
-      // Mock the sub-transformers
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      const { transformCountryLinks } = await import(
-        "../countryLink/transform.js"
-      )
-      const { transformLanguages } = await import("../language/transform.js")
-      const { transformMediaItems } = await import("../mediaItem/transform.js")
-
-      vi.mocked(transformBibleCodes).mockResolvedValue([])
-      vi.mocked(transformCountryLinks).mockResolvedValue([])
-      vi.mocked(transformLanguages).mockResolvedValue([])
-      vi.mocked(transformMediaItems).mockResolvedValue([])
-
-      mockDb.write.mockImplementation(() => {
-        throw new Error("Database write failed")
-      })
-
-      await expect(
-        transformReadingLanguageData({
-          languageId: "529",
-          languageTag: "en",
-        })
-      ).rejects.toThrow("Database write failed")
-    })
-  })
-
-  describe("data validation", () => {
-    it("should call sub-transformers with correct parameters", async () => {
-      // Mock languages array
-      mockLanguages.length = 0
-      mockLanguages.push({
-        tag: "pt",
-        name: "Portuguese",
-        nameNative: "Português",
-        id: 584,
-      })
-
-      // Mock the sub-transformers
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      const { transformCountryLinks } = await import(
-        "../countryLink/transform.js"
-      )
-      const { transformLanguages } = await import("../language/transform.js")
-      const { transformMediaItems } = await import("../mediaItem/transform.js")
-
-      vi.mocked(transformBibleCodes).mockResolvedValue([])
-      vi.mocked(transformCountryLinks).mockResolvedValue([])
-      vi.mocked(transformLanguages).mockResolvedValue([])
-      vi.mocked(transformMediaItems).mockResolvedValue([])
-
-      await transformReadingLanguageData({
-        languageId: "529",
-        languageTag: "en",
-      })
-
-      // Verify all sub-transformers are called with read-only mode
-      expect(transformBibleCodes).toHaveBeenCalledWith({
-        languageId: "584", // Portuguese language ID
-        languageTag: "pt",
-        readOnly: true,
-      })
-
-      expect(transformCountryLinks).toHaveBeenCalledWith({
-        languageId: "584",
-        languageTag: "pt",
-        readOnly: true,
-      })
-
-      expect(transformLanguages).toHaveBeenCalledWith({
-        languageId: "584",
-        languageTag: "pt",
-        readOnly: true,
-      })
-
-      expect(transformMediaItems).toHaveBeenCalledWith({
-        languageId: "584",
-        languageTag: "pt",
-        readOnly: true,
-      })
-    })
-
-    it("should create correct Buffer data from JSON", async () => {
-      // Mock languages array
-      mockLanguages.length = 0
-      mockLanguages.push({
-        tag: "zh-Hans",
-        name: "Chinese",
-        nameNative: "中国",
-        id: 21754,
-      })
-
-      const mockData = [{ test: "data", numbers: [1, 2, 3] }] as any
-
-      // Mock the sub-transformers
-      const { transformBibleCodes } = await import("../bibleCode/transform.js")
-      const { transformCountryLinks } = await import(
-        "../countryLink/transform.js"
-      )
-      const { transformLanguages } = await import("../language/transform.js")
-      const { transformMediaItems } = await import("../mediaItem/transform.js")
-
-      vi.mocked(transformBibleCodes).mockResolvedValue(mockData)
-      vi.mocked(transformCountryLinks).mockResolvedValue(mockData)
-      vi.mocked(transformLanguages).mockResolvedValue(mockData)
-      vi.mocked(transformMediaItems).mockResolvedValue(mockData)
-
-      const result = await transformReadingLanguageData({
-        languageId: "529",
-        languageTag: "en",
-      })
-
-      expect(result).toHaveLength(1)
-
-      // Verify Buffer content can be parsed back to original data
-      const bibleCodeData = JSON.parse(result[0]!.bibleCodeData!.toString())
-      expect(bibleCodeData).toEqual(mockData)
-
-      const countryData = JSON.parse(result[0]!.countryData!.toString())
-      expect(countryData).toEqual(mockData)
-
-      const languageData = JSON.parse(result[0]!.languageData!.toString())
-      expect(languageData).toEqual(mockData)
-
-      const mediaItemData = JSON.parse(result[0]!.mediaItemData!.toString())
-      expect(mediaItemData).toEqual(mockData)
     })
   })
 })

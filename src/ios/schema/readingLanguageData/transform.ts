@@ -2,14 +2,12 @@ import { Buffer } from "buffer"
 
 import Realm from "realm"
 
+import { client } from "../../../lib/client.js"
 import { languages } from "../../../lib/languages.js"
 import { TransformOptions } from "../../../types/transform.js"
 import { getDb } from "../../lib/db.js"
-import { transformBibleCodes } from "../bibleCode/transform.js"
-import { transformCountryLinks } from "../countryLink/transform.js"
-import { transformLanguages } from "../language/transform.js"
-import { transformMediaItems } from "../mediaItem/transform.js"
 
+import { JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery as query } from "./query.js"
 import { ReadingLanguageData } from "./realm.js"
 
 export async function transformReadingLanguageData({
@@ -32,68 +30,77 @@ export async function transformReadingLanguageData({
       "Processing reading language data"
     )
 
+    const { data } = await client.query({
+      query,
+      variables: {
+        languageId,
+      },
+    })
+
+    logger?.info(
+      { metadataLanguageTag: languageTag, readingLanguageId: languageId },
+      "Retrieved reading language data from API"
+    )
+
     const readingLanguageData = {
       readingLanguageId: languageId,
       metadataLanguageTag: languageTag,
       bibleCodeData: Buffer.from(
         JSON.stringify(
-          await transformBibleCodes({
-            languageId,
-            languageTag,
-            readOnly: true,
-            logger: logger?.child({
-              subTransformer: "bibleCodes",
-              languageId,
-              languageTag,
-            }),
-          })
+          data.bibleCodeData.map((obj) => ({
+            name: obj.name,
+            fullName: obj.fullName.at(0)?.value,
+            metadataLanguageTag: languageTag,
+          }))
         )
       ),
       countryData: Buffer.from(
         JSON.stringify(
-          await transformCountryLinks({
-            languageId,
-            languageTag,
-            readOnly: true,
-            logger: logger?.child({
-              subTransformer: "countryLinks",
-              languageId,
-              languageTag,
-            }),
-          })
+          data.countryData.map((obj) => ({
+            name: obj.name.at(0)?.value,
+            continentName: obj.continent.name.at(0)?.value,
+            countryId: obj.countryId,
+            metadataLanguageTag: languageTag,
+          }))
         )
       ),
       languageData: Buffer.from(
         JSON.stringify(
-          await transformLanguages({
-            languageId,
-            languageTag,
-            readOnly: true,
-            logger: logger?.child({
-              subTransformer: "languages",
-              languageId,
-              languageTag,
-            }),
-          })
+          data.languageData.map((obj) => ({
+            name: obj.name.at(0)?.value,
+            nameNative: obj.nameNative.at(0)?.value,
+            languageId: obj.languageId,
+            metadataLanguageTag: languageTag,
+          }))
         )
       ),
       mediaItemData: Buffer.from(
         JSON.stringify(
-          await transformMediaItems({
-            languageId,
-            languageTag,
-            readOnly: true,
-            logger: logger?.child({
-              subTransformer: "mediaItems",
-              languageId,
-              languageTag,
-            }),
-          })
+          data.mediaItemData.map((obj) => ({
+            mediaComponentId: obj.mediaComponentId,
+            longDescription: obj.longDescription.at(0)?.value,
+            shortDescription: obj.shortDescription.at(0)?.value,
+            name: obj.name.at(0)?.value,
+            metadataLanguageTag: languageTag,
+            studyQuestions: obj.studyQuestions.map(
+              (question) => question.value
+            ),
+            bibleCitations: obj.bibleCitations.map((citation) => ({
+              osisBibleBook: citation.osisBibleBook,
+              verseStart: citation.verseStart,
+              verseEnd: citation.verseEnd,
+              chapterStart: citation.chapterStart,
+              chapterEnd: citation.chapterEnd,
+            })),
+          }))
         )
       ),
     }
 
-    logger?.info("Writing reading language data to database")
+    logger?.info("Writing reading language data to database", {
+      metadataLanguageTag: languageTag,
+      readingLanguageId: languageId,
+    })
     const db = await getDb()
     db.write(() => {
       db.create(
@@ -102,7 +109,10 @@ export async function transformReadingLanguageData({
         Realm.UpdateMode.Modified
       )
     })
-    logger?.info("Successfully wrote reading language data to database")
+    logger?.info("Successfully wrote reading language data to database", {
+      metadataLanguageTag: languageTag,
+      readingLanguageId: languageId,
+    })
 
     readingLanguageDatas.push(readingLanguageData)
   }
