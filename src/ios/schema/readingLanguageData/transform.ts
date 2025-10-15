@@ -78,9 +78,9 @@ export async function transformReadingLanguageData({
         JSON.stringify(
           data.mediaItemData.map((obj) => ({
             mediaComponentId: obj.mediaComponentId,
-            longDescription: obj.longDescription.at(0)?.value,
-            shortDescription: obj.shortDescription.at(0)?.value,
-            name: obj.name.at(0)?.value,
+            longDescription: obj.longDescription.at(0)?.value ?? "",
+            shortDescription: obj.shortDescription.at(0)?.value ?? "",
+            name: obj.name.at(0)?.value ?? "",
             metadataLanguageTag: languageTag,
             studyQuestions: obj.studyQuestions.map(
               (question) => question.value
@@ -88,9 +88,9 @@ export async function transformReadingLanguageData({
             bibleCitations: obj.bibleCitations.map((citation) => ({
               osisBibleBook: citation.osisBibleBook,
               verseStart: citation.verseStart,
-              verseEnd: citation.verseEnd,
+              verseEnd: citation.verseEnd ?? 0,
               chapterStart: citation.chapterStart,
-              chapterEnd: citation.chapterEnd,
+              chapterEnd: citation.chapterEnd ?? 0,
             })),
           }))
         )
