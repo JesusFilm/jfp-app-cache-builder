@@ -116,9 +116,10 @@ describe("runner", () => {
         languageId: "529",
         languageTag: "en",
       })
-
-      // Should NOT call readingLanguageData transformer
-      expect(transformReadingLanguageData).not.toHaveBeenCalled()
+      expect(transformReadingLanguageData).toHaveBeenCalledWith({
+        languageId: "529",
+        languageTag: "en",
+      })
     })
 
     it("should run all transformers including readingLanguageData when enabled", async () => {

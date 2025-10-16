@@ -64,6 +64,9 @@ describe("transformCountries", () => {
               {
                 suggested: true,
                 language: { id: "529" },
+              },              {
+                suggested: true,
+                language: { id: "21028" },
               },
               {
                 suggested: false,
@@ -135,7 +138,7 @@ describe("transformCountries", () => {
           continentName: "North America",
           englishName: "United States",
           name: "United States",
-          languageSpeakerCounts: [mockCountryLink, mockCountryLink],
+          languageSpeakerCounts: [mockCountryLink],
           suggestedLanguages: [mockSuggestedLanguage],
         },
       ])
@@ -440,7 +443,7 @@ describe("transformCountries", () => {
           continentName: "Africa",
           englishName: "Test Country",
           name: "Test Country",
-          languageSpeakerCounts: [mockCountryLink, mockCountryLink], // Only existing ones
+          languageSpeakerCounts: [], // None exist
           suggestedLanguages: [], // None exist
         },
       ])
@@ -602,6 +605,10 @@ describe("transformCountries", () => {
               },
               {
                 suggested: false,
+                language: { id: "21028" },
+              },
+              {
+                suggested: false,
                 language: { id: "529" },
               },
             ],
@@ -714,6 +721,10 @@ describe("transformCountries", () => {
                 suggested: true,
                 language: { id: "529" },
               },
+              {
+                suggested: false,
+                language: { id: "529" },
+              },
             ],
           },
           {
@@ -735,6 +746,10 @@ describe("transformCountries", () => {
               {
                 suggested: false,
                 language: { id: "529" },
+              },
+              {
+                suggested: false,
+                language: { id: "21028" },
               },
               {
                 suggested: true,
