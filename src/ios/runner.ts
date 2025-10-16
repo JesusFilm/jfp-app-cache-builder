@@ -39,7 +39,7 @@ export async function runner({
     [transformCountries, "countries"],
     [transformMediaCategories, "mediaCategories"],
     [transformMediaItems, "mediaItems"],
-    [transformContainedByMediaLinks, "containedByMediaLinks"]
+    [transformContainedByMediaLinks, "containedByMediaLinks"],
   ]
 
   // Add reading language data transformer if requested
