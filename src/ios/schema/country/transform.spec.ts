@@ -64,7 +64,8 @@ describe("transformCountries", () => {
               {
                 suggested: true,
                 language: { id: "529" },
-              },              {
+              },              
+              {
                 suggested: true,
                 language: { id: "21028" },
               },
