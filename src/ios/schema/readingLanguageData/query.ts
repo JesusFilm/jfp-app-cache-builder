@@ -10,18 +10,18 @@ export const JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery = graphql(`
     }
     countryData: countries {
       countryId: id
-      name(languageId: $languageId) {
+      name(languageId: $languageId, primary: true) {
         value
       }
       continent {
-        name(languageId: $languageId) {
+        name(languageId: $languageId, primary: true) {
           value
         }
       }
     }
     languageData: languages {
       languageId: id
-      name(languageId: $languageId) {
+      name(languageId: $languageId, primary: true) {
         value
       }
       nameNative: name(primary: true) {
@@ -30,13 +30,13 @@ export const JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery = graphql(`
     }
     mediaItemData: videos(limit: 10000) {
       mediaComponentId: id
-      longDescription: description(languageId: $languageId) {
+      longDescription: description(languageId: $languageId, primary: true) {
         value
       }
-      shortDescription: snippet(languageId: $languageId) {
+      shortDescription: snippet(languageId: $languageId, primary: true) {
         value
       }
-      name: title(languageId: $languageId) {
+      name: title(languageId: $languageId, primary: true) {
         value
       }
       studyQuestions(languageId: $languageId) {

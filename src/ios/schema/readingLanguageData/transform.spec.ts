@@ -61,22 +61,39 @@ describe("transformReadingLanguageData", () => {
         ],
         countryData: [
           {
-            name: [{ value: "Spain" }],
-            continent: { name: [{ value: "Europe" }] },
+            name: [{ value: "Spain Primary" }, { value: "Spain Secondary" }],
+            continent: {
+              name: [
+                { value: "Europe Primary" },
+                { value: "Europe Secondary" },
+              ],
+            },
           },
         ],
         languageData: [
           {
-            name: [{ value: "Spanish" }],
+            name: [
+              { value: "Spanish Primary" },
+              { value: "Spanish Secondary" },
+            ],
             nameNative: [{ value: "Español" }],
           },
         ],
         mediaItemData: [
           {
             mediaComponentId: "video1",
-            longDescription: [{ value: "Long description" }],
-            shortDescription: [{ value: "Short description" }],
-            name: [{ value: "Video 1" }],
+            longDescription: [
+              { value: "Long description Primary" },
+              { value: "Long description Secondary" },
+            ],
+            shortDescription: [
+              { value: "Short description Primary" },
+              { value: "Short description Secondary" },
+            ],
+            name: [
+              { value: "Video 1 Primary" },
+              { value: "Video 1 Secondary" },
+            ],
             studyQuestions: [{ value: "Question 1" }],
             bibleCitations: [
               {
@@ -136,14 +153,14 @@ describe("transformReadingLanguageData", () => {
       ])
       expect(JSON.parse(result[0]!.countryData.toString())).toEqual([
         {
-          name: "Spain",
-          continentName: "Europe",
+          name: "Spain Secondary",
+          continentName: "Europe Secondary",
           metadataLanguageTag: "es",
         },
       ])
       expect(JSON.parse(result[0]!.languageData.toString())).toEqual([
         {
-          name: "Spanish",
+          name: "Spanish Secondary",
           nameNative: "Español",
           metadataLanguageTag: "es",
         },
@@ -151,9 +168,9 @@ describe("transformReadingLanguageData", () => {
       expect(JSON.parse(result[0]!.mediaItemData.toString())).toEqual([
         {
           mediaComponentId: "video1",
-          longDescription: "Long description",
-          shortDescription: "Short description",
-          name: "Video 1",
+          longDescription: "Long description Secondary",
+          shortDescription: "Short description Secondary",
+          name: "Video 1 Secondary",
           studyQuestions: ["Question 1"],
           bibleCitations: [
             {

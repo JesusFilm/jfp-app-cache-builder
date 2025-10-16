@@ -57,8 +57,8 @@ export async function transformReadingLanguageData({
       countryData: Buffer.from(
         JSON.stringify(
           data.countryData.map((obj) => ({
-            name: obj.name.at(0)?.value,
-            continentName: obj.continent.name.at(0)?.value,
+            name: obj.name.at(-1)?.value ?? "",
+            continentName: obj.continent.name.at(-1)?.value ?? "",
             countryId: obj.countryId,
             metadataLanguageTag: languageTag,
           }))
@@ -67,8 +67,8 @@ export async function transformReadingLanguageData({
       languageData: Buffer.from(
         JSON.stringify(
           data.languageData.map((obj) => ({
-            name: obj.name.at(0)?.value,
-            nameNative: obj.nameNative.at(0)?.value,
+            name: obj.name.at(-1)?.value ?? "",
+            nameNative: obj.nameNative.at(-1)?.value ?? "",
             languageId: obj.languageId,
             metadataLanguageTag: languageTag,
           }))
@@ -78,9 +78,9 @@ export async function transformReadingLanguageData({
         JSON.stringify(
           data.mediaItemData.map((obj) => ({
             mediaComponentId: obj.mediaComponentId,
-            longDescription: obj.longDescription.at(0)?.value ?? "",
-            shortDescription: obj.shortDescription.at(0)?.value ?? "",
-            name: obj.name.at(0)?.value ?? "",
+            longDescription: obj.longDescription.at(-1)?.value ?? "",
+            shortDescription: obj.shortDescription.at(-1)?.value ?? "",
+            name: obj.name.at(-1)?.value ?? "",
             metadataLanguageTag: languageTag,
             studyQuestions: obj.studyQuestions.map(
               (question) => question.value
