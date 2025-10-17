@@ -67,8 +67,8 @@ export async function transformReadingLanguageData({
       languageData: Buffer.from(
         JSON.stringify(
           data.languageData.map((obj) => ({
-            name: obj.name.at(-1)?.value ?? "",
-            nameNative: obj.nameNative.at(-1)?.value ?? "",
+            name: obj.name.at(-1)?.value ?? obj.nameNative.at(-1)?.value ?? "",
+            nameNative: obj.nameNative.at(0)?.value ?? "",
             languageId: obj.languageId,
             metadataLanguageTag: languageTag,
           }))
