@@ -108,6 +108,7 @@ export default function AndroidBrowser() {
                     key={selectedTable}
                     data={tableData}
                     title={selectedTable}
+                    tableName={selectedTable}
                   />
                 )
               ) : (

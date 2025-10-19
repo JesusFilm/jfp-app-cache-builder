@@ -2,18 +2,21 @@
 
 import { useState, useMemo, useEffect } from "react"
 import SearchBar from "./SearchBar"
+import TableCell from "./TableCell"
 
 interface TableViewerProps {
   data: any[]
   columns?: string[]
   title?: string
   className?: string
+  tableName?: string
 }
 
 export default function TableViewer({
   data,
   columns,
   title,
+  tableName,
 }: TableViewerProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -51,15 +54,6 @@ export default function TableViewer({
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
-  }
-
-  const formatValue = (value: any): string => {
-    if (value === null || value === undefined) return ""
-    if (typeof value === "object") return JSON.stringify(value)
-    if (typeof value === "string" && value.length > 100) {
-      return value.substring(0, 100) + "..."
-    }
-    return String(value)
   }
 
   const showPagination = totalPages > 1
@@ -109,17 +103,14 @@ export default function TableViewer({
               <tr key={index} className="hover:bg-gray-50">
                 {detectedColumns.map((column) => {
                   const value = row[column]
-                  const formattedValue = formatValue(value)
 
                   return (
-                    <td
+                    <TableCell
                       key={column}
-                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                    >
-                      <div className="max-w-xs truncate" title={formattedValue}>
-                        {formattedValue}
-                      </div>
-                    </td>
+                      value={value}
+                      tableName={tableName}
+                      columnName={column}
+                    />
                   )
                 })}
               </tr>

@@ -110,6 +110,7 @@ export default function IOSBrowser() {
                     key={selectedSchema}
                     data={schemaData}
                     title={selectedSchema}
+                    tableName={selectedSchema}
                   />
                 )
               ) : (
