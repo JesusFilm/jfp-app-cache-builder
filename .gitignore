@@ -18,5 +18,13 @@ assets/android/*
 !assets/android/cache.clean.db
 src/__generated__/prisma
 
+# Next.js
+.next/
+out/
+next-env.d.ts
+
 # GitHub Pages build directory
 _site
+
+# Database export data (generated at build time)
+public/data/
