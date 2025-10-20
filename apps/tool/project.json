@@ -4,7 +4,7 @@
   "sourceRoot": "apps/tool/src",
   "projectType": "application",
   "targets": {
-    "exec": {
+    "cli": {
       "executor": "nx:run-commands",
       "options": {
         "command": "tsx src/main.ts",

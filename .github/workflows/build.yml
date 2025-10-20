@@ -40,7 +40,7 @@ jobs:
         run: pnpm nx run tool:prisma-generate
 
       - name: Build iOS cache
-        run: pnpm nx run tool:exec --target ios --verbose
+        run: pnpm nx run tool:cli --target ios --verbose
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
 
@@ -78,7 +78,7 @@ jobs:
         run: pnpm nx run tool:prisma-generate
 
       - name: Build Android cache
-        run: pnpm nx run tool:exec --target android --verbose
+        run: pnpm nx run tool:cli --target android --verbose
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
           DATABASE_URL: "file:${{ github.workspace }}/apps/tool/assets/android/cache.db?connection_limit=1&pool_timeout=60&query_timeout=60"
