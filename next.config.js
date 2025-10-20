@@ -2,6 +2,7 @@
 const nextConfig = {
   output: "export",
   trailingSlash: true,
+  ...(process.env.GITHUB_ACTIONS && { basePath: "/jfp-app-cache-builder" }),
   images: {
     unoptimized: true,
   },

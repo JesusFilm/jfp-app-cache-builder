@@ -158,6 +158,14 @@ export default [
     },
   },
   {
+    files: ["next.config.js"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+      },
+    },
+  },
+  {
     ignores: [
       "dist/*",
       "node_modules/*",
