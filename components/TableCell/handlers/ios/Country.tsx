@@ -1,4 +1,12 @@
 import React from "react"
+import {
+  ImageThumbnail,
+  formatNumber,
+  formatDecimal,
+  formatArrayLength,
+  formatObject,
+  IdCode,
+} from "../components"
 
 export function handleCountryColumn(
   columnName: string,
@@ -7,40 +15,32 @@ export function handleCountryColumn(
   switch (columnName) {
     case "flagUrlPng":
     case "flagUrlWebPLossy50":
-      if (value && typeof value === "string" && value.trim() !== "") {
-        return (
-          <img
-            src={value}
-            alt={value}
-            className="w-8 h-6 object-cover rounded border"
-          />
-        )
-      }
-      return value || ""
+      return <ImageThumbnail src={value} alt={value} />
 
     case "latitude":
     case "longitude":
+      return formatDecimal(value)
+
     case "countryPopulation":
     case "languageCount":
     case "languageCountHavingMedia":
-      if (typeof value === "number") {
-        // Use consistent formatting to avoid hydration mismatches
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return value || ""
+      return formatNumber(value)
 
     case "languageSpeakerCounts":
     case "suggestedLanguages":
-      if (Array.isArray(value)) {
-        return value.length > 0 ? `${value.length} items` : "Empty"
-      }
-      return value || ""
+      return formatArrayLength(value)
+
+    case "currentDescriptorLanguageId":
+      return (
+        <IdCode
+          value={value}
+          t="Language"
+          q={`languageId:"${value}"`}
+          platform="ios"
+        />
+      )
 
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

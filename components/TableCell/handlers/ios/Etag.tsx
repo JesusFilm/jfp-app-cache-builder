@@ -1,4 +1,5 @@
 import React from "react"
+import { IdCode, truncateText, formatObject } from "../components"
 
 export function handleEtagColumn(
   columnName: string,
@@ -7,20 +8,10 @@ export function handleEtagColumn(
   switch (columnName) {
     case "nameLanguageId":
     case "languageId":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
+      return <IdCode value={value} />
 
     case "name":
-      if (typeof value === "string" && value.length > 30) {
-        return value.substring(0, 30) + "..."
-      }
-      return value || ""
+      return truncateText(value, 30)
 
     case "etag":
       if (typeof value === "string") {
@@ -30,7 +21,7 @@ export function handleEtagColumn(
           </span>
         )
       }
-      return value || ""
+      return String(value || "")
 
     case "date":
       if (typeof value === "string") {
@@ -39,16 +30,12 @@ export function handleEtagColumn(
           // Use a consistent format to avoid hydration mismatches
           return date.toISOString().split("T")[0] // YYYY-MM-DD format
         } catch {
-          return value
+          return String(value || "")
         }
       }
-      return value || ""
+      return String(value || "")
 
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

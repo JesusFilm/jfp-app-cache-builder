@@ -1,4 +1,5 @@
 import React from "react"
+import { IdCode, formatObject } from "../components"
 
 export function handleCountryTranslationsColumn(
   columnName: string,
@@ -6,36 +7,15 @@ export function handleCountryTranslationsColumn(
 ): React.ReactNode | string {
   switch (columnName) {
     case "countryId":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
-
-    case "name":
-      if (typeof value === "string" && value.length > 40) {
-        return value.substring(0, 40) + "..."
-      }
-      return value || ""
-
-    case "languageTag":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-blue-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
-
+      return (
+        <IdCode
+          value={value}
+          t="countries"
+          q={`countryId:"${value}"`}
+          platform="android"
+        />
+      )
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

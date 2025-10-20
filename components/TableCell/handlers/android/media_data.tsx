@@ -1,72 +1,96 @@
 import React from "react"
+import {
+  IdCode,
+  formatDurationMilliseconds,
+  formatFileSize,
+  formatBoolean,
+  truncateText,
+  formatObject,
+  ImageThumbnail,
+  formatReferenceText,
+} from "../components"
 
 export function handleMediaDataColumn(
   columnName: string,
   value: any
 ): React.ReactNode | string {
   switch (columnName) {
-    case "id":
     case "primaryMediaLanguageId":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
+      return (
+        <IdCode
+          value={value}
+          t="media_languages"
+          q={`mediaLanguageId:"${value}"`}
+          platform="android"
+        />
+      )
 
     case "primaryMediaLanguageName":
     case "subType":
-      if (typeof value === "string" && value.length > 30) {
-        return value.substring(0, 30) + "..."
-      }
-      return value || ""
-
-    case "componentType":
-    case "contentType":
-    case "languageCount":
-    case "containsCount":
-      if (typeof value === "number") {
-        return value.toString()
-      }
-      return value || ""
-
+      return truncateText(value, 30)
     case "lengthInMilliseconds":
-      if (typeof value === "number") {
-        // Format duration in milliseconds to MM:SS format for Android
-        const seconds = Math.floor(value / 1000)
-        const minutes = Math.floor(seconds / 60)
-        const remainingSeconds = seconds % 60
-        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`
-      }
-      return value || ""
-
+      return formatDurationMilliseconds(value)
     case "isDownloadable":
-      return value ? "Yes" : "No"
-
+      return formatBoolean(value)
     case "approximateDownloadLowFileSizeInBytes":
     case "approximateDownloadHighFileSizeInBytes":
-      if (typeof value === "number") {
-        // Format file sizes in MB
-        const mb = value / (1024 * 1024)
-        return `${mb.toFixed(1)} MB`
+      return formatFileSize(value)
+    case "bibleCitations": {
+      const bibleCitations = JSON.parse(value)
+      if (Array.isArray(bibleCitations)) {
+        return (
+          <div className="flex items-center space-x-2 flex-wrap gap-2">
+            {bibleCitations.map((citation) => {
+              const text = formatReferenceText(citation)
+              return (
+                <a
+                  key={text}
+                  className="flex items-center space-x-1 px-2 py-1 rounded text-sm font-medium transition-colors cursor-pointer bg-blue-100 hover:bg-blue-200"
+                  href={`https://www.biblegateway.com/passage/?search=${text.replaceAll(" ", "+")}&version=CSB`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📖 {text}
+                </a>
+              )
+            })}
+          </div>
+        )
       }
-      return value || ""
-
-    case "bibleCitations":
-    case "mediaComponentLinks":
-    case "imageUrls":
-      if (typeof value === "string" && value.length > 50) {
-        return value.substring(0, 50) + "..."
+      return formatObject(bibleCitations)
+    }
+    case "imageUrls": {
+      const imageUrls = JSON.parse(value)
+      if (typeof imageUrls === "object" && imageUrls !== null) {
+        return (
+          <div className="flex items-center space-x-2 flex-wrap gap-2">
+            {Object.keys(imageUrls).map((key) => (
+              <ImageThumbnail src={imageUrls[key]} alt={key} />
+            ))}
+          </div>
+        )
       }
-      return value || ""
-
+      return formatObject(imageUrls)
+    }
+    case "mediaComponentLinks": {
+      const mediaComponentLinks = JSON.parse(value)
+      if (Array.isArray(mediaComponentLinks)) {
+        return (
+          <div className="flex items-center space-x-2 flex-wrap gap-2">
+            {mediaComponentLinks.map((link) => (
+              <IdCode
+                value={link}
+                t="media_components"
+                q={`id:"${link}"`}
+                platform="android"
+              />
+            ))}
+          </div>
+        )
+      }
+      return formatObject(value)
+    }
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

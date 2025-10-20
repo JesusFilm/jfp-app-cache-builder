@@ -1,4 +1,5 @@
 import React from "react"
+import { IdCode, formatNumber, formatObject } from "../components"
 
 export function handleSpokenLanguagesColumn(
   columnName: string,
@@ -6,28 +7,28 @@ export function handleSpokenLanguagesColumn(
 ): React.ReactNode | string {
   switch (columnName) {
     case "countryId":
+      return (
+        <IdCode
+          value={value}
+          t="countries"
+          q={`countryId:"${value}"`}
+          platform="android"
+        />
+      )
     case "languageId":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
+      return (
+        <IdCode
+          value={value}
+          t="media_languages"
+          q={`mediaLanguageId:"${value}"`}
+          platform="android"
+        />
+      )
 
     case "speakerCount":
-      if (typeof value === "number") {
-        // Use consistent formatting to avoid hydration mismatches
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return value || ""
+      return formatNumber(value)
 
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

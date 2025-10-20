@@ -1,4 +1,5 @@
 import React from "react"
+import { formatObject, IdCode } from "../components"
 
 export function handleMediaLanguageLinksColumn(
   columnName: string,
@@ -6,21 +7,26 @@ export function handleMediaLanguageLinksColumn(
 ): React.ReactNode | string {
   switch (columnName) {
     case "mediaComponentId":
+      return (
+        <IdCode
+          value={value}
+          t="media_data"
+          q={`id:"${value}"`}
+          platform="android"
+        />
+      )
+
     case "languageId":
-      if (typeof value === "string") {
-        return (
-          <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-            {value}
-          </span>
-        )
-      }
-      return value || ""
+      return (
+        <IdCode
+          value={value}
+          t="media_languages"
+          q={`mediaLanguageId:"${value}"`}
+          platform="android"
+        />
+      )
 
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }

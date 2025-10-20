@@ -1,4 +1,14 @@
 import React from "react"
+import {
+  ImageThumbnail,
+  formatDurationSeconds,
+  formatFileSize,
+  formatBoolean,
+  truncateText,
+  formatObject,
+  IdCode,
+  DataModal,
+} from "../components"
 
 export function handleMediaItemColumn(
   columnName: string,
@@ -6,71 +16,49 @@ export function handleMediaItemColumn(
 ): React.ReactNode | string {
   switch (columnName) {
     case "lengthInSeconds":
-      if (typeof value === "number") {
-        // Format duration in seconds to MM:SS format for iOS
-        const minutes = Math.floor(value / 60)
-        const seconds = Math.floor(value % 60)
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`
-      }
-      return value || ""
-
+      return formatDurationSeconds(value)
     case "approxLargeDownloadSize":
     case "approxSmallDownloadSize":
-      if (typeof value === "number") {
-        // Format file sizes in MB
-        const mb = value / (1024 * 1024)
-        return `${mb.toFixed(1)} MB`
-      }
-      return value || ""
-
+      return formatFileSize(value)
     case "highResImageUrl":
     case "lowResImageUrl":
     case "veryLowResImageUrl":
     case "thumbnailUrl":
     case "videoStillUrl":
-      if (value && typeof value === "string" && value.trim() !== "") {
-        return (
-          <img
-            src={value}
-            alt="Media thumbnail"
-            className="w-16 h-12 object-cover rounded border"
-          />
-        )
-      }
-      return value || ""
-
+      return (
+        <ImageThumbnail
+          src={value}
+          alt="Media thumbnail"
+          width={16}
+          height={12}
+        />
+      )
     case "isDownloadable":
-      return value ? "Yes" : "No"
-
+      return formatBoolean(value)
     case "languageIds":
-      if (Array.isArray(value)) {
-        return value.length > 0 ? `${value.length} languages` : "No languages"
-      }
-      return value || ""
-
+      return (
+        <div className="flex items-center space-x-2 flex-wrap gap-2">
+          {value.split(",").map((id: string) => (
+            <IdCode
+              value={id.replaceAll("|", "")}
+              t="Language"
+              q={`languageId:"${id.replaceAll("|", "")}"`}
+              platform="ios"
+            />
+          ))}
+        </div>
+      )
     case "englishLongDescription":
     case "longDescription":
     case "englishShortDescription":
     case "shortDescription":
-      if (typeof value === "string" && value.length > 100) {
-        return value.substring(0, 100) + "..."
-      }
-      return value || ""
-
+      return truncateText(value, 100)
     case "englishBibleCitationsData":
     case "bibleCitationsData":
     case "englishStudyQuestionsData":
     case "studyQuestionsData":
-      if (typeof value === "string" && value.length > 50) {
-        return value.substring(0, 50) + "..."
-      }
-      return value || ""
-
+      return <DataModal value={value} title={columnName} />
     default:
-      // Handle objects by converting to JSON string
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value)
-      }
-      return String(value || "")
+      return formatObject(value)
   }
 }
