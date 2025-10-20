@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import SearchBar from "./SearchBar"
-import TableCell from "./TableCell"
+import { useRouter, useSearchParams } from "next/navigation"
+import SearchBar from "../SearchBar"
+import TableCell from "../TableCell"
 
 interface TableViewerProps {
   data: any[]
@@ -10,6 +11,7 @@ interface TableViewerProps {
   title?: string
   className?: string
   tableName?: string
+  platform?: "ios" | "android"
 }
 
 export default function TableViewer({
@@ -17,10 +19,21 @@ export default function TableViewer({
   columns,
   title,
   tableName,
+  platform,
 }: TableViewerProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(50)
+
+  // Initialize search query from URL params
+  useEffect(() => {
+    const queryParam = searchParams.get("q")
+    if (queryParam) {
+      setSearchQuery(queryParam)
+    }
+  }, [searchParams])
 
   const detectedColumns = useMemo(() => {
     if (columns) return columns
@@ -54,6 +67,13 @@ export default function TableViewer({
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
+    const params = new URLSearchParams(searchParams.toString())
+    if (query) {
+      params.set("q", query)
+    } else {
+      params.delete("q")
+    }
+    router.replace(`${window.location.pathname}?${params.toString()}`)
   }
 
   const showPagination = totalPages > 1
@@ -76,7 +96,7 @@ export default function TableViewer({
             )}
           </p>
         </div>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} initialValue={searchQuery} />
       </div>
       {/* 65px for header, 85px for search bar, 55px for pagination */}
       <div
@@ -110,6 +130,7 @@ export default function TableViewer({
                       value={value}
                       tableName={tableName}
                       columnName={column}
+                      platform={platform}
                     />
                   )
                 })}

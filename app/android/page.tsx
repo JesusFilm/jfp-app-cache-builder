@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Layout from "../../components/Layout"
 import Sidebar from "../../components/Sidebar"
 import TableViewer from "../../components/TableViewer"
@@ -22,6 +23,8 @@ interface AndroidSchema {
 }
 
 export default function AndroidBrowser() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [schema, setSchema] = useState<AndroidSchema | null>(null)
   const [selectedTable, setSelectedTable] = useState<string | null>(null)
   const [tableData, setTableData] = useState<any[]>([])
@@ -34,13 +37,22 @@ export default function AndroidBrowser() {
       .then((data: AndroidSchema) => {
         setSchema(data)
         setLoading(false)
+
+        // Initialize selected table from URL params
+        const tableParam = searchParams.get("t")
+        if (
+          tableParam &&
+          data.tables.some((table) => table.name === tableParam)
+        ) {
+          setSelectedTable(tableParam)
+        }
       })
       .catch((err) => {
         console.error("Failed to load Android schema:", err)
         setError("Failed to load database schema")
         setLoading(false)
       })
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     if (selectedTable) {
@@ -59,6 +71,14 @@ export default function AndroidBrowser() {
     }
   }, [selectedTable])
 
+  const handleTableSelect = (tableName: string) => {
+    setSelectedTable(tableName)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("t", tableName)
+    params.delete("q") // Clear search query when changing tables
+    router.replace(`/android?${params.toString()}`)
+  }
+
   const sidebarItems =
     schema?.tables.map((table) => ({
       name: table.name,
@@ -72,7 +92,7 @@ export default function AndroidBrowser() {
           <Sidebar
             items={sidebarItems}
             selectedItem={selectedTable}
-            onItemSelect={setSelectedTable}
+            onItemSelect={handleTableSelect}
             title="Android DB"
           />
         </div>
@@ -109,6 +129,7 @@ export default function AndroidBrowser() {
                     data={tableData}
                     title={selectedTable}
                     tableName={selectedTable}
+                    platform="android"
                   />
                 )
               ) : (

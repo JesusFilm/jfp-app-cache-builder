@@ -4,10 +4,18 @@ import { useState, useEffect } from "react"
 
 interface SearchBarProps {
   onSearch: (query: string) => void
+  initialValue?: string
 }
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [query, setQuery] = useState("")
+export default function SearchBar({
+  onSearch,
+  initialValue = "",
+}: SearchBarProps) {
+  const [query, setQuery] = useState(initialValue)
+
+  useEffect(() => {
+    setQuery(initialValue)
+  }, [initialValue])
 
   return (
     <div className="relative m-4">

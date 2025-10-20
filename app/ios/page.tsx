@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Layout from "../../components/Layout"
 import Sidebar from "../../components/Sidebar"
 import TableViewer from "../../components/TableViewer"
@@ -23,6 +24,8 @@ interface IOSSchema {
 }
 
 export default function IOSBrowser() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [schema, setSchema] = useState<IOSSchema | null>(null)
   const [selectedSchema, setSelectedSchema] = useState<string | null>(null)
   const [schemaData, setSchemaData] = useState<any[]>([])
@@ -36,13 +39,22 @@ export default function IOSBrowser() {
       .then((data: IOSSchema) => {
         setSchema(data)
         setLoading(false)
+
+        // Initialize selected schema from URL params
+        const schemaParam = searchParams.get("t")
+        if (
+          schemaParam &&
+          data.schemas.some((schemaInfo) => schemaInfo.name === schemaParam)
+        ) {
+          setSelectedSchema(schemaParam)
+        }
       })
       .catch((err) => {
         console.error("Failed to load iOS schema:", err)
         setError("Failed to load database schema")
         setLoading(false)
       })
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     if (selectedSchema) {
@@ -61,6 +73,14 @@ export default function IOSBrowser() {
     }
   }, [selectedSchema])
 
+  const handleSchemaSelect = (schemaName: string) => {
+    setSelectedSchema(schemaName)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("t", schemaName)
+    params.delete("q") // Clear search query when changing tables
+    router.replace(`/ios?${params.toString()}`)
+  }
+
   const sidebarItems =
     schema?.schemas.map((schemaInfo) => ({
       name: schemaInfo.name,
@@ -74,7 +94,7 @@ export default function IOSBrowser() {
           <Sidebar
             items={sidebarItems}
             selectedItem={selectedSchema}
-            onItemSelect={setSelectedSchema}
+            onItemSelect={handleSchemaSelect}
             title="iOS DB"
           />
         </div>
@@ -111,6 +131,7 @@ export default function IOSBrowser() {
                     data={schemaData}
                     title={selectedSchema}
                     tableName={selectedSchema}
+                    platform="ios"
                   />
                 )
               ) : (
