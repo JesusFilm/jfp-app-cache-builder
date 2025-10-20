@@ -145,7 +145,7 @@ export default function TableViewer({
 
                   return (
                     <TableCell
-                      key={column}
+                      key={`${tableName}-${column}-${currentPage}-${index}`}
                       value={value}
                       tableName={tableName}
                       columnName={column}
