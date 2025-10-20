@@ -104,7 +104,7 @@ importers:
         version: 5.5.3(eslint-config-prettier@10.1.8(eslint@9.32.0(jiti@2.6.1)))(eslint@9.32.0(jiti@2.6.1))(prettier@3.6.2)
       gql.tada:
         specifier: ^1.8.12
-        version: 1.8.12(graphql@16.11.0)(typescript@5.9.2)
+        version: 1.8.13(graphql@16.11.0)(typescript@5.9.2)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -383,8 +383,8 @@ packages:
     resolution: {integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gql.tada/cli-utils@1.7.0':
-    resolution: {integrity: sha512-Jj74qfIplT+MzUUWABeUJxHF5lxiyOJpE4ENeIOwvcPAi+QYoxsKNj/aPcGAk2jK5CrP9aFtE5O7794q2rWjlQ==}
+  '@gql.tada/cli-utils@1.7.1':
+    resolution: {integrity: sha512-wg5ysZNQxtNQm67T3laVWmZzLpGb7QfyYWZdaUD2r1OjDj5Bgftq7eQlplmH+hsdffjuUyhJw/b5XAjeE2mJtg==}
     peerDependencies:
       '@0no-co/graphqlsp': ^1.12.13
       '@gql.tada/svelte-support': 1.0.1
@@ -1845,8 +1845,8 @@ packages:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
 
-  gql.tada@1.8.12:
-    resolution: {integrity: sha512-VuHbhYyhPN7XDc06Gl3jYWxMlqa1MLX5xbrmbBbzelX/+M5khxDsNBE7FvTEvAmx0RyLyDkEtRPWRfIdMCTKTw==}
+  gql.tada@1.8.13:
+    resolution: {integrity: sha512-fYoorairdPgxtE7Sf1X9/6bSN9Kt2+PN8KLg3hcF8972qFnawwUgs1OLVU8efZMHwL7EBHhhKBhrsGPlOs2lZQ==}
     hasBin: true
     peerDependencies:
       typescript: ^5.0.0
@@ -3271,7 +3271,7 @@ snapshots:
       '@eslint/core': 0.15.1
       levn: 0.4.1
 
-  '@gql.tada/cli-utils@1.7.0(@0no-co/graphqlsp@1.15.0(graphql@16.11.0)(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)':
+  '@gql.tada/cli-utils@1.7.1(@0no-co/graphqlsp@1.15.0(graphql@16.11.0)(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)':
     dependencies:
       '@0no-co/graphqlsp': 1.15.0(graphql@16.11.0)(typescript@5.9.2)
       '@gql.tada/internal': 1.0.8(graphql@16.11.0)(typescript@5.9.2)
@@ -4852,11 +4852,11 @@ snapshots:
 
   gopd@1.2.0: {}
 
-  gql.tada@1.8.12(graphql@16.11.0)(typescript@5.9.2):
+  gql.tada@1.8.13(graphql@16.11.0)(typescript@5.9.2):
     dependencies:
       '@0no-co/graphql.web': 1.2.0(graphql@16.11.0)
       '@0no-co/graphqlsp': 1.15.0(graphql@16.11.0)(typescript@5.9.2)
-      '@gql.tada/cli-utils': 1.7.0(@0no-co/graphqlsp@1.15.0(graphql@16.11.0)(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)
+      '@gql.tada/cli-utils': 1.7.1(@0no-co/graphqlsp@1.15.0(graphql@16.11.0)(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)
       '@gql.tada/internal': 1.0.8(graphql@16.11.0)(typescript@5.9.2)
       typescript: 5.9.2
     transitivePeerDependencies:
