@@ -1,16 +1,15 @@
 "use client"
 
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
 
 interface LayoutProps {
   children: ReactNode
-  title?: string
 }
 
-export default function Layout({ children, title }: LayoutProps) {
+export default function Layout({ children }: LayoutProps) {
   const pathname = usePathname()
   return (
     <div className="min-h-screen bg-gray-50">

@@ -28,3 +28,6 @@ _site
 
 # Database export data (generated at build time)
 public/data/
+
+# TypeScript build info
+tsconfig.tsbuildinfo

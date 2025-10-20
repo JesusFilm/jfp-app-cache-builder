@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react"
 
 interface SearchBarProps {
   onSearch: (query: string) => void
@@ -41,7 +41,7 @@ export default function SearchBar({
 
   const suggestions = getColumnSuggestions()
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setQuery(value)
     onSearch(value)
@@ -49,7 +49,7 @@ export default function SearchBar({
     setSelectedSuggestionIndex(-1)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!showSuggestions || suggestions.length === 0) return
 
     switch (e.key) {

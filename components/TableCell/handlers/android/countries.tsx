@@ -1,6 +1,6 @@
 import React from "react"
+
 import {
-  IdCode,
   ImageThumbnail,
   formatNumber,
   formatDecimal,

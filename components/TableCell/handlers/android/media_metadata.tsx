@@ -1,5 +1,6 @@
 import React from "react"
-import { DataModal, formatObject, IdCode, truncateText } from "../components"
+
+import { DataModal, formatObject, IdCode } from "../components"
 
 export function handleMediaMetadataColumn(
   columnName: string,
@@ -16,7 +17,7 @@ export function handleMediaMetadataColumn(
         />
       )
 
-    case "studyQuestions":
+    case "studyQuestions": {
       const studyQuestions = JSON.parse(value)
       if (Array.isArray(studyQuestions)) {
         return (
@@ -27,7 +28,7 @@ export function handleMediaMetadataColumn(
         )
       }
       return formatObject(studyQuestions)
-
+    }
     default:
       return formatObject(value)
   }

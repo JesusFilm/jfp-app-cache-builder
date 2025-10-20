@@ -1,4 +1,5 @@
 import React from "react"
+
 import { formatObject, DataModal } from "../components"
 
 export function handleReadingLanguageDataColumn(

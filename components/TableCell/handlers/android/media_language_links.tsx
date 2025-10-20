@@ -1,4 +1,5 @@
 import React from "react"
+
 import { formatObject, IdCode } from "../components"
 
 export function handleMediaLanguageLinksColumn(

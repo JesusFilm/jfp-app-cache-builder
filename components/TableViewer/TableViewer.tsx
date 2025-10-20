@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useMemo, useEffect } from "react"
+
 import SearchBar from "../SearchBar"
 import TableCell from "../TableCell"
 
@@ -61,13 +62,6 @@ export default function TableViewer({
     // Default search across all columns
     return data.filter((row) =>
       Object.values(row).some((value) => {
-        if (String(value).toLowerCase().includes(searchQuery.toLowerCase())) {
-          console.log(
-            String(value),
-            searchQuery,
-            String(value).toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        }
         return String(value).toLowerCase().includes(searchQuery.toLowerCase())
       })
     )

@@ -1,4 +1,5 @@
 import React from "react"
+
 import { IdCode, truncateText, formatObject } from "../components"
 
 export function handleBibleCodeColumn(

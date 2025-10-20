@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { formatObject } from "./textUtils"
 
 interface DataModalProps {
   value: any
@@ -24,7 +23,7 @@ export function DataModal({
         const decoded = Buffer.from(data, "base64").toString("utf-8")
         // Try to parse as JSON
         return JSON.parse(decoded)
-      } catch (error) {
+      } catch {
         // If decoding/parsing fails, return original data
         return data
       }

@@ -1,4 +1,5 @@
 import React from "react"
+
 import { formatObject } from "../components"
 
 export function handleTermTranslationsColumn(
