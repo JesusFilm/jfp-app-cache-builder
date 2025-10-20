@@ -140,10 +140,10 @@ jobs:
       - name: Extract database files
         run: |
           # Extract iOS cache
-          unzip -o ./public/data/ios/ios-cache.zip -d ./public/data/ios/
+          unzip -o ./public/data/ios/ios-cache.zip -d ./assets/ios/
 
           # Extract Android cache  
-          unzip -o ./public/data/android/android-cache.zip -d ./public/data/android/
+          unzip -o ./public/data/android/android-cache.zip -d ./assets/android/
 
       - name: Export database data
         run: pnpm export:dbs
