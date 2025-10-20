@@ -96,6 +96,12 @@ export default [
     },
   },
   {
+    files: ["next-env.d.ts"],
+    rules: {
+      "@typescript-eslint/triple-slash-reference": "off",
+    },
+  },
+  {
     ignores: [".next/*", "out/*", "node_modules/*"],
   },
 ]

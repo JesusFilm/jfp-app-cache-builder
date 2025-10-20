@@ -21,7 +21,6 @@ apps/tool/src/__generated__/prisma
 # Next.js
 apps/website/.next/
 apps/website/out/
-apps/website/next-env.d.ts
 
 # GitHub Pages build directory
 _site
