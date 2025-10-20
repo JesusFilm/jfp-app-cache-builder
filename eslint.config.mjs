@@ -7,13 +7,13 @@ import importPlugin from "eslint-plugin-import"
 export default [
   js.configs.recommended,
   {
-    files: ["src/**/*.ts"],
+    files: ["apps/tool/**/*.ts"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        project: "./tsconfig.tool.json",
+        project: "./tsconfig.json",
       },
     },
     plugins: {
@@ -25,7 +25,7 @@ export default [
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: "./tsconfig.tool.json",
+          project: "./tsconfig.json",
         },
       },
       "import/extensions": [".ts", ".js"],
@@ -67,17 +67,13 @@ export default [
     },
   },
   {
-    files: [
-      "components/**/*.{ts,tsx}",
-      "pages/**/*.{ts,tsx}",
-      "app/**/*.{ts,tsx}",
-    ],
+    files: ["apps/website/**/*.{ts,tsx}"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        project: "./tsconfig.json",
+        project: "./apps/website/tsconfig.json",
         jsx: "preserve",
       },
       globals: {
@@ -110,7 +106,7 @@ export default [
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: "./tsconfig.json",
+          project: "./apps/website/tsconfig.json",
         },
       },
       "import/extensions": [".ts", ".tsx", ".js", ".jsx"],
@@ -152,13 +148,13 @@ export default [
     },
   },
   {
-    files: ["src/**/*.spec.ts"],
+    files: ["apps/tool/**/*.spec.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {
-    files: ["next.config.js"],
+    files: ["apps/website/next.config.js"],
     languageOptions: {
       globals: {
         process: "readonly",
@@ -169,9 +165,9 @@ export default [
     ignores: [
       "dist/*",
       "node_modules/*",
-      "src/__generated__/*",
-      ".next/*",
-      "out/*",
+      "apps/tool/src/__generated__/*",
+      "apps/website/.next/*",
+      "apps/website/out/*",
     ],
   },
 ]

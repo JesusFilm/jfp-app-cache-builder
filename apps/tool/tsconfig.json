@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
@@ -16,5 +16,5 @@
     ]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "components", "pages", "public"]
+  "exclude": ["node_modules", "dist"]
 }

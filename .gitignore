@@ -8,26 +8,30 @@ graphql
 *.realm.*
 .env.local
 .env.*.local
-assets/*
-!assets/.gitkeep
-!assets/ios/
-!assets/android/
-assets/ios/*
-!assets/ios/cache.clean.realm
-assets/android/*
-!assets/android/cache.clean.db
-src/__generated__/prisma
+apps/tool/assets/*
+!apps/tool/assets/.gitkeep
+!apps/tool/assets/ios/
+!apps/tool/assets/android/
+apps/tool/assets/ios/*
+!apps/tool/assets/ios/cache.clean.realm
+apps/tool/assets/android/*
+!apps/tool/assets/android/cache.clean.db
+apps/tool/src/__generated__/prisma
 
 # Next.js
-.next/
-out/
-next-env.d.ts
+apps/website/.next/
+apps/website/out/
+apps/website/next-env.d.ts
 
 # GitHub Pages build directory
 _site
 
 # Database export data (generated at build time)
-public/data/
+apps/website/public/data/
 
 # TypeScript build info
 tsconfig.tsbuildinfo
+
+# Nx
+.nx/cache
+.nx/workspace-data

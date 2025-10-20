@@ -10,8 +10,8 @@ JFP App Cache Builder is a Node.js application that:
 - Fetches various types of content data (languages, media items, countries, etc.)
 - Transforms the data into a structured format
 - Stores it in a local database file:
-  - iOS: Realm database (`assets/ios/cache.realm`)
-  - Android: SQLite database (`assets/android/cache.db`)
+  - iOS: Realm database (`apps/tool/assets/ios/cache.realm`)
+  - Android: SQLite database (`apps/tool/assets/android/cache.db`)
 
 This database can then be used by iOS and Android applications to provide offline access to Jesus Film content.
 
@@ -32,20 +32,20 @@ This database can then be used by iOS and Android applications to provide offlin
 2. **Build the application:**
 
    ```bash
-   pnpm build
+   pnpm build:tool
    ```
 
 3. **Run the data transformation:**
 
    ```bash
    # Using the CLI binary for iOS
-   ./bin/jfp-app-cache-builder --target ios
+   ./apps/tool/bin/jfp-app-cache-builder --target ios
 
    # Using the CLI binary for Android
-   ./bin/jfp-app-cache-builder --target android
+   ./apps/tool/bin/jfp-app-cache-builder --target android
 
    # Or using pnpm scripts
-   pnpm dev -- --target ios
+   pnpm dev:tool -- --target ios
    ```
 
 This will:
@@ -59,7 +59,7 @@ This will:
 JFP App Cache Builder includes a powerful CLI with the following options:
 
 ```bash
-./bin/jfp-app-cache-builder [options]
+./apps/tool/bin/jfp-app-cache-builder [options]
 ```
 
 ### Options
@@ -77,37 +77,65 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 
 ```bash
 # iOS build (English, language ID 529)
-./bin/jfp-app-cache-builder --target ios
+./apps/tool/bin/jfp-app-cache-builder --target ios
 
 # Android build (English, language ID 529)
-./bin/jfp-app-cache-builder --target android
+./apps/tool/bin/jfp-app-cache-builder --target android
 
 # iOS build for Spanish
-./bin/jfp-app-cache-builder --target ios --language-id 496 --language-tag es
+./apps/tool/bin/jfp-app-cache-builder --target ios --language-id 496 --language-tag es
 
 # Android build with reading language data included
-./bin/jfp-app-cache-builder --target android --include-reading-language-data
+./apps/tool/bin/jfp-app-cache-builder --target android --include-reading-language-data
 
 # iOS build with verbose logging
-./bin/jfp-app-cache-builder --target ios --verbose
+./apps/tool/bin/jfp-app-cache-builder --target ios --verbose
 
 # Android build in silent mode
-./bin/jfp-app-cache-builder --target android --silent
+./apps/tool/bin/jfp-app-cache-builder --target android --silent
 ```
 
 ## Available Scripts
 
-- `pnpm dev` - Run the transformation in development mode
-- `pnpm build` - Build the TypeScript code
+### Tool (CLI Application)
+- `pnpm build:tool` - Build the TypeScript code
+- `pnpm dev:tool` - Run the transformation in development mode
 - `pnpm start` - Run the built application
 - `pnpm cli` - Build and run the CLI binary
-- `pnpm lint` - Check code for linting issues
+- `pnpm test:tool` - Run the test suite for the tool
+- `pnpm export:dbs` - Export database contents to JSON files
+
+### Website (Database Browser)
+- `pnpm build:website` - Build the Next.js site for production
+- `pnpm dev:website` - Start the development server
+- `pnpm start:website` - Start the production server
+- `pnpm test:website` - Run tests for the website
+
+### Workspace Commands
+- `pnpm build` - Build all applications
+- `pnpm test` - Run all tests
+- `pnpm lint` - Check code for linting issues across all apps
 - `pnpm lint:fix` - Fix linting issues automatically
 - `pnpm format` - Format code with Prettier
 - `pnpm format:check` - Check if code is properly formatted
-- `pnpm test` - Run the test suite
-- `pnpm test:watch` - Run tests in watch mode
-- `pnpm test:ui` - Run tests with UI interface
+
+## Project Structure
+
+This is an Nx monorepo with two applications:
+
+```
+apps/
+├── tool/           # CLI tool for building databases
+│   ├── src/        # Source code
+│   ├── assets/     # Database files
+│   ├── prisma/     # Database schema
+│   ├── scripts/    # Export scripts
+│   └── bin/        # CLI binary
+└── website/        # Next.js database browser
+    ├── app/        # Next.js app directory
+    ├── components/ # React components
+    └── public/     # Static assets
+```
 
 ## CI/CD
 
@@ -120,7 +148,7 @@ Runs on every push to `main` and pull request:
 - **Code Formatting**: Checks if code follows Prettier formatting standards
 - **Linting**: Runs ESLint to check for code quality issues
 - **Build**: Compiles TypeScript and generates build artifacts
-- **Testing**: Runs the complete test suite (222 tests)
+- **Testing**: Runs the complete test suite
 - **Artifact Verification**: Ensures build artifacts are created correctly
 
 ### Build Workflow (`build.yml`)
@@ -140,7 +168,7 @@ Runs on pushes to `main` and manual triggers:
 
 ## Output
 
-The tool generates a Realm database file at `assets/cache.realm` containing:
+The tool generates database files containing:
 
 - **Bible Codes** - Bible book information and metadata
 - **Languages** - Language data with audio previews and speaker counts
@@ -156,7 +184,7 @@ The tool uses the following default configuration:
 
 - **Language ID**: `529` (English)
 - **API Endpoint**: `https://api-gateway.central.jesusfilm.org`
-- **Database Path**: `assets/cache.realm`
+- **Database Path**: `apps/tool/assets/cache.realm` (iOS) or `apps/tool/assets/cache.db` (Android)
 
 ## Troubleshooting
 
@@ -167,8 +195,8 @@ The tool uses the following default configuration:
    - Check if the API is available and responding
 
 2. **Database Write Errors**
-   - Ensure the `assets/` directory exists and is writable
-   - Check if the Realm database file is not locked by another process
+   - Ensure the `apps/tool/assets/` directory exists and is writable
+   - Check if the database file is not locked by another process
 
 3. **Memory Issues**
    - The tool processes large amounts of data; ensure sufficient RAM is available
@@ -206,9 +234,9 @@ To run the database browser locally:
 1. **Build the databases first:**
 
    ```bash
-   pnpm build
-   ./bin/jfp-app-cache-builder --target ios
-   ./bin/jfp-app-cache-builder --target android
+   pnpm build:tool
+   ./apps/tool/bin/jfp-app-cache-builder --target ios
+   ./apps/tool/bin/jfp-app-cache-builder --target android
    ```
 
 2. **Export database data:**
@@ -220,25 +248,18 @@ To run the database browser locally:
 3. **Start the development server:**
 
    ```bash
-   pnpm dev:site
+   pnpm dev:website
    ```
 
 4. **Open your browser:**
    Navigate to `http://localhost:3000`
 
-### Available Scripts
-
-- `pnpm export:dbs` - Export database contents to JSON files
-- `pnpm site:build` - Build the Next.js site for production
-- `pnpm site:dev` - Start the development server
-- `pnpm site:start` - Start the production server
-
 ### Database Export
 
 The database browser uses pre-processed JSON files generated at build time:
 
-- **Android Data**: `public/data/android/` - Contains all SQLite table data
-- **iOS Data**: `public/data/ios/` - Contains all Realm schema data
+- **Android Data**: `apps/website/public/data/android/` - Contains all SQLite table data
+- **iOS Data**: `apps/website/public/data/ios/` - Contains all Realm schema data
 
 These files are automatically generated by the export scripts and included in the GitHub Pages deployment.
 
