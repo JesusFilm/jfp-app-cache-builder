@@ -8,7 +8,7 @@ import { TransformOptions } from "../../../types/transform.js"
 import { getDb } from "../../lib/db.js"
 
 import { JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery as query } from "./query.js"
-import { ReadingLanguageData } from "./realm.js"
+import { ReadingLanguageData, ReadingLanguageDataObject } from "./realm.js"
 
 export async function transformReadingLanguageData({
   logger,
@@ -20,7 +20,7 @@ export async function transformReadingLanguageData({
     "Retrieved languages from lib/languages.ts"
   )
 
-  const readingLanguageDatas = []
+  const readingLanguageDatas: ReadingLanguageDataObject[] = []
   for (const language of filteredLanguages) {
     const languageId = language.id.toString()
     const languageTag = language.tag
@@ -97,10 +97,13 @@ export async function transformReadingLanguageData({
       ),
     }
 
-    logger?.info("Writing reading language data to database", {
-      metadataLanguageTag: languageTag,
-      readingLanguageId: languageId,
-    })
+    logger?.info(
+      {
+        metadataLanguageTag: languageTag,
+        readingLanguageId: languageId,
+      },
+      "Writing reading language data to database"
+    )
     const db = await getDb()
     db.write(() => {
       db.create(
@@ -109,10 +112,13 @@ export async function transformReadingLanguageData({
         Realm.UpdateMode.Modified
       )
     })
-    logger?.info("Successfully wrote reading language data to database", {
-      metadataLanguageTag: languageTag,
-      readingLanguageId: languageId,
-    })
+    logger?.info(
+      {
+        metadataLanguageTag: languageTag,
+        readingLanguageId: languageId,
+      },
+      "Successfully wrote reading language data to database"
+    )
 
     readingLanguageDatas.push(readingLanguageData)
   }

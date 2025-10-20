@@ -223,8 +223,8 @@ export async function rebuild({ logger }: RebuildOptions) {
       }
     } catch (error) {
       logger?.warn?.(
-        `Failed to remove ${file}:`,
-        error instanceof Error ? error.message : String(error)
+        { error: error instanceof Error ? error.message : String(error) },
+        `Failed to remove ${file}`
       )
     }
   }

@@ -23,7 +23,8 @@
     "lint:fix": "eslint . --fix --no-warn-ignored",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "export:dbs": "tsx scripts/export-dbs.ts"
+    "export:dbs": "tsx --tsconfig ./tsconfig.tool.json scripts/export-dbs.ts",
+    "type-check": "tsc --noEmit --project tsconfig.tool.json && tsc --noEmit --project tsconfig.json"
   },
   "keywords": [],
   "author": "",

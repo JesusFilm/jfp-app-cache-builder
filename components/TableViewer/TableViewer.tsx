@@ -144,7 +144,7 @@ export default function TableViewer({
                       value={value}
                       {...(tableName ? { tableName } : {})}
                       columnName={column}
-                      platform={platform}
+                      {...(platform ? { platform } : {})}
                     />
                   )
                 })}
