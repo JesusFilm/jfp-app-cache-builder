@@ -11,6 +11,10 @@ export function ImageThumbnail({ src, alt = "Image" }: ImageThumbnailProps) {
   }
 
   return (
-    <img src={src} alt={alt} className="w-[50px] object-cover rounded border" />
+    <img
+      src={src}
+      alt={alt ?? src}
+      className="w-[50px] object-cover rounded border"
+    />
   )
 }

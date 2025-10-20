@@ -16,7 +16,7 @@ export function handleCountryColumn(
   switch (columnName) {
     case "flagUrlPng":
     case "flagUrlWebPLossy50":
-      return <ImageThumbnail src={value} alt={value} />
+      return <ImageThumbnail src={value} />
 
     case "latitude":
     case "longitude":

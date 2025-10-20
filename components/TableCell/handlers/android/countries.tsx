@@ -27,7 +27,7 @@ export function handleCountriesColumn(
 
     case "flagLossyWeb":
     case "flagPng8":
-      return <ImageThumbnail src={value} alt={value} />
+      return <ImageThumbnail src={value} />
 
     default:
       return formatObject(value)

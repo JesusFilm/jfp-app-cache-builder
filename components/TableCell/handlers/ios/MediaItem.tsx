@@ -26,14 +26,7 @@ export function handleMediaItemColumn(
     case "veryLowResImageUrl":
     case "thumbnailUrl":
     case "videoStillUrl":
-      return (
-        <ImageThumbnail
-          src={value}
-          alt="Media thumbnail"
-          width={16}
-          height={12}
-        />
-      )
+      return <ImageThumbnail src={value} />
     case "isDownloadable":
       return formatBoolean(value)
     case "languageIds":
