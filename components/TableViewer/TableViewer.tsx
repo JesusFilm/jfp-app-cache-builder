@@ -44,6 +44,21 @@ export default function TableViewer({
   const filteredData = useMemo(() => {
     if (!searchQuery) return data
 
+    // Check if search query uses columnname:"value" syntax
+    const columnSearchMatch = searchQuery.match(/^(\w+):"([^"]*)"$/)
+
+    if (columnSearchMatch) {
+      const [, columnName, searchValue] = columnSearchMatch
+      const lowerSearchValue = searchValue.toLowerCase()
+
+      return data.filter((row) => {
+        const columnValue = row[columnName]
+        if (columnValue === null || columnValue === undefined) return false
+        return String(columnValue).toLowerCase() === lowerSearchValue
+      })
+    }
+
+    // Default search across all columns
     return data.filter((row) =>
       Object.values(row).some((value) => {
         if (String(value).toLowerCase().includes(searchQuery.toLowerCase())) {
@@ -96,7 +111,11 @@ export default function TableViewer({
             )}
           </p>
         </div>
-        <SearchBar onSearch={handleSearch} initialValue={searchQuery} />
+        <SearchBar
+          onSearch={handleSearch}
+          initialValue={searchQuery}
+          availableColumns={detectedColumns}
+        />
       </div>
       {/* 65px for header, 85px for search bar, 55px for pagination */}
       <div

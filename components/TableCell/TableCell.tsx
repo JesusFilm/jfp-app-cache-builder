@@ -1,5 +1,32 @@
 "use client"
 
+import {
+  // iOS handlers
+  handleBibleCodeColumn,
+  handleContainedByMediaLinkColumn,
+  handleCountryColumn,
+  handleCountryLinkColumn,
+  handleEtagColumn,
+  handleLanguageColumn,
+  handleMediaCategoryColumn,
+  handleMediaItemColumn,
+  handleReadingLanguageDataColumn,
+  handleSuggestedLanguageColumn,
+  // Android handlers
+  handleCountriesColumn,
+  handleCountryTranslationsColumn,
+  handleMediaDataColumn,
+  handleMediaLanguageLinksColumn,
+  handleMediaLanguageTranslationsColumn,
+  handleMediaLanguagesColumn,
+  handleMediaMetadataColumn,
+  handleReadingLanguagesColumn,
+  handleRoomMasterTableColumn,
+  handleSpokenLanguagesColumn,
+  handleSuggestedLanguagesColumn,
+  handleTermTranslationsColumn,
+} from "./handlers"
+
 interface TableCellProps {
   value: any
   tableName?: string
@@ -22,65 +49,74 @@ export default function TableCell({
     return String(value)
   }
 
-  // Handle special cases based on table name, column name, and platform
+  // Handle special cases using platform-specific table handlers
   const handleSpecialCases = (
     value: any,
     tableName?: string,
     columnName?: string,
     platform?: "ios" | "android"
   ) => {
-    // Handle Country table flag URLs
-    if (
-      tableName === "Country" &&
-      (columnName === "flagUrlPng" || columnName === "flagUrlWebPLossy50")
-    ) {
-      if (value && typeof value === "string" && value.trim() !== "") {
-        return (
-          <img
-            src={value}
-            alt={value}
-            className="w-8 h-6 object-cover rounded border"
-          />
-        )
+    if (!tableName || !columnName || !platform) {
+      return formatValue(value)
+    }
+
+    // iOS table handlers
+    if (platform === "ios") {
+      switch (tableName) {
+        case "BibleCode":
+          return handleBibleCodeColumn(columnName, value)
+        case "ContainedByMediaLink":
+          return handleContainedByMediaLinkColumn(columnName, value)
+        case "Country":
+          return handleCountryColumn(columnName, value)
+        case "CountryLink":
+          return handleCountryLinkColumn(columnName, value)
+        case "Etag":
+          return handleEtagColumn(columnName, value)
+        case "Language":
+          return handleLanguageColumn(columnName, value)
+        case "MediaCategory":
+          return handleMediaCategoryColumn(columnName, value)
+        case "MediaItem":
+          return handleMediaItemColumn(columnName, value)
+        case "ReadingLanguageData":
+          return handleReadingLanguageDataColumn(columnName, value)
+        case "SuggestedLanguage":
+          return handleSuggestedLanguageColumn(columnName, value)
+        default:
+          return formatValue(value)
       }
     }
 
-    // Handle Country table numeric columns with locale formatting
-    if (
-      tableName === "Country" &&
-      (columnName === "latitude" ||
-        columnName === "longitude" ||
-        columnName === "countryPopulation" ||
-        columnName === "languageCount" ||
-        columnName === "languageCountHavingMedia")
-    ) {
-      if (typeof value === "number") {
-        return value.toLocaleString()
-      }
-    }
-
-    // Example: Platform-specific formatting
-    if (
-      platform === "ios" &&
-      tableName === "MediaItem" &&
-      columnName === "duration"
-    ) {
-      if (typeof value === "number") {
-        // Format duration in seconds to MM:SS format for iOS
-        const minutes = Math.floor(value / 60)
-        const seconds = Math.floor(value % 60)
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`
-      }
-    }
-
-    if (
-      platform === "android" &&
-      tableName === "media_metadata" &&
-      columnName === "duration"
-    ) {
-      if (typeof value === "number") {
-        // Format duration differently for Android
-        return `${value}s`
+    // Android table handlers
+    if (platform === "android") {
+      switch (tableName) {
+        case "countries":
+          return handleCountriesColumn(columnName, value)
+        case "country_translations":
+          return handleCountryTranslationsColumn(columnName, value)
+        case "media_data":
+          return handleMediaDataColumn(columnName, value)
+        case "media_language_links":
+          return handleMediaLanguageLinksColumn(columnName, value)
+        case "media_language_translations":
+          return handleMediaLanguageTranslationsColumn(columnName, value)
+        case "media_languages":
+          return handleMediaLanguagesColumn(columnName, value)
+        case "media_metadata":
+          return handleMediaMetadataColumn(columnName, value)
+        case "reading_languages":
+          return handleReadingLanguagesColumn(columnName, value)
+        case "room_master_table":
+          return handleRoomMasterTableColumn(columnName, value)
+        case "spoken_languages":
+          return handleSpokenLanguagesColumn(columnName, value)
+        case "suggested_languages":
+          return handleSuggestedLanguagesColumn(columnName, value)
+        case "term_translations":
+          return handleTermTranslationsColumn(columnName, value)
+        default:
+          return formatValue(value)
       }
     }
 
