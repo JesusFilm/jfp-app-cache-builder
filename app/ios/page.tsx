@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 
 import Layout from "../../components/Layout"
 import Sidebar from "../../components/Sidebar"
@@ -24,7 +24,7 @@ interface IOSSchema {
   schemas: SchemaInfo[]
 }
 
-export default function IOSBrowser() {
+function IOSBrowserContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [schema, setSchema] = useState<IOSSchema | null>(null)
@@ -151,5 +151,13 @@ export default function IOSBrowser() {
         </div>
       </div>
     </Layout>
+  )
+}
+
+export default function IOSBrowser() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <IOSBrowserContent />
+    </Suspense>
   )
 }

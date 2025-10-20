@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 
 import Layout from "../../components/Layout"
 import Sidebar from "../../components/Sidebar"
@@ -23,7 +23,7 @@ interface AndroidSchema {
   tables: TableInfo[]
 }
 
-export default function AndroidBrowser() {
+function AndroidBrowserContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [schema, setSchema] = useState<AndroidSchema | null>(null)
@@ -149,5 +149,13 @@ export default function AndroidBrowser() {
         </div>
       </div>
     </Layout>
+  )
+}
+
+export default function AndroidBrowser() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AndroidBrowserContent />
+    </Suspense>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, Suspense } from "react"
 
 import SearchBar from "../SearchBar"
 import TableCell from "../TableCell"
@@ -15,7 +15,7 @@ interface TableViewerProps {
   platform?: "ios" | "android"
 }
 
-export default function TableViewer({
+function TableViewerContent({
   data,
   columns,
   title,
@@ -185,5 +185,13 @@ export default function TableViewer({
         </div>
       )}
     </div>
+  )
+}
+
+export default function TableViewer(props: TableViewerProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TableViewerContent {...props} />
+    </Suspense>
   )
 }
