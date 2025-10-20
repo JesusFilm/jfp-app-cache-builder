@@ -144,28 +144,28 @@ describe("transformReadingLanguageData", () => {
       // Verify the structure of returned data
       expect(result[0]!.readingLanguageId).toEqual("21028")
       expect(result[0]!.metadataLanguageTag).toEqual("es")
-      expect(JSON.parse(result[0]!.bibleCodeData.toString())).toEqual([
+      expect(JSON.parse(result[0]!.bibleCodeData!.toString())).toEqual([
         {
           name: "Gen",
           fullName: "Genesis",
           metadataLanguageTag: "es",
         },
       ])
-      expect(JSON.parse(result[0]!.countryData.toString())).toEqual([
+      expect(JSON.parse(result[0]!.countryData!.toString())).toEqual([
         {
           name: "Spain Secondary",
           continentName: "Europe Secondary",
           metadataLanguageTag: "es",
         },
       ])
-      expect(JSON.parse(result[0]!.languageData.toString())).toEqual([
+      expect(JSON.parse(result[0]!.languageData!.toString())).toEqual([
         {
           name: "Spanish Secondary",
           nameNative: "Español",
           metadataLanguageTag: "es",
         },
       ])
-      expect(JSON.parse(result[0]!.mediaItemData.toString())).toEqual([
+      expect(JSON.parse(result[0]!.mediaItemData!.toString())).toEqual([
         {
           mediaComponentId: "video1",
           longDescription: "Long description Secondary",

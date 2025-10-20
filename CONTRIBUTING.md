@@ -37,7 +37,7 @@ src/
 
 - **Runtime**: Node.js with TypeScript
 - **GraphQL Client**: Apollo Client
-- **Databases**: 
+- **Databases**:
   - iOS: Realm (MongoDB)
   - Android: SQLite (via Prisma)
 - **Logging**: Pino with pretty formatting
@@ -56,6 +56,7 @@ src/
 ### Initial Setup
 
 1. **Clone and install dependencies:**
+
    ```bash
    git clone <repository-url>
    cd jfp-app-cache-builder
@@ -71,11 +72,13 @@ src/
 ### Development Workflow
 
 1. **Start development server:**
+
    ```bash
    pnpm dev
    ```
 
 2. **Run linting and formatting:**
+
    ```bash
    pnpm lint:fix
    pnpm format
@@ -171,9 +174,9 @@ All transformers accept a `TransformOptions` object:
 
 ```typescript
 export type TransformOptions = {
-  languageId: string      // Target language ID
-  readOnly?: boolean      // Skip database writes if true
-  logger: Logger          // Pino logger instance
+  languageId: string // Target language ID
+  readOnly?: boolean // Skip database writes if true
+  logger: Logger // Pino logger instance
 }
 ```
 
@@ -223,13 +226,15 @@ const logger = pino({
      - `assets/android/cache.clean.db` (from Android app)
 
 4. **Rebuild from clean templates:**
+
    ```bash
    # Rebuild iOS database from clean template
    pnpm cli --target ios --rebuild
-   
+
    # Rebuild Android database from clean template
    pnpm cli --target android --rebuild
    ```
+
    This cleans the template databases, removes all assets except .clean files, and copies the clean templates to create fresh databases.
 
 5. **Update transformer code (if needed):**
@@ -244,11 +249,13 @@ When new data types become available from the API, you can add transformers for 
 #### iOS Transformer
 
 1. **Create schema directory:**
+
    ```bash
    mkdir src/ios/schema/[newType]
    ```
 
 2. **Create GraphQL query** (`query.ts`):
+
    ```typescript
    import { graphql } from "gql.tada"
 
@@ -262,6 +269,7 @@ When new data types become available from the API, you can add transformers for 
    ```
 
 3. **Implement transformer** (`transform.ts`):
+
    ```typescript
    import { client } from "../../../lib/client.js"
    import { getDb } from "../../lib/db.js"
@@ -281,11 +289,13 @@ When new data types become available from the API, you can add transformers for 
 #### Android Transformer
 
 1. **Create schema directory:**
+
    ```bash
    mkdir src/android/schema/[newType]
    ```
 
 2. **Create GraphQL query** (`query.ts`):
+
    ```typescript
    import { graphql } from "gql.tada"
 
@@ -299,6 +309,7 @@ When new data types become available from the API, you can add transformers for 
    ```
 
 3. **Implement transformer** (`transform.ts`):
+
    ```typescript
    import { client } from "../../../lib/client.js"
    import { db } from "../../lib/db.js"
@@ -315,6 +326,7 @@ When new data types become available from the API, you can add transformers for 
    ```
 
 4. **Add to runner** (`src/ios/runner.ts` or `src/android/runner.ts`):
+
    ```typescript
    import { transformNewTypes } from "./schema/newType/transform.js"
 
@@ -353,6 +365,7 @@ pnpm cli --target android --rebuild
 ### Database Files
 
 #### iOS (Realm)
+
 - Main database: `assets/ios/cache.realm`
 - Clean template: `assets/ios/cache.clean.realm`
 - Auxiliary files (removed during rebuild):
@@ -361,6 +374,7 @@ pnpm cli --target android --rebuild
   - `cache.realm.management/`
 
 #### Android (SQLite)
+
 - Main database: `assets/android/cache.db`
 - Clean template: `assets/android/cache.clean.db`
 - Auxiliary files (removed during rebuild):
@@ -400,6 +414,7 @@ pnpm test
 ### Build Process
 
 1. **TypeScript compilation:**
+
    ```bash
    pnpm build
    ```
@@ -423,16 +438,17 @@ The application maintains a list of supported languages in `src/lib/languages.ts
 
 ```typescript
 interface Language {
-  tag: string          // BCP-47 language tag (e.g., "en", "es", "zh-Hans")
-  name: string         // English name of the language
-  nameNative: string   // Native name of the language
-  id: number          // Jesus Film Project API language ID
+  tag: string // BCP-47 language tag (e.g., "en", "es", "zh-Hans")
+  name: string // English name of the language
+  nameNative: string // Native name of the language
+  id: number // Jesus Film Project API language ID
 }
 ```
 
 ### Updating Languages
 
 1. **Source of Truth**: The language list should match the languages supported by the Jesus Film Project API. The source can be found at:
+
    ```
    https://github.com/JesusFilm/core/blob/main/apps/arclight/src/app/v2/%5B...route%5D/_metadata-language-tags/languages.ts
    ```
@@ -494,4 +510,4 @@ The application uses structured logging with Pino. Logs include transformation p
 - [Realm Documentation](https://docs.mongodb.com/realm/)
 - [Apollo Client Documentation](https://www.apollographql.com/docs/react/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [Pino Logging](https://getpino.io/) 
+- [Pino Logging](https://getpino.io/)

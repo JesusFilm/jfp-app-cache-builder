@@ -16,19 +16,19 @@ permissions:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         name: Setup pnpm
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
@@ -42,15 +42,8 @@ jobs:
       - name: Lint code
         run: pnpm lint
 
-      - name: Build TypeScript
-        run: pnpm build
+      - name: Type check
+        run: pnpm type-check
 
       - name: Run tests
         run: pnpm test
-
-      - name: Verify build artifacts
-        run: |
-          # Check that the build created the expected files
-          test -f dist/main.js
-          test -f bin/jfp-app-cache-builder
-          echo "✅ Build artifacts verified" 
