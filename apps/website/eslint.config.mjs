@@ -7,73 +7,13 @@ import importPlugin from "eslint-plugin-import"
 export default [
   js.configs.recommended,
   {
-    files: ["apps/tool/**/*.ts"],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
         project: "./tsconfig.json",
-      },
-    },
-    plugins: {
-      "@typescript-eslint": typescript,
-      prettier: prettier,
-      import: importPlugin,
-    },
-    settings: {
-      "import/resolver": {
-        typescript: {
-          alwaysTryTypes: true,
-          project: "./tsconfig.json",
-        },
-      },
-      "import/extensions": [".ts", ".js"],
-      "import/parsers": {
-        "@typescript-eslint/parser": [".ts"],
-      },
-    },
-    rules: {
-      ...typescript.configs.recommended.rules,
-      "prettier/prettier": "error",
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      semi: ["error", "never"],
-      "object-shorthand": ["error", "always"],
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-            "object",
-            "type",
-          ],
-          "newlines-between": "always",
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
-        },
-      ],
-      "import/no-unresolved": "error",
-      "import/no-duplicates": "error",
-    },
-  },
-  {
-    files: ["apps/website/**/*.{ts,tsx}"],
-    languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        project: "./apps/website/tsconfig.json",
         jsx: "preserve",
       },
       globals: {
@@ -106,7 +46,7 @@ export default [
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: "./apps/website/tsconfig.json",
+          project: "./tsconfig.json",
         },
       },
       "import/extensions": [".ts", ".tsx", ".js", ".jsx"],
@@ -148,13 +88,7 @@ export default [
     },
   },
   {
-    files: ["apps/tool/**/*.spec.ts"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-    },
-  },
-  {
-    files: ["apps/website/next.config.js"],
+    files: ["next.config.js"],
     languageOptions: {
       globals: {
         process: "readonly",
@@ -162,12 +96,6 @@ export default [
     },
   },
   {
-    ignores: [
-      "dist/*",
-      "node_modules/*",
-      "apps/tool/src/__generated__/*",
-      "apps/website/.next/*",
-      "apps/website/out/*",
-    ],
+    ignores: [".next/*", "out/*", "node_modules/*"],
   },
 ]

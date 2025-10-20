@@ -3,9 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, Suspense } from "react"
 
-import Layout from "../../components/Layout"
-import Sidebar from "../../components/Sidebar"
-import TableViewer from "../../components/TableViewer"
+import Layout from "@/components/Layout"
+import Sidebar from "@/components/Sidebar"
+import TableViewer from "@/components/TableViewer"
 
 interface TableInfo {
   name: string

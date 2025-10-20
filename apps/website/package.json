@@ -1,14 +1,8 @@
 {
   "name": "website",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
-  "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
-    "export": "next build && next export",
-    "lint": "next lint"
-  },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.14",
     "next": "15.5.3",

@@ -98,6 +98,7 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 ## Available Scripts
 
 ### Tool (CLI Application)
+
 - `pnpm build:tool` - Build the TypeScript code
 - `pnpm dev:tool` - Run the transformation in development mode
 - `pnpm start` - Run the built application
@@ -106,12 +107,14 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 - `pnpm export:dbs` - Export database contents to JSON files
 
 ### Website (Database Browser)
+
 - `pnpm build:website` - Build the Next.js site for production
 - `pnpm dev:website` - Start the development server
 - `pnpm start:website` - Start the production server
 - `pnpm test:website` - Run tests for the website
 
 ### Workspace Commands
+
 - `pnpm build` - Build all applications
 - `pnpm test` - Run all tests
 - `pnpm lint` - Check code for linting issues across all apps

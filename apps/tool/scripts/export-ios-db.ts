@@ -1,6 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 import process from "process"
+
 import Realm from "realm"
 
 // Import all Realm schemas
@@ -54,7 +55,14 @@ function realmObjectToPlain(obj: any): any {
 
 async function exportIOSDatabase() {
   const dbPath = path.join(process.cwd(), "assets", "ios", "cache.realm")
-  const outputDir = path.join(process.cwd(), "public", "data", "ios")
+  const outputDir = path.join(
+    process.cwd(),
+    "..",
+    "website",
+    "public",
+    "data",
+    "ios"
+  )
 
   console.log(`Reading iOS database from: ${dbPath}`)
   console.log(`Output directory: ${outputDir}`)
