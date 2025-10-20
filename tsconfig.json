@@ -16,6 +16,11 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "gql.tada/ts-plugin",
+        "schema": "https://api-gateway.central.jesusfilm.org",
+        "tadaOutputLocation": "./src/__generated__/graphql-env.d.ts"
       }
     ],
     "paths": {
