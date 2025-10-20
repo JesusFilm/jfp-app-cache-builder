@@ -3,14 +3,9 @@ import React, { useState } from "react"
 interface DataModalProps {
   value: any
   title?: string
-  className?: string
 }
 
-export function DataModal({
-  value,
-  title = "Data",
-  className = "",
-}: DataModalProps) {
+export function DataModal({ value, title = "Data" }: DataModalProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   // Decode base64 data if it's a string
@@ -88,7 +83,7 @@ export function DataModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className={`px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm font-medium hover:bg-blue-200 transition-colors cursor-pointer ${className}`}
+        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm font-medium hover:bg-blue-200 transition-colors cursor-pointer"
       >
         {recordCount} record{recordCount !== 1 ? "s" : ""}
       </button>

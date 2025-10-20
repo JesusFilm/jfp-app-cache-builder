@@ -20,7 +20,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center">
               <Link href="/" className="flex items-center space-x-3">
                 <Image
-                  src="/assets/logo.png"
+                  src="/jfp-app-cache-builder/assets/logo.png"
                   alt="JFP Logo"
                   width={32}
                   height={32}

@@ -2,10 +2,9 @@ import React, { useState, useRef } from "react"
 
 interface AudioPlayerProps {
   src: string
-  className?: string
 }
 
-export function AudioPlayer({ src, className = "" }: AudioPlayerProps) {
+export function AudioPlayer({ src }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -35,7 +34,7 @@ export function AudioPlayer({ src, className = "" }: AudioPlayerProps) {
   }
 
   return (
-    <div className={`flex items-center space-x-2 ${className}`}>
+    <div className="flex items-center space-x-2">
       <audio
         ref={audioRef}
         src={src}

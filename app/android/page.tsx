@@ -33,7 +33,7 @@ function AndroidBrowserContent() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch("/data/android/schema.json")
+    fetch("/jfp-app-cache-builder/data/android/schema.json")
       .then((res) => res.json())
       .then((data: AndroidSchema) => {
         setSchema(data)
@@ -58,7 +58,7 @@ function AndroidBrowserContent() {
   useEffect(() => {
     if (selectedTable) {
       setLoading(true)
-      fetch(`/data/android/${selectedTable}.json`)
+      fetch(`/jfp-app-cache-builder/data/android/${selectedTable}.json`)
         .then((res) => res.json())
         .then((data) => {
           setTableData(data)

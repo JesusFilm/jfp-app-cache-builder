@@ -35,7 +35,7 @@ function IOSBrowserContent() {
 
   useEffect(() => {
     // Load schema
-    fetch("/data/ios/schema.json")
+    fetch("/jfp-app-cache-builder/data/ios/schema.json")
       .then((res) => res.json())
       .then((data: IOSSchema) => {
         setSchema(data)
@@ -60,7 +60,7 @@ function IOSBrowserContent() {
   useEffect(() => {
     if (selectedSchema) {
       setLoading(true)
-      fetch(`/data/ios/${selectedSchema}.json`)
+      fetch(`/jfp-app-cache-builder/data/ios/${selectedSchema}.json`)
         .then((res) => res.json())
         .then((data) => {
           setSchemaData(data)
