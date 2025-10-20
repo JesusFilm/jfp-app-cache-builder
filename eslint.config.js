@@ -67,7 +67,11 @@ export default [
     },
   },
   {
-    files: ["components/**/*.{ts,tsx}", "pages/**/*.{ts,tsx}", "app/**/*.{ts,tsx}"],
+    files: [
+      "components/**/*.{ts,tsx}",
+      "pages/**/*.{ts,tsx}",
+      "app/**/*.{ts,tsx}",
+    ],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -94,6 +98,7 @@ export default [
         File: "readonly",
         Blob: "readonly",
         Buffer: "readonly",
+        process: "readonly",
       },
     },
     plugins: {

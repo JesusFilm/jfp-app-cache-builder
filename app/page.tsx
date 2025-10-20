@@ -1,15 +1,16 @@
 "use client"
 
 import Link from "next/link"
+
 import Layout from "../components/Layout"
 
 export default function Home() {
   // Use environment variables for build information
   const buildDate =
-    process.env.NEXT_PUBLIC_BUILD_DATE || new Date().toLocaleString()
+    process.env["NEXT_PUBLIC_BUILD_DATE"] || new Date().toLocaleString()
   const buildNumber =
-    process.env.NEXT_PUBLIC_BUILD_NUMBER || "Development Build"
-  const commitSha = process.env.NEXT_PUBLIC_COMMIT_SHA || "dev-commit"
+    process.env["NEXT_PUBLIC_BUILD_NUMBER"] || "Development Build"
+  const commitSha = process.env["NEXT_PUBLIC_COMMIT_SHA"] || "dev-commit"
 
   return (
     <Layout>

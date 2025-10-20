@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -5,6 +7,6 @@ export const metadata: Metadata = {
   description: "Browse iOS Realm database contents",
 }
 
-export default function IOSLayout({ children }: { children: React.ReactNode }) {
+export default function IOSLayout({ children }: { children: ReactNode }) {
   return children
 }
