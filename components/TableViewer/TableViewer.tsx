@@ -50,9 +50,10 @@ export default function TableViewer({
 
     if (columnSearchMatch) {
       const [, columnName, searchValue] = columnSearchMatch
-      const lowerSearchValue = searchValue.toLowerCase()
+      const lowerSearchValue = searchValue?.toLowerCase() || ""
 
       return data.filter((row) => {
+        if (!columnName) return false
         const columnValue = row[columnName]
         if (columnValue === null || columnValue === undefined) return false
         return String(columnValue).toLowerCase() === lowerSearchValue
@@ -139,9 +140,9 @@ export default function TableViewer({
 
                   return (
                     <TableCell
-                      key={`${tableName}-${column}-${currentPage}-${index}`}
+                      key={`${tableName || "unknown"}-${column}-${currentPage}-${index}`}
                       value={value}
-                      tableName={tableName}
+                      {...(tableName ? { tableName } : {})}
                       columnName={column}
                       platform={platform}
                     />

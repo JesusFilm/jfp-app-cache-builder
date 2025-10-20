@@ -65,7 +65,10 @@ export default function SearchBar({
         break
       case "Enter":
         e.preventDefault()
-        if (selectedSuggestionIndex >= 0) {
+        if (
+          selectedSuggestionIndex >= 0 &&
+          suggestions[selectedSuggestionIndex]
+        ) {
           selectSuggestion(suggestions[selectedSuggestionIndex])
         }
         break
