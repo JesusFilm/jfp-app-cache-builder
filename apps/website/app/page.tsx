@@ -1,16 +1,14 @@
-"use client"
-
-import Link from "next/link"
+import { format, parseISO } from "date-fns"
 
 import Layout from "@/components/Layout"
 
 export default function Home() {
   // Use environment variables for build information
-  const buildDate =
-    process.env["NEXT_PUBLIC_BUILD_DATE"] || new Date().toLocaleString()
-  const buildNumber =
-    process.env["NEXT_PUBLIC_BUILD_NUMBER"] || "Development Build"
-  const commitSha = process.env["NEXT_PUBLIC_COMMIT_SHA"] || "dev-commit"
+  const buildDate = process.env["NEXT_PUBLIC_BUILD_DATE"]
+    ? process.env["NEXT_PUBLIC_BUILD_DATE"]
+    : new Date().toISOString()
+  const buildNumber = process.env["NEXT_PUBLIC_BUILD_NUMBER"] || "DEV"
+  const commitSha = process.env["NEXT_PUBLIC_COMMIT_SHA"] || "DEV-COMMIT"
 
   return (
     <Layout>
@@ -28,20 +26,20 @@ export default function Home() {
 
           <div className="my-10">
             <div className="grid gap-5 mt-[30px]">
-              <Link
+              <a
                 href="/ios-cache.zip"
-                className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-gradient-to-br from-[#007aff] to-[#0051d5] text-white shadow-[0_8px_25px_rgba(0,122,255,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(0,122,255,0.4)]"
+                className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-linear-to-br from-[#007aff] to-[#0051d5] text-white shadow-[0_8px_25px_rgba(0,122,255,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(0,122,255,0.4)]"
               >
                 <span className="mr-3 text-[1.3rem]">📱</span>
                 Download iOS Cache
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/android-cache.zip"
-                className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-gradient-to-br from-[#3ddc84] to-[#00c853] text-white shadow-[0_8px_25px_rgba(61,220,132,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(61,220,132,0.4)]"
+                className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-linear-to-br from-[#3ddc84] to-[#00c853] text-white shadow-[0_8px_25px_rgba(61,220,132,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(61,220,132,0.4)]"
               >
                 <span className="mr-3 text-[1.3rem]">🤖</span>
                 Download Android Cache
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -62,7 +60,10 @@ export default function Home() {
                     Build Date:
                   </span>
                   <span className="text-[#6c757d] font-mono text-[0.9rem]">
-                    {buildDate}
+                    {format(
+                      parseISO(buildDate),
+                      "MMM d, yyyy 'at' h:mm a 'UTC'"
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-[#e9ecef]">
