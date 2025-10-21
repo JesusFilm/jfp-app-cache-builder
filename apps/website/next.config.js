@@ -1,4 +1,6 @@
-/** @type {import('next').NextConfig} */
+import { composePlugins, withNx } from "@nx/next"
+
+/** @type {import('@nx/next/plugins/with-nx').WithNxOptions} */
 const nextConfig = {
   output: "export",
   trailingSlash: true,
@@ -13,6 +15,9 @@ const nextConfig = {
       },
     ]
   },
+  nx: {
+    svgr: false,
+  },
   images: {
     unoptimized: true,
   },
@@ -22,16 +27,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  webpack: (config) => {
-    // Exclude better-sqlite3 and realm from client bundle
-    config.externals = config.externals || []
-    config.externals.push({
-      "better-sqlite3": "commonjs better-sqlite3",
-      realm: "commonjs realm",
-    })
-
-    return config
-  },
 }
 
-export default nextConfig
+export default composePlugins(withNx)(nextConfig)

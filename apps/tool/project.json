@@ -1,0 +1,45 @@
+{
+  "name": "tool",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/tool/src",
+  "projectType": "application",
+  "targets": {
+    "cli": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx src/main.ts",
+        "cwd": "apps/tool"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "command": "vitest run",
+        "cwd": "apps/tool"
+      }
+    },
+    "export-dbs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx --tsconfig ./tsconfig.json scripts/export-dbs.ts",
+        "cwd": "apps/tool"
+      }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate",
+        "cwd": "apps/tool"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit",
+        "cwd": "apps/tool"
+      }
+    }
+  },
+  "tags": []
+}

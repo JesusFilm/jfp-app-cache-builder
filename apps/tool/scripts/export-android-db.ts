@@ -1,6 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 import process from "process"
+
 import Database from "better-sqlite3"
 
 interface TableInfo {
@@ -17,7 +18,14 @@ interface TableInfo {
 
 async function exportAndroidDatabase() {
   const dbPath = path.join(process.cwd(), "assets", "android", "cache.db")
-  const outputDir = path.join(process.cwd(), "public", "data", "android")
+  const outputDir = path.join(
+    process.cwd(),
+    "..",
+    "website",
+    "public",
+    "data",
+    "android"
+  )
 
   console.log(`Reading Android database from: ${dbPath}`)
   console.log(`Output directory: ${outputDir}`)

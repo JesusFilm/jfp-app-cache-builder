@@ -3,89 +3,87 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, Suspense } from "react"
 
-import Layout from "../../components/Layout"
-import Sidebar from "../../components/Sidebar"
-import TableViewer from "../../components/TableViewer"
+import Layout from "@/components/Layout"
+import Sidebar from "@/components/Sidebar"
+import TableViewer from "@/components/TableViewer"
 
-interface SchemaProperty {
+interface TableInfo {
   name: string
-  type: string
-  optional: boolean
-  primaryKey?: boolean
+  columns: Array<{
+    name: string
+    type: string
+    notnull: boolean
+    dflt_value: any
+    pk: boolean
+  }>
+  rowCount: number
 }
 
-interface SchemaInfo {
-  name: string
-  properties: SchemaProperty[]
-  objectCount: number
+interface AndroidSchema {
+  tables: TableInfo[]
 }
 
-interface IOSSchema {
-  schemas: SchemaInfo[]
-}
-
-function IOSBrowserContent() {
+function AndroidBrowserContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [schema, setSchema] = useState<IOSSchema | null>(null)
-  const [selectedSchema, setSelectedSchema] = useState<string | null>(null)
-  const [schemaData, setSchemaData] = useState<any[]>([])
+  const [schema, setSchema] = useState<AndroidSchema | null>(null)
+  const [selectedTable, setSelectedTable] = useState<string | null>(null)
+  const [tableData, setTableData] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Load schema
-    fetch("/jfp-app-cache-builder/data/ios/schema.json")
+    fetch("/jfp-app-cache-builder/data/android/schema.json")
       .then((res) => res.json())
-      .then((data: IOSSchema) => {
+      .then((data: AndroidSchema) => {
         setSchema(data)
         setLoading(false)
 
-        // Initialize selected schema from URL params
-        const schemaParam = searchParams.get("t")
+        // Initialize selected table from URL params
+        const tableParam = searchParams.get("t")
         if (
-          schemaParam &&
-          data.schemas.some((schemaInfo) => schemaInfo.name === schemaParam)
+          tableParam &&
+          data.tables.some((table) => table.name === tableParam)
         ) {
-          setSelectedSchema(schemaParam)
+          setSelectedTable(tableParam)
         }
       })
       .catch((err) => {
-        console.error("Failed to load iOS schema:", err)
+        console.error("Failed to load Android schema:", err)
         setError("Failed to load database schema")
         setLoading(false)
       })
   }, [searchParams])
 
   useEffect(() => {
-    if (selectedSchema) {
+    if (selectedTable) {
       setLoading(true)
-      fetch(`/jfp-app-cache-builder/data/ios/${selectedSchema}.json`)
+      fetch(`/jfp-app-cache-builder/data/android/${selectedTable}.json`)
         .then((res) => res.json())
         .then((data) => {
-          setSchemaData(data)
+          setTableData(data)
           setLoading(false)
         })
         .catch((err) => {
-          console.error(`Failed to load schema ${selectedSchema}:`, err)
-          setError(`Failed to load schema: ${selectedSchema}`)
+          console.error(`Failed to load table ${selectedTable}:`, err)
+          setError(`Failed to load table: ${selectedTable}`)
           setLoading(false)
         })
     }
-  }, [selectedSchema])
+  }, [selectedTable])
 
-  const handleSchemaSelect = (schemaName: string) => {
-    setSelectedSchema(schemaName)
+  const handleTableSelect = (tableName: string) => {
+    setSelectedTable(tableName)
     const params = new URLSearchParams(searchParams.toString())
-    params.set("t", schemaName)
+    params.set("t", tableName)
     params.delete("q") // Clear search query when changing tables
-    router.replace(`/ios?${params.toString()}`)
+    router.replace(`/android?${params.toString()}`)
   }
 
   const sidebarItems =
-    schema?.schemas.map((schemaInfo) => ({
-      name: schemaInfo.name,
-      count: schemaInfo.objectCount,
+    schema?.tables.map((table) => ({
+      name: table.name,
+      count: table.rowCount,
     })) || []
 
   return (
@@ -94,9 +92,9 @@ function IOSBrowserContent() {
         <div className="w-80 flex-shrink-0 h-full">
           <Sidebar
             items={sidebarItems}
-            selectedItem={selectedSchema}
-            onItemSelect={handleSchemaSelect}
-            title="iOS DB"
+            selectedItem={selectedTable}
+            onItemSelect={handleTableSelect}
+            title="Android DB"
           />
         </div>
         <div className="w-[calc(100%_-_var(--spacing)*80)] h-full flex flex-col items-center justify-center">
@@ -120,19 +118,19 @@ function IOSBrowserContent() {
           )}
           {!error && schema && (
             <>
-              {selectedSchema ? (
+              {selectedTable ? (
                 loading ? (
                   <div className="flex-1 flex flex-col items-center justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading schema data...</p>
+                    <p className="mt-4 text-gray-600">Loading table data...</p>
                   </div>
                 ) : (
                   <TableViewer
-                    key={selectedSchema}
-                    data={schemaData}
-                    title={selectedSchema}
-                    tableName={selectedSchema}
-                    platform="ios"
+                    key={selectedTable}
+                    data={tableData}
+                    title={selectedTable}
+                    tableName={selectedTable}
+                    platform="android"
                   />
                 )
               ) : (
@@ -154,10 +152,10 @@ function IOSBrowserContent() {
   )
 }
 
-export default function IOSBrowser() {
+export default function AndroidBrowser() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <IOSBrowserContent />
+      <AndroidBrowserContent />
     </Suspense>
   )
 }

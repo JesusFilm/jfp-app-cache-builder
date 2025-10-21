@@ -1,7 +1,6 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
@@ -15,6 +14,6 @@
       }
     ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "components", "pages", "public"]
+  "include": ["src/**/*", "scripts/**/*", "vitest.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }
