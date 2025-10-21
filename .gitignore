@@ -26,7 +26,8 @@ apps/website/out/
 _site
 
 # Database export data (generated at build time)
-apps/website/public/data/
+apps/website/src/lib/android/data/*.json
+apps/website/src/lib/ios/data/*.json
 
 # TypeScript build info
 tsconfig.tsbuildinfo

@@ -22,9 +22,10 @@ async function exportAndroidDatabase() {
     process.cwd(),
     "..",
     "website",
-    "public",
-    "data",
-    "android"
+    "src",
+    "lib",
+    "android",
+    "data"
   )
 
   console.log(`Reading Android database from: ${dbPath}`)

@@ -121,21 +121,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ios-cache
-          path: ./apps/website/public/data/ios/
+          path: ./apps/website/public/
 
       - name: Download Android artifact
         uses: actions/download-artifact@v4
         with:
           name: android-cache
-          path: ./apps/website/public/data/android/
+          path: ./apps/website/public/
 
       - name: Extract database files
         run: |
           # Extract iOS cache
-          unzip -o ./apps/website/public/data/ios/ios-cache.zip -d ./apps/tool/assets/ios/
+          unzip -o ./apps/website/public/ios-cache.zip -d ./apps/tool/assets/ios/
 
           # Extract Android cache  
-          unzip -o ./apps/website/public/data/android/android-cache.zip -d ./apps/tool/assets/android/
+          unzip -o ./apps/website/public/android-cache.zip -d ./apps/tool/assets/android/
 
       - name: Export database data
         run: pnpm nx run tool:export-dbs
@@ -177,21 +177,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ios-cache
-          path: ./apps/website/public/data/ios/
+          path: ./apps/website/public/
 
       - name: Download Android artifact
         uses: actions/download-artifact@v4
         with:
           name: android-cache
-          path: ./apps/website/public/data/android/
+          path: ./apps/website/public/
 
       - name: Extract database files
         run: |
           # Extract iOS cache
-          unzip -o ./apps/website/public/data/ios/ios-cache.zip -d ./apps/tool/assets/ios/
+          unzip -o ./apps/website/public/ios-cache.zip -d ./apps/tool/assets/ios/
 
           # Extract Android cache  
-          unzip -o ./apps/website/public/data/android/android-cache.zip -d ./apps/tool/assets/android/
+          unzip -o ./apps/website/public/android-cache.zip -d ./apps/tool/assets/android/
 
       - name: Export database data
         run: pnpm nx run tool:export-dbs

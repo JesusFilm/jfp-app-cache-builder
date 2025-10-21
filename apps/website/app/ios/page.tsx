@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
-import { iosSchemaData } from "@/data/ios-schema"
+import { iosSchemaData } from "@/lib/ios/schema"
 
 export default function IOSBrowser() {
   const sidebarItems = iosSchemaData.schemas.map((schema) => ({

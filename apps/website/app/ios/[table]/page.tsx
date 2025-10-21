@@ -6,7 +6,7 @@ import { notFound } from "next/navigation"
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
 import TableViewer from "@/components/TableViewer"
-import { iosSchemaData } from "@/data/ios-schema"
+import { iosSchemaData } from "@/lib/ios/schema"
 
 import type { Metadata } from "next"
 
@@ -51,7 +51,14 @@ export default async function IOSTablePage({ params }: IOSTablePageProps) {
   }
 
   // Read schema data from JSON file
-  const filePath = path.join(process.cwd(), "public/data/ios", `${table}.json`)
+  const filePath = path.join(
+    process.cwd(),
+    "src",
+    "lib",
+    "ios",
+    "data",
+    `${table}.json`
+  )
   let schemaData: any[] = []
 
   try {

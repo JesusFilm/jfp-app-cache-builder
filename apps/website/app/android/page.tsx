@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
-import { androidSchemaData } from "@/data/android-schema"
+import { androidSchemaData } from "@/lib/android/schema"
 
 export default function AndroidBrowser() {
   const sidebarItems = androidSchemaData.tables.map((table) => ({

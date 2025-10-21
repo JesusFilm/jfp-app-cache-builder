@@ -1,4 +1,4 @@
-import iosSchema from "../../public/data/ios/schema.json"
+import iosSchema from "./data/schema.json"
 
 export interface SchemaProperty {
   name: string

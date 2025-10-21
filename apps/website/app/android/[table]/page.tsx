@@ -6,7 +6,7 @@ import { notFound } from "next/navigation"
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
 import TableViewer from "@/components/TableViewer"
-import { androidSchemaData } from "@/data/android-schema"
+import { androidSchemaData } from "@/lib/android/schema"
 
 import type { Metadata } from "next"
 
@@ -55,7 +55,10 @@ export default async function AndroidTablePage({
   // Read table data from JSON file
   const filePath = path.join(
     process.cwd(),
-    "public/data/android",
+    "src",
+    "lib",
+    "android",
+    "data",
     `${table}.json`
   )
   let tableData: any[] = []

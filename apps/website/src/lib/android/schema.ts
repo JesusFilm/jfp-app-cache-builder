@@ -1,4 +1,4 @@
-import androidSchema from "../../public/data/android/schema.json"
+import androidSchema from "./data/schema.json"
 
 export interface TableColumn {
   name: string

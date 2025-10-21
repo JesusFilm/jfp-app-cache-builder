@@ -59,9 +59,10 @@ async function exportIOSDatabase() {
     process.cwd(),
     "..",
     "website",
-    "public",
-    "data",
-    "ios"
+    "src",
+    "lib",
+    "ios",
+    "data"
   )
 
   console.log(`Reading iOS database from: ${dbPath}`)
