@@ -34,7 +34,7 @@ jobs:
         run: pnpm install
 
       - name: Generate Prisma client
-        run: pnpm prisma generate
+        run: pnpm nx run tool:prisma-generate
 
       - name: Check code formatting
         run: pnpm format:check
