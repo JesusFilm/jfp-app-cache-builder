@@ -16,15 +16,10 @@ import { MediaItem } from "../src/ios/schema/mediaItem/realm.js"
 import { ReadingLanguageData } from "../src/ios/schema/readingLanguageData/realm.js"
 import { SuggestedLanguage } from "../src/ios/schema/suggestedLanguage/realm.js"
 
-interface SchemaInfo {
+interface TableInfo {
   name: string
-  properties: Array<{
-    name: string
-    type: string
-    optional: boolean
-    primaryKey?: boolean
-  }>
-  objectCount: number
+  count: number
+  platform: "ios" | "android"
 }
 
 // Helper function to convert Buffer to base64 string
@@ -93,34 +88,24 @@ async function exportIOSDatabase() {
   })
 
   try {
-    const schemaInfo: { schemas: SchemaInfo[] } = { schemas: [] }
+    const tablesInfo: TableInfo[] = []
 
     // Export each schema
     for (const SchemaClass of schemas) {
       const schemaName = SchemaClass.schema.name
       console.log(`Exporting schema: ${schemaName}`)
 
-      // Get schema properties
-      const properties = Object.entries(SchemaClass.schema.properties).map(
-        ([name, prop]: [string, any]) => ({
-          name,
-          type: prop.type,
-          optional: prop.optional || false,
-          primaryKey: prop.primaryKey || false,
-        })
-      )
-
       // Get all objects of this type
       const objects = realm.objects(schemaName)
       const objectCount = objects.length
 
-      const info: SchemaInfo = {
+      const tableInfo: TableInfo = {
         name: schemaName,
-        properties,
-        objectCount,
+        count: objectCount,
+        platform: "ios",
       }
 
-      schemaInfo.schemas.push(info)
+      tablesInfo.push(tableInfo)
 
       // Convert to plain objects and handle Buffers
       const plainObjects = Array.from(objects).map((obj) =>
@@ -135,7 +120,7 @@ async function exportIOSDatabase() {
 
     // Write schema file
     const schemaFile = path.join(outputDir, "schema.json")
-    await fs.writeFile(schemaFile, JSON.stringify(schemaInfo, null, 2))
+    await fs.writeFile(schemaFile, JSON.stringify(tablesInfo, null, 2))
     console.log(`Schema written to: ${schemaFile}`)
   } finally {
     realm.close()

@@ -8,7 +8,7 @@ export const JFPAppCacheBuilder_iOS_CountryLinkQuery = graphql(`
         language {
           id
         }
-        speakerCount: displaySpeakers
+        speakerCount: speakers
       }
     }
   }

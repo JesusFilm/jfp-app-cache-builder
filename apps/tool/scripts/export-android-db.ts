@@ -6,14 +6,8 @@ import Database from "better-sqlite3"
 
 interface TableInfo {
   name: string
-  columns: Array<{
-    name: string
-    type: string
-    notnull: boolean
-    dflt_value: any
-    pk: boolean
-  }>
-  rowCount: number
+  count: number
+  platform: "ios" | "android"
 }
 
 async function exportAndroidDatabase() {
@@ -54,17 +48,12 @@ async function exportAndroidDatabase() {
       tables.map((t) => t.name)
     )
 
-    const schema: { tables: TableInfo[] } = { tables: [] }
+    const tablesInfo: TableInfo[] = []
 
     // Export each table
     for (const table of tables) {
       const tableName = table.name
       console.log(`Exporting table: ${tableName}`)
-
-      // Get table schema
-      const columns = db
-        .prepare(`PRAGMA table_info(${tableName})`)
-        .all() as any[]
 
       // Get row count
       const rowCount = db
@@ -73,17 +62,11 @@ async function exportAndroidDatabase() {
 
       const tableInfo: TableInfo = {
         name: tableName,
-        columns: columns.map((col) => ({
-          name: col.name,
-          type: col.type,
-          notnull: col.notnull === 1,
-          dflt_value: col.dflt_value,
-          pk: col.pk === 1,
-        })),
-        rowCount: rowCount.count,
+        count: rowCount.count,
+        platform: "android",
       }
 
-      schema.tables.push(tableInfo)
+      tablesInfo.push(tableInfo)
 
       // Export table data
       const data = db.prepare(`SELECT * FROM ${tableName}`).all()
@@ -96,7 +79,7 @@ async function exportAndroidDatabase() {
 
     // Write schema file
     const schemaFile = path.join(outputDir, "schema.json")
-    await fs.writeFile(schemaFile, JSON.stringify(schema, null, 2))
+    await fs.writeFile(schemaFile, JSON.stringify(tablesInfo, null, 2))
     console.log(`Schema written to: ${schemaFile}`)
   } finally {
     db.close()

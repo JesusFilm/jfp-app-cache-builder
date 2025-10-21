@@ -6,7 +6,8 @@ import { notFound } from "next/navigation"
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
 import TableViewer from "@/components/TableViewer"
-import { iosSchemaData } from "@/lib/ios/schema"
+import { tableDataSchema, type TableData } from "@/lib/common/schema"
+import { tables } from "@/lib/ios/schema"
 
 import type { Metadata } from "next"
 
@@ -17,8 +18,8 @@ interface IOSTablePageProps {
 }
 
 export async function generateStaticParams() {
-  return iosSchemaData.schemas.map((schema) => ({
-    table: schema.name,
+  return tables.map(({ name }) => ({
+    table: name,
   }))
 }
 
@@ -26,9 +27,9 @@ export async function generateMetadata({
   params,
 }: IOSTablePageProps): Promise<Metadata> {
   const { table } = await params
-  const schemaInfo = iosSchemaData.schemas.find((s) => s.name === table)
+  const tableInfo = tables.find((t) => t.name === table)
 
-  if (!schemaInfo) {
+  if (!tableInfo) {
     return {
       title: "Schema Not Found | iOS Cache Browser",
       description: "The requested schema was not found",
@@ -36,21 +37,21 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${schemaInfo.name} | iOS Cache Browser | Jesus Film Project`,
-    description: `Browse ${schemaInfo.name} schema with ${schemaInfo.objectCount.toLocaleString()} objects from iOS Realm database`,
+    title: `${tableInfo.name} | iOS Cache Browser | Jesus Film Project`,
+    description: `Browse ${tableInfo.name} schema with ${tableInfo.count.toLocaleString()} objects from iOS Realm database`,
   }
 }
 
 export default async function IOSTablePage({ params }: IOSTablePageProps) {
   const { table } = await params
 
-  // Validate schema exists in schema
-  const schemaInfo = iosSchemaData.schemas.find((s) => s.name === table)
-  if (!schemaInfo) {
+  // Validate table exists in schema
+  const tableInfo = tables.find((t) => t.name === table)
+  if (!tableInfo) {
     notFound()
   }
 
-  // Read schema data from JSON file
+  // Read table data from JSON file
   const filePath = path.join(
     process.cwd(),
     "src",
@@ -59,35 +60,24 @@ export default async function IOSTablePage({ params }: IOSTablePageProps) {
     "data",
     `${table}.json`
   )
-  let schemaData: any[] = []
+  let tableData: TableData[] = []
 
   try {
     const fileContent = fs.readFileSync(filePath, "utf-8")
-    schemaData = JSON.parse(fileContent)
+    tableData = tableDataSchema.parse(JSON.parse(fileContent))
   } catch (error) {
     console.error(`Failed to read schema data for ${table}:`, error)
     notFound()
   }
 
-  const sidebarItems = iosSchemaData.schemas.map((schema) => ({
-    name: schema.name,
-    count: schema.objectCount,
-    href: `/ios/${schema.name}`,
-  }))
-
   return (
     <Layout>
       <div className="h-full flex items-center justify-center">
         <div className="w-80 shrink-0 h-full">
-          <Sidebar items={sidebarItems} selectedItem={table} title="iOS DB" />
+          <Sidebar items={tables} selectedItem={table} title="iOS DB" />
         </div>
         <div className="w-[calc(100%-var(--spacing)*80)] h-full flex flex-col items-center justify-center">
-          <TableViewer
-            data={schemaData}
-            title={table}
-            tableName={table}
-            platform="ios"
-          />
+          <TableViewer data={tableData} tableName={table} platform="ios" />
         </div>
       </div>
     </Layout>

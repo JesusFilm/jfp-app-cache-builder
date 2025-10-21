@@ -44,6 +44,7 @@ export async function transformCountries({
     englishName: country.englishName.at(0)?.value ?? "",
     name: country.name.at(0)?.value ?? "",
     languageSpeakerCounts: country.countryLanguages
+      .filter(({ suggested }) => !suggested)
       .map(({ language }) => {
         return db.objectForPrimaryKey(
           CountryLink,

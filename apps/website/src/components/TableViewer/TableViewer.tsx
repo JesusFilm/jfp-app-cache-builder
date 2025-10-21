@@ -1,24 +1,19 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useMemo, useEffect, Suspense } from "react"
+import { useState, useMemo, useEffect } from "react"
 
 import SearchBar from "../SearchBar"
 import TableCell from "../TableCell"
 
 interface TableViewerProps {
-  data: any[]
-  columns?: string[]
-  title?: string
-  className?: string
-  tableName?: string
-  platform?: "ios" | "android"
+  data: Record<string, unknown>[]
+  tableName: string
+  platform: "ios" | "android"
 }
 
-function TableViewerContent({
+export default function TableViewer({
   data,
-  columns,
-  title,
   tableName,
   platform,
 }: TableViewerProps) {
@@ -37,10 +32,10 @@ function TableViewerContent({
   }, [searchParams])
 
   const detectedColumns = useMemo(() => {
-    if (columns) return columns
-    if (data.length === 0) return []
-    return Object.keys(data[0])
-  }, [data, columns])
+    const firstRow = data[0]
+    if (!firstRow) return []
+    return Object.keys(firstRow)
+  }, [data])
 
   const filteredData = useMemo(() => {
     if (!searchQuery) return data
@@ -92,9 +87,7 @@ function TableViewerContent({
     <div className="bg-white h-full w-full">
       <div className="border-b border-gray-200 flex justify-between items-center">
         <div className="p-4">
-          <h2 className="text-lg font-semibold text-gray-900">
-            {title || "Data Table"}
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900">{tableName}</h2>
           <p className="text-sm text-gray-500 mt-1">
             {filteredData.length !== data.length ? (
               <>
@@ -140,11 +133,11 @@ function TableViewerContent({
 
                   return (
                     <TableCell
-                      key={`${tableName || "unknown"}-${column}-${currentPage}-${index}`}
+                      key={`${tableName}-${column}-${currentPage}-${index}`}
                       value={value}
-                      {...(tableName ? { tableName } : {})}
+                      tableName={tableName}
                       columnName={column}
-                      {...(platform ? { platform } : {})}
+                      platform={platform}
                     />
                   )
                 })}
@@ -185,13 +178,5 @@ function TableViewerContent({
         </div>
       )}
     </div>
-  )
-}
-
-export default function TableViewer(props: TableViewerProps) {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <TableViewerContent {...props} />
-    </Suspense>
   )
 }

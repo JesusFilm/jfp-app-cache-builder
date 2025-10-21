@@ -21,10 +21,10 @@ export const JFPAppCacheBuilder_iOS_ReadingLanguageDataQuery = graphql(`
     }
     languageData: languages {
       languageId: id
-      name(languageId: $languageId, primary: true) {
+      name(languageId: $languageId) {
         value
       }
-      nameNative: name(primary: true) {
+      nameNative: name {
         value
       }
     }

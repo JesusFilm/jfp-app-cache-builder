@@ -1,21 +1,14 @@
-import androidSchema from "./data/schema.json"
+import { type TableInfo, tableInfoSchema } from "../common/schema"
 
-export interface TableColumn {
-  name: string
-  type: string
-  notnull: boolean
-  dflt_value: any
-  pk: boolean
+let tables: TableInfo[]
+
+try {
+  const androidSchema = await import("./data/schema.json")
+  const validatedSchema = tableInfoSchema.parse(androidSchema.default)
+  tables = validatedSchema
+} catch {
+  // Soft fail - return empty schema if file can't be found or validation fails
+  tables = []
 }
 
-export interface TableInfo {
-  name: string
-  columns: TableColumn[]
-  rowCount: number
-}
-
-export interface AndroidSchema {
-  tables: TableInfo[]
-}
-
-export const androidSchemaData: AndroidSchema = androidSchema as AndroidSchema
+export { tables }

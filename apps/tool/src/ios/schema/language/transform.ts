@@ -41,7 +41,8 @@ export async function transformLanguages({
     currentDescriptorLanguageId: languageId,
     englishName: language.englishName.at(0)?.value ?? "",
     name: language.name.at(0)?.value ?? "",
-    nameNative: language.nameNative.at(0)?.value ?? "",
+    nameNative:
+      language.nameNative.at(0)?.value ?? language.name.at(0)?.value ?? "",
   }))
 
   if (!readOnly) {

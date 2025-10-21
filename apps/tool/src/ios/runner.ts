@@ -15,7 +15,7 @@ export async function runner({
   languageId,
   languageTag,
   logger,
-  includeReadingLanguageData = false,
+  includeReadingLanguageData = true,
   readOnly = false,
 }: RunnerOptions): Promise<void> {
   logger?.info("Starting iOS data transformation process")
