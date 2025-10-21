@@ -80,7 +80,7 @@ This will:
 
 This is an Nx monorepo with two applications:
 
-````plaintext
+```plaintext
 apps/
 ├── tool/           # CLI tool for building databases
 │   ├── src/        # Source code
