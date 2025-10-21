@@ -1,5 +1,7 @@
 "use client"
 
+import { useMemo } from "react"
+
 import {
   // iOS handlers
   handleBibleCodeColumn,
@@ -26,41 +28,22 @@ import {
   handleSuggestedLanguagesColumn,
   handleTermTranslationsColumn,
 } from "./handlers"
+import { formatValue } from "./handlers/components"
 
 interface TableCellProps {
-  value: any
-  tableName?: string
-  columnName?: string
-  platform?: "ios" | "android"
+  value: unknown
+  tableName: string
+  columnName: string
+  platform: "ios" | "android"
 }
 
-export default function TableCell({
-  value,
-  tableName,
-  columnName,
-  platform,
-}: TableCellProps) {
-  const formatValue = (value: any): string => {
-    if (value === null || value === undefined) return ""
-    if (typeof value === "object") return JSON.stringify(value)
-    if (typeof value === "string" && value.length > 100) {
-      return value.substring(0, 100) + "..."
-    }
-    return String(value)
-  }
-
-  // Handle special cases using platform-specific table handlers
-  const handleSpecialCases = (
-    value: any,
-    tableName?: string,
-    columnName?: string,
-    platform?: "ios" | "android"
-  ) => {
-    if (!tableName || !columnName || !platform) {
-      return formatValue(value)
-    }
-
-    // iOS table handlers
+export default function TableCell(props: TableCellProps) {
+  const handleSpecialCases = ({
+    value,
+    tableName,
+    columnName,
+    platform,
+  }: TableCellProps) => {
     if (platform === "ios") {
       switch (tableName) {
         case "BibleCode":
@@ -88,55 +71,46 @@ export default function TableCell({
       }
     }
 
-    // Android table handlers
-    if (platform === "android") {
-      switch (tableName) {
-        case "countries":
-          return handleCountriesColumn(columnName, value)
-        case "country_translations":
-          return handleCountryTranslationsColumn(columnName, value)
-        case "media_data":
-          return handleMediaDataColumn(columnName, value)
-        case "media_language_links":
-          return handleMediaLanguageLinksColumn(columnName, value)
-        case "media_language_translations":
-          return handleMediaLanguageTranslationsColumn(columnName, value)
-        case "media_languages":
-          return handleMediaLanguagesColumn(columnName, value)
-        case "media_metadata":
-          return handleMediaMetadataColumn(columnName, value)
-        case "reading_languages":
-          return handleReadingLanguagesColumn(columnName, value)
-        case "room_master_table":
-          return handleRoomMasterTableColumn(columnName, value)
-        case "spoken_languages":
-          return handleSpokenLanguagesColumn(columnName, value)
-        case "suggested_languages":
-          return handleSuggestedLanguagesColumn(columnName, value)
-        case "term_translations":
-          return handleTermTranslationsColumn(columnName, value)
-        default:
-          return formatValue(value)
-      }
+    switch (tableName) {
+      case "countries":
+        return handleCountriesColumn(columnName, value)
+      case "country_translations":
+        return handleCountryTranslationsColumn(columnName, value)
+      case "media_data":
+        return handleMediaDataColumn(columnName, value)
+      case "media_language_links":
+        return handleMediaLanguageLinksColumn(columnName, value)
+      case "media_language_translations":
+        return handleMediaLanguageTranslationsColumn(columnName, value)
+      case "media_languages":
+        return handleMediaLanguagesColumn(columnName, value)
+      case "media_metadata":
+        return handleMediaMetadataColumn(columnName, value)
+      case "reading_languages":
+        return handleReadingLanguagesColumn(columnName, value)
+      case "room_master_table":
+        return handleRoomMasterTableColumn(columnName, value)
+      case "spoken_languages":
+        return handleSpokenLanguagesColumn(columnName, value)
+      case "suggested_languages":
+        return handleSuggestedLanguagesColumn(columnName, value)
+      case "term_translations":
+        return handleTermTranslationsColumn(columnName, value)
+      default:
+        return formatValue(value)
     }
-
-    // Default formatting for all other cases
-    return formatValue(value)
   }
 
-  const formattedValue = handleSpecialCases(
-    value,
-    tableName,
-    columnName,
-    platform
-  )
+  const formattedValue = useMemo(() => handleSpecialCases(props), [props])
 
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
       <div
         className="max-w-xs truncate"
         title={
-          typeof formattedValue === "string" ? formattedValue : String(value)
+          typeof formattedValue === "string"
+            ? formattedValue
+            : String(props.value)
         }
       >
         {formattedValue}

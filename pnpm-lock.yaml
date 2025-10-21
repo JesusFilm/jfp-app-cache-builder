@@ -144,6 +144,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.14
         version: 4.1.15
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^6.9.1
@@ -8065,6 +8068,9 @@ packages:
 
   zen-observable@0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
+
+  zod@4.1.12:
+    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
 
 snapshots:
 
@@ -17175,3 +17181,5 @@ snapshots:
       zen-observable: 0.8.15
 
   zen-observable@0.8.15: {}
+
+  zod@4.1.12: {}

@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation"
 
 interface SidebarItem {
   name: string
-  count?: number
-  href?: string
+  count: number
+  platform: "ios" | "android"
 }
 
 interface SidebarProps {
@@ -29,12 +29,13 @@ export default function Sidebar({ items, selectedItem, title }: SidebarProps) {
         <ul className="space-y-1">
           {items.map((item) => {
             const isActive =
-              selectedItem === item.name || pathname === item.href
+              selectedItem === item.name ||
+              pathname === `/${item.platform}/${item.name}`
 
             return (
               <li key={item.name}>
                 <Link
-                  href={item.href || `/${item.name}`}
+                  href={`/${item.platform}/${item.name}`}
                   className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer block ${
                     isActive
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
@@ -43,11 +44,9 @@ export default function Sidebar({ items, selectedItem, title }: SidebarProps) {
                 >
                   <div className="flex justify-between items-center">
                     <span className="truncate">{item.name}</span>
-                    {item.count !== undefined && (
-                      <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                        {item.count.toLocaleString()}
-                      </span>
-                    )}
+                    <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {item.count.toLocaleString()}
+                    </span>
                   </div>
                 </Link>
               </li>

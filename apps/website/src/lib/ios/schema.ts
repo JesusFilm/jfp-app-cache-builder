@@ -1,20 +1,14 @@
-import iosSchema from "./data/schema.json"
+import { type TableInfo, tableInfoSchema } from "../common/schema"
 
-export interface SchemaProperty {
-  name: string
-  type: string
-  optional: boolean
-  primaryKey?: boolean
+let tables: TableInfo[]
+
+try {
+  const iosSchema = await import("./data/schema.json")
+  const validatedSchema = tableInfoSchema.parse(iosSchema.default)
+  tables = validatedSchema
+} catch {
+  // Soft fail - return empty schema if file can't be found or validation fails
+  tables = []
 }
 
-export interface SchemaInfo {
-  name: string
-  properties: SchemaProperty[]
-  objectCount: number
-}
-
-export interface IOSSchema {
-  schemas: SchemaInfo[]
-}
-
-export const iosSchemaData: IOSSchema = iosSchema as IOSSchema
+export { tables }

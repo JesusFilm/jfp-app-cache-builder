@@ -120,3 +120,12 @@ export function formatReferenceText(value: {
 
   return reference
 }
+
+export function formatValue(value: unknown): string {
+  if (value === null || value === undefined) return ""
+  if (typeof value === "object") return JSON.stringify(value)
+  if (typeof value === "string" && value.length > 100) {
+    return truncateText(value, 100)
+  }
+  return String(value)
+}

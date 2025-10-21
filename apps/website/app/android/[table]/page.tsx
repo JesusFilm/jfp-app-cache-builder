@@ -6,7 +6,8 @@ import { notFound } from "next/navigation"
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
 import TableViewer from "@/components/TableViewer"
-import { androidSchemaData } from "@/lib/android/schema"
+import { tables } from "@/lib/android/schema"
+import { tableDataSchema, type TableData } from "@/lib/common/schema"
 
 import type { Metadata } from "next"
 
@@ -17,8 +18,8 @@ interface AndroidTablePageProps {
 }
 
 export async function generateStaticParams() {
-  return androidSchemaData.tables.map((table) => ({
-    table: table.name,
+  return tables.map(({ name }) => ({
+    table: name,
   }))
 }
 
@@ -26,7 +27,7 @@ export async function generateMetadata({
   params,
 }: AndroidTablePageProps): Promise<Metadata> {
   const { table } = await params
-  const tableInfo = androidSchemaData.tables.find((t) => t.name === table)
+  const tableInfo = tables.find((t) => t.name === table)
 
   if (!tableInfo) {
     return {
@@ -37,7 +38,7 @@ export async function generateMetadata({
 
   return {
     title: `${tableInfo.name} | Android Cache Browser | Jesus Film Project`,
-    description: `Browse ${tableInfo.name} table with ${tableInfo.rowCount.toLocaleString()} rows from Android SQLite database`,
+    description: `Browse ${tableInfo.name} table with ${tableInfo.count.toLocaleString()} rows from Android SQLite database`,
   }
 }
 
@@ -47,7 +48,7 @@ export default async function AndroidTablePage({
   const { table } = await params
 
   // Validate table exists in schema
-  const tableInfo = androidSchemaData.tables.find((t) => t.name === table)
+  const tableInfo = tables.find((t) => t.name === table)
   if (!tableInfo) {
     notFound()
   }
@@ -61,39 +62,24 @@ export default async function AndroidTablePage({
     "data",
     `${table}.json`
   )
-  let tableData: any[] = []
+  let tableData: TableData[] = []
 
   try {
     const fileContent = fs.readFileSync(filePath, "utf-8")
-    tableData = JSON.parse(fileContent)
+    tableData = tableDataSchema.parse(JSON.parse(fileContent))
   } catch (error) {
     console.error(`Failed to read table data for ${table}:`, error)
     notFound()
   }
 
-  const sidebarItems = androidSchemaData.tables.map((table) => ({
-    name: table.name,
-    count: table.rowCount,
-    href: `/android/${table.name}`,
-  }))
-
   return (
     <Layout>
       <div className="h-full flex items-center justify-center">
         <div className="w-80 shrink-0 h-full">
-          <Sidebar
-            items={sidebarItems}
-            selectedItem={table}
-            title="Android DB"
-          />
+          <Sidebar items={tables} selectedItem={table} title="Android DB" />
         </div>
         <div className="w-[calc(100%-var(--spacing)*80)] h-full flex flex-col items-center justify-center">
-          <TableViewer
-            data={tableData}
-            title={table}
-            tableName={table}
-            platform="android"
-          />
+          <TableViewer data={tableData} tableName={table} platform="android" />
         </div>
       </div>
     </Layout>
