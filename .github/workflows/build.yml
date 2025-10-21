@@ -96,9 +96,62 @@ jobs:
           path: apps/tool/assets/android/android-cache.zip
           retention-days: 5
 
+  build-website:
+    needs: [build-ios, build-android]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Setup pnpm
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Download iOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-cache
+          path: ./apps/website/public/data/ios/
+
+      - name: Download Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-cache
+          path: ./apps/website/public/data/android/
+
+      - name: Extract database files
+        run: |
+          # Extract iOS cache
+          unzip -o ./apps/website/public/data/ios/ios-cache.zip -d ./apps/tool/assets/ios/
+
+          # Extract Android cache  
+          unzip -o ./apps/website/public/data/android/android-cache.zip -d ./apps/tool/assets/android/
+
+      - name: Export database data
+        run: pnpm nx run tool:export-dbs
+
+      - name: Build Next.js site
+        run: pnpm nx run website:build
+        env:
+          NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.run_number }}
+          NEXT_PUBLIC_BUILD_NUMBER: ${{ github.run_number }}
+          NEXT_PUBLIC_COMMIT_SHA: ${{ github.sha }}
+          GITHUB_ACTIONS: true
+
   deploy-pages:
     needs: [build-ios, build-android]
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
 
     environment:
       name: github-pages
@@ -143,7 +196,7 @@ jobs:
       - name: Export database data
         run: pnpm nx run tool:export-dbs
 
-      - name: Export Next.js site
+      - name: Build Next.js site
         run: pnpm nx run website:export
         env:
           NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.run_number }}
@@ -152,16 +205,13 @@ jobs:
           GITHUB_ACTIONS: true
 
       - name: Setup Pages
-        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Upload to GitHub Pages
-        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./apps/website/out
 
       - name: Deploy to GitHub Pages
-        if: github.event_name != 'pull_request'
         id: deployment
         uses: actions/deploy-pages@v4
