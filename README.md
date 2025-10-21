@@ -91,7 +91,7 @@ apps/
     ├── app/        # Next.js app directory
     ├── components/ # React components
     └── public/     # Static assets
-```plaintext
+```
 
 ## CI/CD
 
