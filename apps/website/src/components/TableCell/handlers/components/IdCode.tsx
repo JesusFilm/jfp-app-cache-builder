@@ -18,7 +18,7 @@ export function IdCode({
     return String(value || "")
   }
 
-  const href = `/${platform}?t=${t}&q=${q}`
+  const href = `/${platform}/${t}/?q=${q}`
   return (
     <div className="flex items-center space-x-2">
       <Link
