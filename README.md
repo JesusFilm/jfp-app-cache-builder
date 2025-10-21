@@ -192,7 +192,7 @@ To run the database browser locally:
    ```bash
    pnpm nx run tool:cli -- --target ios
    pnpm nx run tool:cli -- --target android
-````
+   ```
 
 2. **Export database data:**
 
