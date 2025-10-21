@@ -80,7 +80,7 @@ This will:
 
 This is an Nx monorepo with two applications:
 
-```
+```plaintext
 apps/
 ├── tool/           # CLI tool for building databases
 │   ├── src/        # Source code
@@ -91,7 +91,7 @@ apps/
     ├── app/        # Next.js app directory
     ├── components/ # React components
     └── public/     # Static assets
-```
+```plaintext
 
 ## CI/CD
 
