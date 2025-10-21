@@ -29,23 +29,14 @@ This database can then be used by iOS and Android applications to provide offlin
    pnpm install
    ```
 
-2. **Build the application:**
+2. **Run the data transformation:**
 
    ```bash
-   pnpm build:tool
-   ```
+   # Using Nx commands for iOS
+   pnpm nx run tool:cli -- --target ios
 
-3. **Run the data transformation:**
-
-   ```bash
-   # Using the CLI binary for iOS
-   ./apps/tool/bin/jfp-app-cache-builder --target ios
-
-   # Using the CLI binary for Android
-   ./apps/tool/bin/jfp-app-cache-builder --target android
-
-   # Or using pnpm scripts
-   pnpm dev:tool -- --target ios
+   # Using Nx commands for Android
+   pnpm nx run tool:cli -- --target android
    ```
 
 This will:
@@ -54,64 +45,7 @@ This will:
 - Transform it into the required format
 - Save it to the appropriate database file based on the target
 
-## Command Line Interface
-
-JFP App Cache Builder includes a powerful CLI with the following options:
-
-```bash
-./apps/tool/bin/jfp-app-cache-builder [options]
-```
-
-### Options
-
-- `--target <target>` - Target platform (required: "ios" or "android")
-- `-l, --language-id <id>` - Language ID to process (default: "529")
-- `-t, --language-tag <tag>` - Language tag to process (default: "en")
-- `--include-reading-language-data` - Include reading language data in the build
-- `--silent` - Run in silent mode (no logging)
-- `--verbose` - Run in verbose mode (detailed logging)
-- `-V, --version` - Output the version number
-- `-h, --help` - Display help for command
-
-### Examples
-
-```bash
-# iOS build (English, language ID 529)
-./apps/tool/bin/jfp-app-cache-builder --target ios
-
-# Android build (English, language ID 529)
-./apps/tool/bin/jfp-app-cache-builder --target android
-
-# iOS build for Spanish
-./apps/tool/bin/jfp-app-cache-builder --target ios --language-id 496 --language-tag es
-
-# Android build with reading language data included
-./apps/tool/bin/jfp-app-cache-builder --target android --include-reading-language-data
-
-# iOS build with verbose logging
-./apps/tool/bin/jfp-app-cache-builder --target ios --verbose
-
-# Android build in silent mode
-./apps/tool/bin/jfp-app-cache-builder --target android --silent
-```
-
 ## Available Scripts
-
-### Tool (CLI Application)
-
-- `pnpm build:tool` - Build the TypeScript code
-- `pnpm dev:tool` - Run the transformation in development mode
-- `pnpm start` - Run the built application
-- `pnpm cli` - Build and run the CLI binary
-- `pnpm test:tool` - Run the test suite for the tool
-- `pnpm export:dbs` - Export database contents to JSON files
-
-### Website (Database Browser)
-
-- `pnpm build:website` - Build the Next.js site for production
-- `pnpm dev:website` - Start the development server
-- `pnpm start:website` - Start the production server
-- `pnpm test:website` - Run tests for the website
 
 ### Workspace Commands
 
@@ -121,6 +55,26 @@ JFP App Cache Builder includes a powerful CLI with the following options:
 - `pnpm lint:fix` - Fix linting issues automatically
 - `pnpm format` - Format code with Prettier
 - `pnpm format:check` - Check if code is properly formatted
+- `pnpm type-check` - Type check all applications
+
+### Tool (CLI Application)
+
+- `pnpm nx run tool:cli -- --target ios` - Run CLI tool for iOS
+- `pnpm nx run tool:cli -- --target android` - Run CLI tool for Android
+- `pnpm nx run tool:export-dbs` - Export database contents to JSON files
+- `pnpm nx run tool:prisma-generate` - Generate Prisma client
+- `pnpm nx run tool:test` - Run the test suite for the tool
+- `pnpm nx run tool:lint` - Lint the tool code
+- `pnpm nx run tool:type-check` - Type check the tool code
+
+### Website (Database Browser)
+
+- `pnpm nx run website:build` - Build the Next.js site for production
+- `pnpm nx run website:serve` - Start the development server
+- `pnpm nx run website:export` - Export static website
+- `pnpm nx run website:test` - Run tests for the website
+- `pnpm nx run website:lint` - Lint the website code
+- `pnpm nx run website:type-check` - Type check the website code
 
 ## Project Structure
 
@@ -133,7 +87,6 @@ apps/
 │   ├── assets/     # Database files
 │   ├── prisma/     # Database schema
 │   ├── scripts/    # Export scripts
-│   └── bin/        # CLI binary
 └── website/        # Next.js database browser
     ├── app/        # Next.js app directory
     ├── components/ # React components
@@ -237,21 +190,20 @@ To run the database browser locally:
 1. **Build the databases first:**
 
    ```bash
-   pnpm build:tool
-   ./apps/tool/bin/jfp-app-cache-builder --target ios
-   ./apps/tool/bin/jfp-app-cache-builder --target android
+   pnpm nx run tool:cli -- --target ios
+   pnpm nx run tool:cli -- --target android
    ```
 
 2. **Export database data:**
 
    ```bash
-   pnpm export:dbs
+   pnpm nx run tool:export-dbs
    ```
 
 3. **Start the development server:**
 
    ```bash
-   pnpm dev:website
+   pnpm nx run website:serve
    ```
 
 4. **Open your browser:**

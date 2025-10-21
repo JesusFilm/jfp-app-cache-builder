@@ -32,6 +32,13 @@
         "command": "prisma generate",
         "cwd": "apps/tool"
       }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit",
+        "cwd": "apps/tool"
+      }
     }
   },
   "tags": []

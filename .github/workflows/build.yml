@@ -3,6 +3,8 @@ name: Build iOS and Android Caches
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * *" # Daily at 6 AM UTC
@@ -97,7 +99,6 @@ jobs:
   deploy-pages:
     needs: [build-ios, build-android]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
 
     environment:
       name: github-pages
@@ -142,8 +143,8 @@ jobs:
       - name: Export database data
         run: pnpm nx run tool:export-dbs
 
-      - name: Build Next.js site
-        run: pnpm nx run website:build
+      - name: Export Next.js site
+        run: pnpm nx run website:export
         env:
           NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.run_number }}
           NEXT_PUBLIC_BUILD_NUMBER: ${{ github.run_number }}
@@ -151,13 +152,16 @@ jobs:
           GITHUB_ACTIONS: true
 
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Upload to GitHub Pages
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./apps/website/out
 
       - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
         id: deployment
         uses: actions/deploy-pages@v4

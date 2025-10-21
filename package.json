@@ -8,7 +8,7 @@
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
-    "lint:fix": "nx run-many -t lint --fix",
+    "lint:fix": "nx run-many -t lint -- --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "nx run-many -t type-check"
