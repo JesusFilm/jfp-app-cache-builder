@@ -1,4 +1,6 @@
-/** @type {import('next').NextConfig} */
+import { composePlugins, withNx } from "@nx/next"
+
+/** @type {import('@nx/next/plugins/with-nx').WithNxOptions} */
 const nextConfig = {
   output: "export",
   trailingSlash: true,
@@ -13,6 +15,9 @@ const nextConfig = {
       },
     ]
   },
+  nx: {
+    svgr: false,
+  },
   images: {
     unoptimized: true,
   },
@@ -24,4 +29,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default composePlugins(withNx)(nextConfig)
