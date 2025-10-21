@@ -80,7 +80,7 @@ This will:
 
 This is an Nx monorepo with two applications:
 
-```plaintext
+````plaintext
 apps/
 ├── tool/           # CLI tool for building databases
 │   ├── src/        # Source code
@@ -192,7 +192,7 @@ To run the database browser locally:
    ```bash
    pnpm nx run tool:cli -- --target ios
    pnpm nx run tool:cli -- --target android
-   ```
+````
 
 2. **Export database data:**
 
