@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 
 import { notFound } from "next/navigation"
+import { Suspense } from "react"
 
 import Layout from "@/components/Layout"
 import Sidebar from "@/components/Sidebar"
@@ -79,7 +80,13 @@ export default async function AndroidTablePage({
           <Sidebar items={tables} selectedItem={table} title="Android DB" />
         </div>
         <div className="w-[calc(100%-var(--spacing)*80)] h-full flex flex-col items-center justify-center">
-          <TableViewer data={tableData} tableName={table} platform="android" />
+          <Suspense fallback={<div className="p-4">Loading table...</div>}>
+            <TableViewer
+              data={tableData}
+              tableName={table}
+              platform="android"
+            />
+          </Suspense>
         </div>
       </div>
     </Layout>
