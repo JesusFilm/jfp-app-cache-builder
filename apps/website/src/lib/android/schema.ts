@@ -3,6 +3,7 @@ import { type TableInfo, tableInfoSchema } from "../common/schema"
 let tables: TableInfo[]
 
 try {
+  // eslint-disable-next-line import/no-unresolved
   const androidSchema = await import("./data/schema.json")
   const validatedSchema = tableInfoSchema.parse(androidSchema.default)
   tables = validatedSchema
