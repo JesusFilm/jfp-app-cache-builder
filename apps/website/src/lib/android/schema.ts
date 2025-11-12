@@ -4,6 +4,7 @@ let tables: TableInfo[]
 
 try {
   // eslint-disable-next-line import/no-unresolved
+  // @ts-ignore - schema.json is generated at build time
   const androidSchema = await import("./data/schema.json")
   const validatedSchema = tableInfoSchema.parse(androidSchema.default)
   tables = validatedSchema
