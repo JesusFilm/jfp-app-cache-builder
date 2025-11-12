@@ -143,7 +143,7 @@ jobs:
       - name: Build Next.js site
         run: pnpm nx run website:build
         env:
-          NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.run_number }}
+          NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
           NEXT_PUBLIC_BUILD_NUMBER: ${{ github.run_number }}
           NEXT_PUBLIC_COMMIT_SHA: ${{ github.sha }}
           GITHUB_ACTIONS: true
@@ -199,7 +199,7 @@ jobs:
       - name: Build Next.js site
         run: pnpm nx run website:build
         env:
-          NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.run_number }}
+          NEXT_PUBLIC_BUILD_DATE: ${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
           NEXT_PUBLIC_BUILD_NUMBER: ${{ github.run_number }}
           NEXT_PUBLIC_COMMIT_SHA: ${{ github.sha }}
           GITHUB_ACTIONS: true
