@@ -36,6 +36,9 @@ jobs:
       - name: Generate Prisma client
         run: pnpm nx run tool:prisma-generate
 
+      - name: Export database schemas
+        run: pnpm nx run tool:export-dbs
+
       - name: Check code formatting
         run: pnpm format:check
 
