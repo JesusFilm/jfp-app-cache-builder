@@ -79,11 +79,7 @@ export default async function IOSTablePage({ params }: IOSTablePageProps) {
         </div>
         <div className="w-[calc(100%-var(--spacing)*80)] h-full flex flex-col items-center justify-center">
           <Suspense fallback={<div className="p-4">Loading table...</div>}>
-            <TableViewer 
-              data={tableData} 
-              tableName={table} 
-              platform="ios" 
-            />
+            <TableViewer data={tableData} tableName={table} platform="ios" />
           </Suspense>
         </div>
       </div>
