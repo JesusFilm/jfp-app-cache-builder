@@ -3,10 +3,7 @@ import { type TableInfo, tableInfoSchema } from "../common/schema"
 let tables: TableInfo[]
 
 try {
-  /* eslint-disable @typescript-eslint/ban-ts-comment */
-  // @ts-ignore - schema.json is generated at build time
-  const iosSchema = await import("./data/schema.json")
-  /* eslint-enable @typescript-eslint/ban-ts-comment */
+  const iosSchema = await import("./data/schema.json") // eslint-disable-line @typescript-eslint/ban-ts-comment // @ts-expect-error
   const validatedSchema = tableInfoSchema.parse(iosSchema.default)
   tables = validatedSchema
 } catch {
