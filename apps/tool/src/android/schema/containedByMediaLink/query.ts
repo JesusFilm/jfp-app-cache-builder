@@ -1,7 +1,7 @@
 import { graphql } from "gql.tada"
 
-export const JFPAppCacheBuilder_iOS_ContainedByMediaLinkQuery = graphql(`
-  query JFPAppCacheBuilder_iOS_ContainedByMediaLinkQuery {
+export const JFPAppCacheBuilder_Android_ContainedByMediaLinkQuery = graphql(`
+  query JFPAppCacheBuilder_Android_ContainedByMediaLinkQuery {
     videos(
       where: { labels: [collection, series, featureFilm, shortFilm] }
       limit: 1000

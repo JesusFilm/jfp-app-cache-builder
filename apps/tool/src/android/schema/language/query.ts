@@ -1,7 +1,7 @@
 import { graphql } from "gql.tada"
 
-export const JFPAppCacheBuilder_iOS_LanguageQuery = graphql(`
-  query JFPAppCacheBuilder_iOS_LanguageQuery($languageId: ID!) {
+export const JFPAppCacheBuilder_Android_LanguageQuery = graphql(`
+  query JFPAppCacheBuilder_Android_LanguageQuery($languageId: ID!) {
     languages {
       id
       audioPreviewURL: audioPreview {

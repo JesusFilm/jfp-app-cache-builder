@@ -1,7 +1,7 @@
 import { graphql } from "gql.tada"
 
-export const JFPAppCacheBuilder_iOS_CountryQuery = graphql(`
-  query JFPAppCacheBuilder_iOS_CountryQuery($languageId: ID!) {
+export const JFPAppCacheBuilder_Android_CountryQuery = graphql(`
+  query JFPAppCacheBuilder_Android_CountryQuery($languageId: ID!) {
     countries {
       countryId: id
       flagUrlPng: flagPngSrc
