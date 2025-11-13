@@ -27,5 +27,9 @@
     ".next/types/**/*.ts",
     "types/**/*.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "src/lib/android/schema.ts",
+    "src/lib/ios/schema.ts"
+  ]
 }
