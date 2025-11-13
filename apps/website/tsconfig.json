@@ -28,8 +28,6 @@
     "types/**/*.d.ts"
   ],
   "exclude": [
-    "node_modules",
-    "src/lib/android/schema.ts",
-    "src/lib/ios/schema.ts"
+    "node_modules"
   ]
 }
