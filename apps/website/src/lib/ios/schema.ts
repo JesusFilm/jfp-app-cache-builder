@@ -3,7 +3,7 @@ import { type TableInfo, tableInfoSchema } from "../common/schema"
 let tables: TableInfo[]
 
 try {
-  // eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error - schema.json is generated at build time
   const iosSchema = await import("./data/schema.json")
   const validatedSchema = tableInfoSchema.parse(iosSchema.default)
