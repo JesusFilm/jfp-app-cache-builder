@@ -4,7 +4,6 @@ export const tableInfoSchema = z.array(
   z.object({
     name: z.string(),
     count: z.number(),
-    platform: z.enum(["ios", "android"]),
   })
 )
 export type TableInfo = z.infer<typeof tableInfoSchema>[number]

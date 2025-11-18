@@ -102,12 +102,6 @@ export default [
     },
   },
   {
-    ignores: [
-      ".next/*",
-      "out/*",
-      "node_modules/*",
-      "src/lib/android/schema.ts",
-      "src/lib/ios/schema.ts",
-    ],
+    ignores: [".next/*", "out/*", "node_modules/*"],
   },
 ]
