@@ -1,10 +1,16 @@
-import { type TableInfo, tableInfoSchema } from "../common/schema"
+import { z } from "zod"
 
-let tables: TableInfo[]
+import { tableInfoSchema } from "../common/schema"
+
+const extendedTableInfoSchema = tableInfoSchema.element
+  .extend({ platform: z.literal("android") })
+  .array()
+
+let tables: z.infer<typeof extendedTableInfoSchema>
 
 try {
   const androidSchema = await import("./data/schema.json")
-  const validatedSchema = tableInfoSchema.parse(androidSchema.default)
+  const validatedSchema = extendedTableInfoSchema.parse(androidSchema.default)
   tables = validatedSchema
 } catch {
   // Soft fail - return empty schema if file can't be found or validation fails

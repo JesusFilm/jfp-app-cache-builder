@@ -36,6 +36,11 @@ jobs:
       - name: Generate Prisma client
         run: pnpm nx run tool:prisma-generate
 
+      - name: Create schema.json files
+        run: |
+          echo "[]" > apps/website/src/lib/android/data/schema.json
+          echo "[]" > apps/website/src/lib/ios/data/schema.json
+
       - name: Check code formatting
         run: pnpm format:check
 
