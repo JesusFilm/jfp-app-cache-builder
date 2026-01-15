@@ -1,4 +1,5 @@
 import { format, parseISO } from "date-fns"
+import Link from "next/link"
 
 import Layout from "@/components/Layout"
 
@@ -26,20 +27,20 @@ export default function Home() {
 
           <div className="my-10">
             <div className="grid gap-5 mt-[30px]">
-              <a
+              <Link
                 href="/ios-cache.zip"
                 className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-linear-to-br from-[#007aff] to-[#0051d5] text-white shadow-[0_8px_25px_rgba(0,122,255,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(0,122,255,0.4)]"
               >
                 <span className="mr-3 text-[1.3rem]">📱</span>
                 Download iOS Cache
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/android-cache.zip"
                 className="inline-flex items-center justify-center p-[18px_30px] border-none rounded-xl text-[1.1rem] font-semibold no-underline transition-all duration-300 relative overflow-hidden cursor-pointer bg-linear-to-br from-[#3ddc84] to-[#00c853] text-white shadow-[0_8px_25px_rgba(61,220,132,0.3)] hover:transform hover:translate-y-[-2px] hover:shadow-[0_12px_35px_rgba(61,220,132,0.4)]"
               >
                 <span className="mr-3 text-[1.3rem]">🤖</span>
                 Download Android Cache
-              </a>
+              </Link>
             </div>
           </div>
 
