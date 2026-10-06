@@ -15,16 +15,16 @@
       "automerge": true
     },
     {
-      "matchPackagePatterns": ["^@prisma/"],
       "groupName": "Prisma packages",
       "schedule": ["before 4am on Monday"],
-      "automerge": false
+      "automerge": false,
+      "matchPackageNames": ["/^@prisma//"]
     },
     {
-      "matchPackagePatterns": ["^eslint", "^@typescript-eslint/"],
       "groupName": "ESLint packages",
       "schedule": ["before 4am on Monday"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^eslint/", "/^@typescript-eslint//"]
     },
     {
       "matchUpdateTypes": ["patch"],
