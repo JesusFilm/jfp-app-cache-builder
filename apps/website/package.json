@@ -21,7 +21,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
-    "eslint-config-next": "15.5.26",
+    "eslint-config-next": "15.5.27",
     "eslint-import-resolver-typescript": "^4.4.4",
     "happy-dom": "^20.0.7",
     "jsdom": "^27.0.1",
