@@ -119,7 +119,7 @@ importers:
         version: 3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
       vitest-mock-extended:
         specifier: ^3.1.0
-        version: 3.1.0(typescript@5.9.3)(vitest@3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))
+        version: 3.1.1(typescript@5.9.3)(vitest@3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))
 
   apps/website:
     dependencies:
@@ -8182,8 +8182,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-essentials@10.1.1:
-    resolution: {integrity: sha512-4aTB7KLHKmUvkjNj8V+EdnmuVTiECzn3K+zIbRthumvHu+j44x3w63xpfs0JL3NGIzGXqoQ7AV591xHO+XrOTw==}
+  ts-essentials@10.2.1:
+    resolution: {integrity: sha512-+Id1fRkuir+CsgK2x04/icS2b4V1hQmq7ObzIrDjhN0ozfRYivnP7aaKMVJfLApQm0trjR39A6NIMVchiB9Erw==}
     peerDependencies:
       typescript: '>=4.5.0'
     peerDependenciesMeta:
@@ -8479,10 +8479,10 @@ packages:
       yaml:
         optional: true
 
-  vitest-mock-extended@3.1.0:
-    resolution: {integrity: sha512-vCM0VkuocOUBwwqwV7JB7YStw07pqeKvEIrZnR8l3PtwYi6rAAJAyJACeC1UYNfbQWi85nz7EdiXWBFI5hll2g==}
+  vitest-mock-extended@3.1.1:
+    resolution: {integrity: sha512-IQBKkEYB5BW4eJ+8JHZRzrLkKIJu5zkLJsU6u8vB+skSXbES+Di86nrUIbXwEQivDXcR4APMZFSvt398+iqKYA==}
     peerDependencies:
-      typescript: 3.x || 4.x || 5.x
+      typescript: 3.x || 4.x || 5.x || 6.x
       vitest: '>=3.0.0'
 
   vitest@3.2.4:
@@ -17929,7 +17929,7 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  ts-essentials@10.1.1(typescript@5.9.3):
+  ts-essentials@10.2.1(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 
@@ -18248,9 +18248,9 @@ snapshots:
       tsx: 4.20.6
       yaml: 2.9.1
 
-  vitest-mock-extended@3.1.0(typescript@5.9.3)(vitest@3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)):
+  vitest-mock-extended@3.1.1(typescript@5.9.3)(vitest@3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)):
     dependencies:
-      ts-essentials: 10.1.1(typescript@5.9.3)
+      ts-essentials: 10.2.1(typescript@5.9.3)
       typescript: 5.9.3
       vitest: 3.2.4(@types/node@24.9.0)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.29))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
 
