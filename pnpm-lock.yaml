@@ -7,7 +7,7 @@ settings:
 overrides:
   realm: npm:realm@community
   vitest@3.2.7>vite: 6.4.4
-  vite-node@3.2.4>vite: 6.4.4
+  vite-node@3.2.4>vite: 6.4.5
 
 importers:
 
@@ -8779,6 +8779,46 @@ packages:
       yaml:
         optional: true
 
+  vite@6.4.5:
+    resolution: {integrity: sha512-4enwjFfi4IwtEh0w+jPzpLVOFQiPHmmzPxcHXQOyEur47o6u0jE573DmGpjA+7irXoMLYRZD5ZaFUEneS3abPg==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      jiti: '>=1.21.0'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      sass-embedded: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+
   vite@7.1.11:
     resolution: {integrity: sha512-uzcxnSDVjAopEUjljkWh8EIrg6tlzrjFUfMcR1EVsRDGwf/ccef0qQPRyOrROwhrTDaApueq+ja+KLPlzR/zdg==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -12111,7 +12151,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.9
       estree-walker: 2.0.2
-      picomatch: 4.0.2
+      picomatch: 4.0.7
     optionalDependencies:
       rollup: 4.64.0
 
@@ -18875,7 +18915,7 @@ snapshots:
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.4.4(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
+      vite: 6.4.5(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -18896,7 +18936,7 @@ snapshots:
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.4.4(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
+      vite: 6.4.5(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -18938,6 +18978,46 @@ snapshots:
       picomatch: 4.0.7
       postcss: 8.5.31
       rollup: 4.64.5
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      '@types/node': 26.6.5
+      fsevents: 2.3.3
+      jiti: 2.6.1
+      less: 4.9.1
+      lightningcss: 1.30.2
+      sass: 1.105.1
+      sass-embedded: 1.105.1
+      terser: 5.51.2
+      tsx: 4.20.6
+      yaml: 2.9.1
+
+  vite@6.4.5(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1):
+    dependencies:
+      esbuild: 0.25.12
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
+      postcss: 8.5.31
+      rollup: 4.64.10
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      '@types/node': 24.19.2
+      fsevents: 2.3.3
+      jiti: 2.6.1
+      less: 4.9.1
+      lightningcss: 1.30.2
+      sass: 1.105.1
+      sass-embedded: 1.105.1
+      terser: 5.51.2
+      tsx: 4.20.6
+      yaml: 2.9.1
+
+  vite@6.4.5(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1):
+    dependencies:
+      esbuild: 0.25.12
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
+      postcss: 8.5.31
+      rollup: 4.64.10
       tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 26.6.5
