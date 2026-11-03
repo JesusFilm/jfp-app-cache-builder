@@ -133,7 +133,7 @@ importers:
         version: 4.1.0
       next:
         specifier: 15.5.28
-        version: 15.5.28(@babel/core@7.29.7)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.105.1)
+        version: 15.5.28(@babel/core@7.29.7)(@types/node@24.19.2)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.105.1)
       postcss:
         specifier: ^8.5.6
         version: 8.5.32
@@ -159,6 +159,9 @@ importers:
       '@testing-library/react':
         specifier: ^16.3.0
         version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/node':
+        specifier: ^24.2.0
+        version: 24.19.2
       '@types/react':
         specifier: ^19
         version: 19.2.2
@@ -167,7 +170,7 @@ importers:
         version: 19.2.2(@types/react@19.2.2)
       '@vitejs/plugin-react':
         specifier: ^5.0.4
-        version: 5.0.4(vite@6.4.4(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))
+        version: 5.0.4(vite@6.4.4(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.6.2(postcss@8.5.32)
@@ -185,10 +188,10 @@ importers:
         version: 27.0.1(postcss@8.5.32)
       vite:
         specifier: ^6.4.2
-        version: 6.4.4(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
+        version: 6.4.4(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
       vitest:
         specifier: ^3.2.7
-        version: 3.2.7(@types/node@26.6.5)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.32))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
+        version: 3.2.7(@types/node@24.19.2)(happy-dom@20.0.7)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.32))(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
 
 packages:
 
@@ -13293,7 +13296,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.12.2':
     optional: true
 
-  '@vitejs/plugin-react@5.0.4(vite@6.4.4(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))':
+  '@vitejs/plugin-react@5.0.4(vite@6.4.4(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.4)
@@ -13301,7 +13304,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.38
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.4.4(@types/node@26.6.5)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
+      vite: 6.4.4(@types/node@24.19.2)(jiti@2.6.1)(less@4.9.1)(lightningcss@1.30.2)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(tsx@4.20.6)(yaml@2.9.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -16820,31 +16823,6 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  next@15.5.28(@babel/core@7.29.7)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.105.1):
-    dependencies:
-      '@next/env': 15.5.28
-      '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001814
-      postcss: 8.4.31
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      styled-jsx: 5.1.6(@babel/core@7.29.7)(babel-plugin-macros@3.1.0)(react@18.3.1)
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.28
-      '@next/swc-darwin-x64': 15.5.28
-      '@next/swc-linux-arm64-gnu': 15.5.28
-      '@next/swc-linux-arm64-musl': 15.5.28
-      '@next/swc-linux-x64-gnu': 15.5.28
-      '@next/swc-linux-x64-musl': 15.5.28
-      '@next/swc-win32-arm64-msvc': 15.5.28
-      '@next/swc-win32-x64-msvc': 15.5.28
-      sass: 1.105.1
-      sharp: 0.35.5(@types/node@26.6.5)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@types/node'
-      - babel-plugin-macros
-
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
@@ -18389,40 +18367,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
       '@types/node': 24.19.2
-    optional: true
-
-  sharp@0.35.5(@types/node@26.6.5):
-    dependencies:
-      '@img/colour': 1.1.0
-      detect-libc: 2.1.2
-      semver: 7.8.5
-    optionalDependencies:
-      '@img/sharp-darwin-arm64': 0.35.5
-      '@img/sharp-darwin-x64': 0.35.5
-      '@img/sharp-freebsd-wasm32': 0.35.5
-      '@img/sharp-libvips-darwin-arm64': 1.3.4
-      '@img/sharp-libvips-darwin-x64': 1.3.4
-      '@img/sharp-libvips-linux-arm': 1.3.4
-      '@img/sharp-libvips-linux-arm64': 1.3.4
-      '@img/sharp-libvips-linux-ppc64': 1.3.4
-      '@img/sharp-libvips-linux-riscv64': 1.3.4
-      '@img/sharp-libvips-linux-s390x': 1.3.4
-      '@img/sharp-libvips-linux-x64': 1.3.4
-      '@img/sharp-libvips-linuxmusl-arm64': 1.3.4
-      '@img/sharp-libvips-linuxmusl-x64': 1.3.4
-      '@img/sharp-linux-arm': 0.35.5
-      '@img/sharp-linux-arm64': 0.35.5
-      '@img/sharp-linux-ppc64': 0.35.5
-      '@img/sharp-linux-riscv64': 0.35.5
-      '@img/sharp-linux-s390x': 0.35.5
-      '@img/sharp-linux-x64': 0.35.5
-      '@img/sharp-linuxmusl-arm64': 0.35.5
-      '@img/sharp-linuxmusl-x64': 0.35.5
-      '@img/sharp-webcontainers-wasm32': 0.35.5
-      '@img/sharp-win32-arm64': 0.35.5
-      '@img/sharp-win32-ia32': 0.35.5
-      '@img/sharp-win32-x64': 0.35.5
-      '@types/node': 26.6.5
     optional: true
 
   shebang-command@2.0.0:
