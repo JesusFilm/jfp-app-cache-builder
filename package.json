@@ -41,8 +41,9 @@
   "pnpm": {
     "overrides": {
       "realm": "npm:realm@community",
-      "vitest@3.2.7>vite": "6.4.4",
-      "vite-node@3.2.4>vite": "6.4.5"
+      "vitest@3.2.7>vite": "6.4.6",
+      "vite-node@3.2.4>vite": "6.4.6",
+      "vitest@3.2.7>tinypool": "2.1.2"
     }
   }
 }
