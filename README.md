@@ -17,7 +17,7 @@ This database can then be used by iOS and Android applications to provide offlin
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 22.23.4
 - pnpm (recommended) or npm
 - Access to the Jesus Film API Gateway
 
