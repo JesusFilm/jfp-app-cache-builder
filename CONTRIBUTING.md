@@ -49,9 +49,13 @@ src/
 
 ### Prerequisites
 
-- Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+ (26.x)
+- Node.js 22.23.5+ (22.x), 24.22.3+ (24.x), or 26.13.1+ (26.x)
 - pnpm 9.12.3+
 - TypeScript 5.9.2+
+
+The default development and CI runtime is Node.js 22.23.5. The 24.x and 26.x
+versions above are security floors; native dependency compatibility on those
+majors requires separate validation.
 
 ### Initial Setup
 

@@ -35,6 +35,9 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
+      - name: Verify selected Node.js runtime
+        run: node -e 'const fs = require("node:fs"); const assert = require("node:assert/strict"); assert.equal(process.versions.node, fs.readFileSync(".nvmrc", "utf8").trim())'
+
       - name: Install dependencies
         run: pnpm install
 
@@ -72,6 +75,9 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
+
+      - name: Verify selected Node.js runtime
+        run: node -e 'const fs = require("node:fs"); const assert = require("node:assert/strict"); assert.equal(process.versions.node, fs.readFileSync(".nvmrc", "utf8").trim())'
 
       - name: Install dependencies
         run: pnpm install
@@ -113,6 +119,9 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
+
+      - name: Verify selected Node.js runtime
+        run: node -e 'const fs = require("node:fs"); const assert = require("node:assert/strict"); assert.equal(process.versions.node, fs.readFileSync(".nvmrc", "utf8").trim())'
 
       - name: Install dependencies
         run: pnpm install
@@ -169,6 +178,9 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
+
+      - name: Verify selected Node.js runtime
+        run: node -e 'const fs = require("node:fs"); const assert = require("node:assert/strict"); assert.equal(process.versions.node, fs.readFileSync(".nvmrc", "utf8").trim())'
 
       - name: Install dependencies
         run: pnpm install
